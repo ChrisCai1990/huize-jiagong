@@ -25,7 +25,24 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Deploy to ECS via SSH
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.ECS_PASS }}" > /tmp/ecs_pass.txt
+          chmod 600 /tmp/ecs_pass.txt
+
+      - name: Upload files to ECS via scp
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.ECS_HOST }}
+          username: ${{ secrets.ECS_USER }}
+          password: ${{ secrets.ECS_PASS }}
+          source: ".next,public,package.json,package-lock.json,next.config.ts"
+          target: /var/www/huize-jiagong
+          strip_components: 0
+          overwrite: true
+
+      - name: Start app on ECS via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.ECS_HOST }}
@@ -33,74 +50,57 @@ jobs:
           password: ${{ secrets.ECS_PASS }}
           script: |
             set -e
+            cd /var/www/huize-jiagong
 
             # 安装 PM2（如未安装）
             if ! command -v pm2 &> /dev/null; then
               npm install -g pm2
             fi
 
-            # 安装 git（如未安装）
-            if ! command -v git &> /dev/null; then
-              apt-get install -y git
-            fi
+            # 安装生产依赖
+            npm install --omit=dev --legacy-peer-deps
 
-            # 克隆或拉取代码（清理残留目录再 clone）
-            if [ -d "/var/www/huize-jiagong/.git" ]; then
-              cd /var/www/huize-jiagong
-              git fetch origin main
-              git reset --hard origin/main
-            else
-              rm -rf /var/www/huize-jiagong
-              mkdir -p /var/www
-              git clone https://github.com/${{ github.repository }}.git /var/www/huize-jiagong
-            fi
-
-            cd /var/www/huize-jiagong
-
-            # 安装依赖 & 构建
-            npm ci
-            npm run build
-
-            # 写入 PM2 配置（如不存在）
+            # 写入 PM2 配置
             cat > ecosystem.config.js << 'EOF'
-            module.exports = {
-              apps: [{
-                name: 'huize-jiagong',
-                script: 'node_modules/.bin/next',
-                args: 'start -p 3001',
-                cwd: '/var/www/huize-jiagong',
-                env: {
-                  NODE_ENV: 'production',
-                  PORT: 3001
-                }
-              }]
-            };
-            EOF
+module.exports = {
+  apps: [{
+    name: 'huize-jiagong',
+    script: 'node_modules/.bin/next',
+    args: 'start -p 3001',
+    cwd: '/var/www/huize-jiagong',
+    env: {
+      NODE_ENV: 'production',
+      PORT: '3001'
+    }
+  }]
+};
+EOF
 
             # 重启或启动
-            pm2 reload huize-jiagong || pm2 start ecosystem.config.js
+            pm2 reload huize-jiagong 2>/dev/null || pm2 start ecosystem.config.js
             pm2 save
 
-            # 写入 Nginx 配置（如不存在）
+            # 写入 Nginx 配置（首次部署）
             if [ ! -f /etc/nginx/conf.d/huize-jiagong.conf ]; then
               cat > /etc/nginx/conf.d/huize-jiagong.conf << 'NGINXEOF'
-            server {
-                listen 80;
-                server_name _;
+server {
+    listen 80;
+    server_name _;
 
-                location / {
-                    proxy_pass http://127.0.0.1:3001;
-                    proxy_http_version 1.1;
-                    proxy_set_header Upgrade $http_upgrade;
-                    proxy_set_header Connection 'upgrade';
-                    proxy_set_header Host $host;
-                    proxy_set_header X-Real-IP $remote_addr;
-                    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                    proxy_cache_bypass $http_upgrade;
-                }
-            }
-            NGINXEOF
+    location / {
+        proxy_pass http://127.0.0.1:3001;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+NGINXEOF
               nginx -t && nginx -s reload
             fi
 
-            echo "✅ 部署完成"
+            echo "Deploy done"
+            pm2 list
