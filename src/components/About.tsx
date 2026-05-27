@@ -1,4 +1,4 @@
-const pillars = [
+﻿const pillars = [
   {
     title: "功能医学视角",
     desc: "不止看指标，寻找症状背后的根本原因——肠道、营养、压力、毒素负荷全面评估。",
@@ -35,7 +35,7 @@ export default function About() {
               </span>
             </h2>
             <p className="mt-6 text-gray-500 leading-relaxed">
-              汇泽甲功由专注自身免疫与营养医学的团队创立。我们深知桥本、
+              汇泽健康由专注自身免疫与营养医学的团队创立。我们深知桥本、
               甲减患者在传统医疗体系中面临的困境——指标"正常"却依然疲惫、
               情绪低落、体重难控。
             </p>

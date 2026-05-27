@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 
@@ -32,7 +32,7 @@ export default function Navbar() {
         <a href="#hero" className="flex items-center gap-2">
           <span className="w-2 h-5 rounded-sm" style={{ background: "var(--green-700)" }} />
           <span className="text-lg font-semibold tracking-tight text-gray-900">
-            汇泽甲功健康
+            汇泽健康
           </span>
         </a>
 

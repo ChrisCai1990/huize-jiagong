@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 export default function Footer() {
   return (
     <footer className="border-t py-12 px-6" style={{ background: "var(--green-900)", borderColor: "var(--green-800)" }}>
@@ -8,7 +8,7 @@ export default function Footer() {
         <div>
           <div className="flex items-center gap-2">
             <span className="w-2 h-5 rounded-sm" style={{ background: "var(--green-500)" }} />
-            <span className="font-semibold text-white">汇泽甲功健康</span>
+            <span className="font-semibold text-white">汇泽健康</span>
           </div>
           <p className="text-xs mt-3 max-w-xs leading-relaxed" style={{ color: "var(--green-300)" }}>
             专注自身免疫性疾病与营养医学，帮助桥本、甲减患者找回健康活力。
@@ -61,7 +61,7 @@ export default function Footer() {
         style={{ borderColor: "var(--green-800)" }}
       >
         <p className="text-xs" style={{ color: "var(--green-500)" }}>
-          © {new Date().getFullYear()} 汇泽甲功健康. 保留所有权利.
+          © {new Date().getFullYear()} 汇泽健康. 保留所有权利.
         </p>
         <p className="text-xs" style={{ color: "var(--green-500)" }}>
           本网站内容仅供参考，不构成医疗诊断或治疗建议

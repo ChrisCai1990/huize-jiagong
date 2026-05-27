@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
 
@@ -8,8 +8,8 @@ const geist = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "汇泽甲功 | 自免·桥本·营养医学",
-  description: "汇泽甲功专注自身免疫性疾病、桥本甲状腺炎及营养医学领域的综合健康管理服务。",
+  title: "汇泽健康 | 自免·桥本·营养医学",
+  description: "汇泽健康专注自身免疫性疾病、桥本甲状腺炎及营养医学领域的综合健康管理服务。",
 };
 
 export default function RootLayout({

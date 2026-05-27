@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 export default function Hero() {
   return (
     <section
@@ -26,7 +26,7 @@ export default function Hero() {
             </h1>
 
             <p className="text-lg text-gray-500 mb-10 leading-relaxed max-w-xl mx-auto lg:mx-0">
-              汇泽甲功聚焦自身免疫性疾病根源，以循证营养医学为核心，
+              汇泽健康聚焦自身免疫性疾病根源，以循证营养医学为核心，
               帮助桥本、甲减患者系统改善症状、恢复活力。
             </p>
 

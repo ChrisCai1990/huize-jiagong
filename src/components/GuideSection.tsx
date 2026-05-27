@@ -1,4 +1,4 @@
-const chapters = [
+﻿const chapters = [
   { icon: "🧠", name: "认知篇", desc: "什么是桥本 · 发展机制" },
   { icon: "🥗", name: "饮食篇", desc: "精准忌口 · 抗炎饮食" },
   { icon: "🏃", name: "运动篇", desc: "运动方式与强度建议" },
@@ -31,7 +31,7 @@ export default function GuideSection() {
             《桥本疗愈指南》
             <br />
             <span className="font-semibold" style={{ color: "var(--green-800)" }}>
-              汇泽甲功 出品
+              汇泽健康 出品
             </span>
           </h2>
           <p className="mt-4 text-gray-500 max-w-xl mx-auto text-sm leading-relaxed">
@@ -60,7 +60,7 @@ export default function GuideSection() {
               {/* 品牌线 */}
               <div className="flex items-center gap-2 mb-5 text-xs font-bold tracking-widest uppercase" style={{ color: "var(--green-700)" }}>
                 <span className="inline-block w-5 h-0.5" style={{ background: "var(--green-700)" }} />
-                汇泽甲功健康
+                汇泽健康
               </div>
 
               <h3 className="text-4xl font-bold leading-tight mb-2" style={{ color: "#1A2E4A" }}>
