@@ -7,20 +7,16 @@ if ! command -v pm2 &> /dev/null; then
   npm install -g pm2
 fi
 
-# 安装生产依赖
-npm install --omit=dev
-
-# 写 PM2 配置
+# 写 PM2 配置（standalone 模式：直接运行 server.js，无需 npm install）
 cat > ecosystem.config.js << 'EOF'
 module.exports = {
   apps: [{
     name: "huize-jiagong",
-    script: "node_modules/.bin/next",
-    args: "start -p 3001",
-    cwd: "/var/www/huize-jiagong",
+    script: "standalone/server.js",
+    cwd: "/var/www/huize-jiagong/.next",
     max_restarts: 5,
     min_uptime: "10s",
-    env: { NODE_ENV: "production", PORT: "3001" }
+    env: { NODE_ENV: "production", PORT: "3001", HOSTNAME: "0.0.0.0" }
   }]
 };
 EOF

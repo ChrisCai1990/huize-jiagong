@@ -28,6 +28,11 @@ jobs:
       - name: Install rsync and sshpass
         run: sudo apt-get install -y rsync sshpass
 
+      - name: Prepare standalone bundle
+        run: |
+          cp -r public .next/standalone/public
+          cp -r .next/static .next/standalone/.next/static
+
       - name: Push files to ECS via rsync
         env:
           ECS_HOST: ${{ secrets.ECS_HOST }}
@@ -40,7 +45,7 @@ jobs:
           sshpass -p "$ECS_PASS" rsync -az --delete \
             --exclude='.git' \
             --exclude='node_modules' \
-            .next public package.json package-lock.json next.config.ts deploy.sh \
+            .next/standalone deploy.sh \
             "$ECS_USER@$ECS_HOST:/var/www/huize-jiagong/"
 
       - name: Run deploy script on ECS
