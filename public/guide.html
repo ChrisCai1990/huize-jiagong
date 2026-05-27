@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>桥本疗愈指南 · 汇泽甲功健康</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#F7F8FA;
+  --white:#FFFFFF;
+  --navy:#1A2E4A;
+  --navy2:#243B55;
+  --text:#2C3E50;
+  --text2:#546E7A;
+  --muted:#90A4AE;
+  --border:#E8ECF0;
+  --green:#2E7D6B;
+  --green2:#3DAA90;
+  --green-bg:#F0FAF8;
+  --green-border:#B2DFDB;
+  --gold:#C0882A;
+  --gold-bg:#FFF8EE;
+  --gold-border:#FFE0A0;
+  --red:#C0392B;
+  --red-bg:#FFF5F5;
+  --red-border:#FFCDD2;
+  --teal:#1565C0;
+  --teal-bg:#EEF4FF;
+  --teal-border:#BBDEFB;
+  --shadow:0 2px 12px rgba(0,0,0,0.06);
+  --shadow-md:0 4px 24px rgba(0,0,0,0.09);
+}
+html,body{height:100%;background:var(--bg);font-family:'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif;color:var(--text);overflow:hidden}
+
+/* ── TOP BAR ── */
+#topbar{position:fixed;top:0;left:0;right:0;height:52px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,0.05)}
+.brand{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--navy)}
+.brand-dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
+.controls{display:flex;align-items:center;gap:8px}
+.ctrl-btn{background:var(--white);border:1px solid var(--border);color:var(--text2);font-size:12px;padding:6px 14px;border-radius:6px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.ctrl-btn:hover{border-color:var(--green);color:var(--green)}
+.ctrl-btn.primary{background:var(--green);border-color:var(--green);color:#fff;font-weight:600}
+.ctrl-btn.primary:hover{background:var(--green2)}
+.mode-group{display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.mode-btn{background:transparent;border:none;color:var(--muted);font-size:12px;padding:6px 12px;cursor:pointer;transition:all .15s;border-right:1px solid var(--border)}
+.mode-btn:last-child{border-right:none}
+.mode-btn.active{background:var(--green);color:#fff}
+
+/* ── LAYOUT ── */
+#layout{display:flex;height:100vh;padding-top:52px}
+
+/* ── SIDEBAR ── */
+#sidebar{width:210px;flex-shrink:0;background:var(--white);border-right:1px solid var(--border);overflow-y:auto;padding:8px 0}
+#sidebar::-webkit-scrollbar{width:3px}
+#sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.sidebar-ch{padding:12px 16px 5px;font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase}
+.sidebar-item{display:flex;align-items:center;gap:8px;padding:7px 16px;font-size:12px;color:var(--text2);cursor:pointer;transition:all .15s;border-left:3px solid transparent}
+.sidebar-item:hover{background:var(--bg);color:var(--text)}
+.sidebar-item.active{background:var(--green-bg);color:var(--green);border-left-color:var(--green);font-weight:600}
+.snum{font-size:10px;color:var(--muted);min-width:18px;flex-shrink:0}
+
+/* ── STAGE ── */
+#stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;background:var(--bg);position:relative}
+
+/* ── SLIDE WRAP ── */
+#slide-wrap{position:relative;width:900px;height:506px;background:var(--white);border-radius:12px;box-shadow:var(--shadow-md);border:1px solid var(--border);overflow:hidden}
+#slide-frame{width:100%;height:100%;position:relative}
+
+/* ── SLIDE BASE ── */
+.slide{width:100%;height:100%;position:absolute;top:0;left:0;display:none!important;background:var(--white)}
+.slide.active{display:block!important}
+.slide.active.s-cover,.slide.active.s-chapter,.slide.active.s-content,.slide.active.s-story,.slide.active.s-cta{display:flex!important}
+
+/* ── COVER ── */
+.s-cover{flex-direction:column;align-items:flex-start;justify-content:center;padding:50px 60px;position:relative;overflow:hidden;background:linear-gradient(135deg,#F0FAF8 0%,#FFFFFF 60%)}
+.cover-accent{position:absolute;right:0;top:0;bottom:0;width:260px;background:linear-gradient(135deg,var(--green) 0%,var(--green2) 100%);opacity:.06;clip-path:polygon(30% 0%,100% 0%,100% 100%,0% 100%)}
+.cover-tag{font-size:10px;font-weight:700;letter-spacing:3px;color:var(--green);text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:6px}
+.cover-tag::before{content:'';width:20px;height:2px;background:var(--green);display:block}
+.cover-h1{font-size:44px;font-weight:700;color:var(--navy);line-height:1.15;margin-bottom:6px}
+.cover-h1 em{color:var(--green);font-style:normal}
+.cover-en{font-size:11px;letter-spacing:4px;color:var(--muted);margin-bottom:24px}
+.cover-desc{font-size:13px;color:var(--text2);line-height:1.8;max-width:380px;margin-bottom:32px;border-left:3px solid var(--green-border);padding-left:14px}
+.cover-stats{display:flex;gap:10px;margin-bottom:0}
+.cstat{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:10px 16px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
+.cstat .n{font-size:22px;font-weight:700;color:var(--green);line-height:1}
+.cstat .l{font-size:10px;color:var(--muted);margin-top:2px}
+.cover-bottom{position:absolute;bottom:0;left:0;right:0;padding:14px 60px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);background:rgba(255,255,255,.9)}
+.cover-brand{font-size:11px;color:var(--green);font-weight:600}
+.cover-slogan{font-size:11px;color:var(--muted)}
+
+/* ── CHAPTER ── */
+.s-chapter{flex-direction:column;align-items:flex-start;justify-content:center;padding:50px 60px;position:relative;overflow:hidden;background:var(--white)}
+.ch-line{position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(to bottom,var(--green),var(--green2))}
+.ch-num{font-size:100px;font-weight:700;color:rgba(0,0,0,0.03);line-height:1;position:absolute;right:50px;bottom:20px;letter-spacing:-5px}
+.ch-badge{background:var(--green);color:#fff;font-size:10px;font-weight:700;letter-spacing:2px;padding:4px 12px;border-radius:4px;display:inline-block;margin-bottom:16px;text-transform:uppercase}
+.ch-title{font-size:38px;font-weight:700;color:var(--navy);margin-bottom:6px;line-height:1.2}
+.ch-en{font-size:11px;letter-spacing:3px;color:var(--muted);margin-bottom:20px}
+.ch-desc{font-size:13px;color:var(--text2);line-height:1.8;max-width:300px;padding-left:16px;border-left:3px solid var(--green-border)}
+
+/* ── CONTENT ── */
+.s-content{flex-direction:column}
+.slide-header{padding:14px 28px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.sh-l{display:flex;align-items:center;gap:6px}
+.sh-dot{width:4px;height:4px;border-radius:50%;background:var(--green)}
+.sh-label{font-size:10px;letter-spacing:1.5px;color:var(--green);text-transform:uppercase;font-weight:600}
+.sh-num{font-size:10px;color:var(--muted);background:var(--bg);padding:2px 8px;border-radius:10px}
+.slide-body{flex:1;padding:18px 28px;overflow:hidden}
+.slide-footer{padding:10px 28px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border)}
+.sf-brand{font-size:9px;color:var(--muted);letter-spacing:1px}
+.sf-pg{font-size:9px;color:var(--muted)}
+.slide-title{font-size:20px;font-weight:700;color:var(--navy);margin-bottom:3px;line-height:1.3}
+.slide-sub{font-size:11px;color:var(--muted);margin-bottom:14px}
+
+/* ── STORY ── */
+.s-story{flex-direction:row}
+.story-bar{width:4px;background:linear-gradient(to bottom,var(--green),var(--green2));flex-shrink:0}
+.story-body{flex:1;padding:24px 28px;overflow:hidden}
+.story-name{font-size:17px;font-weight:700;color:var(--navy);margin-bottom:3px}
+.story-role{font-size:11px;color:var(--green);margin-bottom:14px}
+.story-text{font-size:12px;color:var(--text2);line-height:1.85;margin-bottom:14px}
+.story-hl{background:var(--green-bg);border:1px solid var(--green-border);border-radius:8px;padding:12px 16px;font-size:12px;color:var(--green);line-height:1.8;font-style:italic}
+.story-stats{display:flex;gap:8px;margin-top:14px}
+.ss{flex:1;background:var(--bg);border-radius:8px;padding:10px;text-align:center;border:1px solid var(--border)}
+.ss-n{font-size:18px;font-weight:700;color:var(--green);line-height:1;margin-bottom:2px}
+.ss-l{font-size:9px;color:var(--muted)}
+
+/* ── CTA ── */
+.s-cta{flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:44px;background:linear-gradient(135deg,#F0FAF8,#FFFFFF)}
+.cta-badge{background:var(--green);color:#fff;font-size:10px;font-weight:700;letter-spacing:2px;padding:4px 14px;border-radius:20px;display:inline-block;margin-bottom:16px}
+.cta-title{font-size:24px;font-weight:700;color:var(--navy);margin-bottom:8px}
+.cta-sub{font-size:12px;color:var(--text2);line-height:1.8;max-width:340px;margin:0 auto 24px}
+.cta-steps{display:flex;gap:12px;margin-bottom:24px;width:100%}
+.cta-step{flex:1;background:var(--white);border:1px solid var(--border);border-radius:10px;padding:14px 12px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
+.cta-sn{font-size:22px;font-weight:700;color:var(--green);margin-bottom:5px;line-height:1}
+.cta-st{font-size:10.5px;color:var(--text2);line-height:1.6}
+.cta-btn{background:var(--green);color:#fff;font-size:13px;font-weight:700;padding:12px 32px;border-radius:24px;display:inline-block;margin-bottom:12px;box-shadow:0 4px 12px rgba(46,125,107,0.25)}
+.cta-note{font-size:10px;color:var(--muted);line-height:1.8}
+
+/* ── COMPONENTS ── */
+.card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:9px;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.card-green{background:var(--green-bg);border-color:var(--green-border)}
+.card-gold{background:var(--gold-bg);border-color:var(--gold-border)}
+.card-red{background:var(--red-bg);border-color:var(--red-border)}
+.card-blue{background:var(--teal-bg);border-color:var(--teal-border)}
+.card-gray{background:var(--bg);border-color:var(--border)}
+
+.card-h{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+.card-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;background:rgba(46,125,107,.1)}
+.ci-g{background:rgba(46,125,107,.1)}
+.ci-gold{background:rgba(192,136,42,.1)}
+.ci-red{background:rgba(192,57,43,.1)}
+.ci-blue{background:rgba(21,101,192,.1)}
+.card-title{font-size:12px;font-weight:700;color:var(--navy)}
+.card-sub{font-size:10px;color:var(--muted);margin-top:1px}
+.card-body{font-size:11px;color:var(--text2);line-height:1.75}
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+
+.callout{border-left:3px solid var(--green);background:var(--green-bg);border-radius:0 6px 6px 0;padding:10px 13px;margin:9px 0}
+.callout-gold{border-left-color:var(--gold);background:var(--gold-bg)}
+.callout-red{border-left-color:var(--red);background:var(--red-bg)}
+.callout-blue{border-left-color:var(--teal);background:var(--teal-bg)}
+.ct{font-size:11px;font-weight:700;color:var(--green);margin-bottom:4px}
+.callout-gold .ct{color:var(--gold)}
+.callout-red .ct{color:var(--red)}
+.callout-blue .ct{color:var(--teal)}
+.cb{font-size:11px;color:var(--text2);line-height:1.75}
+
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.tag{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:2px 9px;font-size:10px;color:var(--text2)}
+.tag-green{background:var(--green-bg);border-color:var(--green-border);color:var(--green)}
+.tag-red{background:var(--red-bg);border-color:var(--red-border);color:var(--red)}
+.tag-gold{background:var(--gold-bg);border-color:var(--gold-border);color:var(--gold)}
+.tag-blue{background:var(--teal-bg);border-color:var(--teal-border);color:var(--teal)}
+
+.stat-row{display:flex;gap:9px;margin-bottom:13px}
+.stat-box{flex:1;background:var(--white);border:1px solid var(--border);border-radius:8px;padding:11px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.sn{font-size:22px;font-weight:700;color:var(--green);line-height:1;margin-bottom:3px}
+.sl{font-size:9.5px;color:var(--muted)}
+
+.step{display:flex;gap:11px;margin-bottom:11px;align-items:flex-start}
+.step-n{width:22px;height:22px;border-radius:50%;background:var(--green);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-t{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:2px}
+.step-d{font-size:11px;color:var(--text2);line-height:1.65}
+
+.ncrd{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:11px 13px 11px 15px;margin-bottom:8px;border-left:3px solid var(--green);box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.ncrd-name{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:3px}
+.ncrd-dose{display:inline-block;background:var(--green-bg);border:1px solid var(--green-border);border-radius:4px;padding:1px 8px;font-size:9px;color:var(--green);margin-bottom:6px;font-weight:600}
+.ncrd-desc{font-size:11px;color:var(--text2);line-height:1.65}
+.ncrd-warn{font-size:10px;color:var(--muted);margin-top:4px}
+
+.timeline{padding-left:18px;border-left:2px solid var(--green-border)}
+.tl-item{position:relative;margin-bottom:12px;padding-left:14px}
+.tl-item::before{content:'';position:absolute;left:-22px;top:5px;width:7px;height:7px;border-radius:50%;background:var(--green);border:2px solid var(--white)}
+.tl-t{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:2px}
+.tl-d{font-size:11px;color:var(--text2);line-height:1.65}
+
+.cmp-table{width:100%;border-collapse:collapse;font-size:11px}
+.cmp-table th{padding:8px 10px;font-size:10px;font-weight:700;text-align:center}
+.cmp-table .th-m{background:var(--green);color:#fff}
+.cmp-table .th-a{background:var(--bg);color:var(--muted)}
+.cmp-table td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.55}
+.cmp-table .td-l{color:var(--muted);font-size:10px;font-weight:600}
+.cmp-table .td-m{color:var(--green);text-align:center;font-weight:500}
+.cmp-table .td-a{color:var(--text2);text-align:center}
+
+.food-table{width:100%;border-collapse:collapse;font-size:10.5px}
+.food-table th{background:var(--bg);color:var(--text2);padding:6px 10px;text-align:left;font-size:10px;font-weight:700;border-bottom:2px solid var(--border)}
+.food-table td{padding:6px 10px;color:var(--text2);border-bottom:1px solid var(--border);line-height:1.55;vertical-align:top}
+.food-table tr:nth-child(even) td{background:#FAFBFC}
+
+.case-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,0.05)}
+.case-tag{display:inline-block;background:var(--green);color:#fff;border-radius:4px;padding:2px 10px;font-size:9px;font-weight:700;margin-bottom:9px;letter-spacing:.5px}
+.case-body{font-size:11.5px;color:var(--text2);line-height:1.8}
+.case-result{font-size:12px;font-weight:600;color:var(--green);margin-top:10px;padding-top:10px;border-top:1px solid var(--green-border)}
+
+.badge-h{display:flex;align-items:center;gap:6px;background:var(--bg);border-radius:6px;padding:6px 10px;margin-bottom:10px;border:1px solid var(--border)}
+.badge-h-t{font-size:11px;font-weight:700;color:var(--navy)}
+
+.sym-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.sym-item{display:flex;align-items:center;gap:6px;background:var(--bg);border-radius:5px;padding:5px 9px;font-size:11px;color:var(--text2)}
+.sym-box{width:13px;height:13px;border-radius:3px;border:1.5px solid var(--green-border);flex-shrink:0}
+
+.pills{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.pill{background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:3px 9px;font-size:10.5px;color:var(--text2)}
+
+.hl{color:var(--green);font-weight:700}
+.hl-g{color:var(--gold);font-weight:700}
+.hl-r{color:var(--red);font-weight:600}
+.hl-b{color:var(--teal);font-weight:600}
+
+/* ── NAV ── */
+#nav{position:absolute;bottom:0;left:0;right:0;height:48px;display:flex;align-items:center;justify-content:center;gap:14px;background:var(--white);border-top:1px solid var(--border)}
+#nav button{background:var(--white);border:1px solid var(--border);color:var(--text2);width:32px;height:28px;border-radius:6px;cursor:pointer;font-size:13px;transition:all .15s;display:flex;align-items:center;justify-content:center}
+#nav button:hover{border-color:var(--green);color:var(--green)}
+#nav button:disabled{opacity:.3;cursor:default}
+#slide-counter{font-size:11px;color:var(--muted);min-width:60px;text-align:center}
+#progress{position:absolute;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--green),var(--green2));transition:width .3s}
+
+/* ── EXPORT OVERLAY ── */
+#export-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.3);z-index:200;align-items:center;justify-content:center}
+#export-overlay.show{display:flex}
+.export-box{background:var(--white);border-radius:14px;padding:32px;width:380px;box-shadow:0 20px 60px rgba(0,0,0,0.15)}
+.export-title{font-size:17px;font-weight:700;color:var(--navy);margin-bottom:6px}
+.export-desc{font-size:12px;color:var(--text2);margin-bottom:22px;line-height:1.7}
+.export-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+.export-opt{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:13px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:all .15s}
+.export-opt:hover{border-color:var(--green);background:var(--green-bg)}
+.export-opt-icon{font-size:22px}
+.export-opt-title{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:2px}
+.export-opt-desc{font-size:11px;color:var(--muted)}
+.export-cancel{background:transparent;border:1px solid var(--border);color:var(--text2);font-size:12px;padding:8px 18px;border-radius:6px;cursor:pointer;width:100%}
+.export-cancel:hover{border-color:var(--red);color:var(--red)}
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div class="brand"><div class="brand-dot"></div>桥本疗愈指南 · 汇泽甲功健康</div>
+  <div class="controls">
+    <div class="mode-group">
+      <button class="mode-btn active" onclick="setMode('full')" id="btn-full">完整版 40页</button>
+      <button class="mode-btn" onclick="setMode('hook')" id="btn-hook">钩子速查卡 9页</button>
+    </div>
+    <button class="ctrl-btn" onclick="document.getElementById('export-overlay').classList.add('show')">↓ 导出</button>
+    <button class="ctrl-btn primary" onclick="alert('请在短视频/直播引导用户\n点击主页→加微信→备注"疗愈指南"')">加微信咨询</button>
+  </div>
+</div>
+
+<div id="layout">
+  <div id="sidebar">
+    <div class="sidebar-ch">封面 & 目录</div>
+    <div class="sidebar-item active" onclick="goTo(0)" data-idx="0"><span class="snum">01</span>封面</div>
+    <div class="sidebar-item" onclick="goTo(1)" data-idx="1"><span class="snum">02</span>羽哥的故事</div>
+    <div class="sidebar-item" onclick="goTo(2)" data-idx="2"><span class="snum">05</span>目录</div>
+    <div class="sidebar-ch">认知篇</div>
+    <div class="sidebar-item" onclick="goTo(3)" data-idx="3"><span class="snum">06</span>章节导入</div>
+    <div class="sidebar-item" onclick="goTo(4)" data-idx="4"><span class="snum">07</span>什么是桥本</div>
+    <div class="sidebar-item" onclick="goTo(5)" data-idx="5"><span class="snum">08</span>发展过程</div>
+    <div class="sidebar-item" onclick="goTo(6)" data-idx="6"><span class="snum">10</span>干预思路</div>
+    <div class="sidebar-item" onclick="goTo(7)" data-idx="7"><span class="snum">11</span>重新认识桥本</div>
+    <div class="sidebar-ch">饮食篇</div>
+    <div class="sidebar-item" onclick="goTo(8)" data-idx="8"><span class="snum">12</span>章节导入</div>
+    <div class="sidebar-item" onclick="goTo(9)" data-idx="9"><span class="snum">13</span>两大核心原则</div>
+    <div class="sidebar-item" onclick="goTo(10)" data-idx="10"><span class="snum">14</span>精准忌口</div>
+    <div class="sidebar-item" onclick="goTo(11)" data-idx="11"><span class="snum">17</span>慢性炎症循环</div>
+    <div class="sidebar-item" onclick="goTo(12)" data-idx="12"><span class="snum">22</span>精准忌口案例</div>
+    <div class="sidebar-item" onclick="goTo(13)" data-idx="13"><span class="snum">25</span>无麸质饮食清单</div>
+    <div class="sidebar-item" onclick="goTo(14)" data-idx="14"><span class="snum">26</span>主食蛋白详表</div>
+    <div class="sidebar-item" onclick="goTo(15)" data-idx="15"><span class="snum">28</span>蔬菜水果详表</div>
+    <div class="sidebar-item" onclick="goTo(16)" data-idx="16"><span class="snum">35</span>六大类忌口</div>
+    <div class="sidebar-item" onclick="goTo(17)" data-idx="17"><span class="snum">37</span>抗炎饮食推荐</div>
+    <div class="sidebar-item" onclick="goTo(18)" data-idx="18"><span class="snum">41</span>分期饮食方案</div>
+    <div class="sidebar-item" onclick="goTo(19)" data-idx="19"><span class="snum">42</span>配料表技巧</div>
+    <div class="sidebar-item" onclick="goTo(20)" data-idx="20"><span class="snum">43</span>211饮食法</div>
+    <div class="sidebar-ch">运动篇</div>
+    <div class="sidebar-item" onclick="goTo(21)" data-idx="21"><span class="snum">44</span>章节导入</div>
+    <div class="sidebar-item" onclick="goTo(22)" data-idx="22"><span class="snum">45</span>推荐运动清单</div>
+    <div class="sidebar-item" onclick="goTo(23)" data-idx="23"><span class="snum">46</span>避免的运动</div>
+    <div class="sidebar-ch">睡眠篇</div>
+    <div class="sidebar-item" onclick="goTo(24)" data-idx="24"><span class="snum">47</span>章节导入</div>
+    <div class="sidebar-item" onclick="goTo(25)" data-idx="25"><span class="snum">48</span>优质睡眠指南</div>
+    <div class="sidebar-ch">情绪管理</div>
+    <div class="sidebar-item" onclick="goTo(26)" data-idx="26"><span class="snum">49</span>章节导入</div>
+    <div class="sidebar-item" onclick="goTo(27)" data-idx="27"><span class="snum">50</span>压力恶性循环</div>
+    <div class="sidebar-item" onclick="goTo(28)" data-idx="28"><span class="snum">51</span>情绪释放技巧</div>
+    <div class="sidebar-ch">排毒 & 医学对比</div>
+    <div class="sidebar-item" onclick="goTo(29)" data-idx="29"><span class="snum">53</span>环境毒素</div>
+    <div class="sidebar-item" onclick="goTo(30)" data-idx="30"><span class="snum">55</span>三种医学对比</div>
+    <div class="sidebar-ch">营养补充剂</div>
+    <div class="sidebar-item" onclick="goTo(31)" data-idx="31"><span class="snum">56</span>章节导入</div>
+    <div class="sidebar-item" onclick="goTo(32)" data-idx="32"><span class="snum">57</span>4大基础补剂</div>
+    <div class="sidebar-item" onclick="goTo(33)" data-idx="33"><span class="snum">58</span>肠道修复补剂</div>
+    <div class="sidebar-ch">案例 & 结尾</div>
+    <div class="sidebar-item" onclick="goTo(34)" data-idx="34"><span class="snum">60</span>案例章节</div>
+    <div class="sidebar-item" onclick="goTo(35)" data-idx="35"><span class="snum">61</span>案例一</div>
+    <div class="sidebar-item" onclick="goTo(36)" data-idx="36"><span class="snum">62</span>案例二</div>
+    <div class="sidebar-item" onclick="goTo(37)" data-idx="37"><span class="snum">63</span>案例三</div>
+    <div class="sidebar-item" onclick="goTo(38)" data-idx="38"><span class="snum">59</span>总结号召</div>
+    <div class="sidebar-item" onclick="goTo(39)" data-idx="39"><span class="snum">64</span>结束页</div>
+  </div>
+
+  <div id="stage">
+    <div id="slide-wrap">
+      <div id="slide-frame">
+
+<!-- SLIDE 0: COVER -->
+<div class="slide active s-cover" data-idx="0">
+  <div class="cover-accent"></div>
+  <div class="cover-tag">汇泽甲功健康</div>
+  <div class="cover-h1">桥本<em>疗愈</em>指南</div>
+  <div class="cover-en">HASHIMOTO'S HEALING GUIDE</div>
+  <div class="cover-desc">从饮食、运动、睡眠、情绪管理到营养补充剂<br>功能医学视角的全方位桥本干预方案</div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="n">9</div><div class="l">大章节</div></div>
+    <div class="cstat"><div class="n">64</div><div class="l">完整页面</div></div>
+    <div class="cstat"><div class="n">6</div><div class="l">大类忌口</div></div>
+    <div class="cstat"><div class="n">3000+</div><div class="l">服务桥本人</div></div>
+  </div>
+  <div class="cover-bottom">
+    <div class="cover-brand">汇泽甲功健康管理</div>
+    <div class="cover-slogan">桥本路上，你不是一个人</div>
+  </div>
+</div>
+
+<!-- SLIDE 1: 羽哥故事 -->
+<div class="slide s-story" data-idx="1">
+  <div class="story-bar"></div>
+  <div class="story-body">
+    <div class="slide-header" style="padding:0 0 12px;border-bottom:1px solid var(--border);margin-bottom:14px">
+      <div class="sh-l"><div class="sh-dot"></div><div class="sh-label">羽哥的故事</div></div>
+      <div class="sh-num">02</div>
+    </div>
+    <div class="story-name">亲爱的桥本家人，我是羽哥</div>
+    <div class="story-role">浙江中医药大学毕业 · 桥本自愈者 · 功能医学健康管理师</div>
+    <div class="story-text">2021年体检发现桥本，没有重视。3年后拖成了甲减，满脸痘痘，长期失眠，床头安眠药不断，情绪失控，差点丢了自己的家庭和事业。<br><br>开始翻阅大量资料、医学指南，咨询甲状腺领域专家朋友，终于找到干预桥本的有效手段——<span class="hl">功能医学</span>。</div>
+    <div class="story-hl">在正确方法的指引下，我花了整整1年，重塑自己的身体，从桥本甲减中自愈，抗体转阴，停掉优甲乐，症状完全消失。我希望，你是下一个……</div>
+    <div class="story-stats">
+      <div class="ss"><div class="ss-n">3年</div><div class="ss-l">拖延后甲减</div></div>
+      <div class="ss"><div class="ss-n">1年</div><div class="ss-l">系统调理周期</div></div>
+      <div class="ss"><div class="ss-n">抗体转阴</div><div class="ss-l">停掉优甲乐</div></div>
+      <div class="ss"><div class="ss-n">3000+</div><div class="ss-l">服务桥本家人</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 2: 目录 -->
+<div class="slide s-content" data-idx="2">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">目录 CONTENTS</div></div><div class="sh-num">05</div></div>
+  <div class="slide-body">
+    <div class="g3" style="height:calc(100% - 0px);gap:8px">
+      <div class="card card-green" style="margin:0"><div style="font-size:20px;font-weight:700;color:var(--green);margin-bottom:4px">01</div><div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:2px">桥本认知篇</div><div style="font-size:10px;color:var(--muted)">知己知彼，百战不殆</div></div>
+      <div class="card" style="margin:0"><div style="font-size:20px;font-weight:700;color:var(--green);margin-bottom:4px">02</div><div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:2px">桥本饮食篇</div><div style="font-size:10px;color:var(--muted)">忌口·抗炎·精准方案</div></div>
+      <div class="card" style="margin:0"><div style="font-size:20px;font-weight:700;color:var(--green);margin-bottom:4px">03</div><div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:2px">桥本运动篇</div><div style="font-size:10px;color:var(--muted)">智慧运动，充电不放电</div></div>
+      <div class="card" style="margin:0"><div style="font-size:20px;font-weight:700;color:var(--green);margin-bottom:4px">04</div><div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:2px">桥本睡眠篇</div><div style="font-size:10px;color:var(--muted)">身体的天然修复剂</div></div>
+      <div class="card" style="margin:0"><div style="font-size:20px;font-weight:700;color:var(--green);margin-bottom:4px">05</div><div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:2px">情绪压力管理</div><div style="font-size:10px;color:var(--muted)">为免疫系统降温</div></div>
+      <div class="card" style="margin:0"><div style="font-size:20px;font-weight:700;color:var(--green);margin-bottom:4px">06</div><div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:2px">生活排毒篇</div><div style="font-size:10px;color:var(--muted)">避开环境免疫干扰源</div></div>
+      <div class="card" style="margin:0"><div style="font-size:20px;font-weight:700;color:var(--green);margin-bottom:4px">07</div><div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:2px">三种医学对比</div><div style="font-size:10px;color:var(--muted)">西医·中医·功能医学</div></div>
+      <div class="card" style="margin:0"><div style="font-size:20px;font-weight:700;color:var(--green);margin-bottom:4px">08</div><div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:2px">营养补充剂选择</div><div style="font-size:10px;color:var(--muted)">精准补充，协同降抗体</div></div>
+      <div class="card card-green" style="margin:0"><div style="font-size:20px;font-weight:700;color:var(--green);margin-bottom:4px">09</div><div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:2px">真实康复案例</div><div style="font-size:10px;color:var(--muted)">3000+桥本人的改变</div></div>
+    </div>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">05</div></div>
+</div>
+
+<!-- SLIDE 3: 认知章节 -->
+<div class="slide s-chapter" data-idx="3">
+  <div class="ch-line"></div>
+  <div class="ch-num">01</div>
+  <div class="ch-badge">CHAPTER 01</div>
+  <div class="ch-title">桥本认知篇</div>
+  <div class="ch-en">Understanding Hashimoto's</div>
+  <div class="ch-desc">知己知彼，百战不殆<br>90%的人对桥本存在误解</div>
+</div>
+
+<!-- SLIDE 4: 什么是桥本 -->
+<div class="slide s-content" data-idx="4">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">认知篇</div></div><div class="sh-num">07</div></div>
+  <div class="slide-body">
+    <div class="slide-title">什么是桥本甲状腺炎？</div>
+    <div class="slide-sub">核心机制：免疫系统的"误判"</div>
+    <div class="callout" style="margin-bottom:11px">
+      <div class="ct">核心认知</div>
+      <div class="cb">桥本甲状腺炎<span class="hl">不是甲状腺的病，是免疫系统的病</span>。免疫系统错误攻击甲状腺——产生 TPOAb / TgAb 抗体，引发慢性炎症，激素合成受损。</div>
+    </div>
+    <div class="g2" style="margin-bottom:11px">
+      <div class="card card-gold" style="margin:0">
+        <div class="card-h"><div class="card-icon ci-gold">📊</div><div><div class="card-title">病程演变</div><div class="card-sub">桥本 → 甲亢 → 甲减</div></div></div>
+        <div class="card-body">初期炎症破坏甲状腺，激素大量释放引发一过性<b>甲亢</b>（心慌、易怒）；后期激素分泌不足，演变为<b>甲减</b>（疲劳、怕冷）。</div>
+      </div>
+      <div class="card" style="margin:0">
+        <div class="card-h"><div class="card-icon">⚠️</div><div><div class="card-title">你有这些症状吗？</div></div></div>
+        <div class="sym-grid">
+          <div class="sym-item"><div class="sym-box"></div>长期疲劳</div>
+          <div class="sym-item"><div class="sym-box"></div>大量脱发</div>
+          <div class="sym-item"><div class="sym-box"></div>抗体升高</div>
+          <div class="sym-item"><div class="sym-box"></div>体重增加</div>
+          <div class="sym-item"><div class="sym-box"></div>怕冷手脚凉</div>
+          <div class="sym-item"><div class="sym-box"></div>情绪低落</div>
+          <div class="sym-item"><div class="sym-box"></div>脑雾健忘</div>
+          <div class="sym-item"><div class="sym-box"></div>肠胃不适</div>
+        </div>
+      </div>
+    </div>
+    <div class="callout callout-red">
+      <div class="ct">⚠️ 不干预的风险</div>
+      <div class="cb">桥本不干预可能引发其他自免疾病：类风湿、干燥综合征、红斑狼疮等。<span class="hl-r">任何时候开始干预都不晚，但越早越好。</span></div>
+    </div>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">07</div></div>
+</div>
+
+<!-- SLIDE 5: 发展过程 -->
+<div class="slide s-content" data-idx="5">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">认知篇</div></div><div class="sh-num">08</div></div>
+  <div class="slide-body">
+    <div class="slide-title">桥本的发展过程</div>
+    <div class="slide-sub">了解自己在哪个阶段，找准干预切入点</div>
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <div class="card" style="flex:1;margin:0"><div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:5px">① 桥本正常期</div><div style="font-size:10.5px;color:var(--text2);line-height:1.65">甲功正常，可能有轻微疲劳肠胃问题。<span class="hl-r">最容易忽视，也是最佳干预期。</span></div></div>
+      <div class="card card-gold" style="flex:1;margin:0"><div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:5px">② 桥本伴甲亢</div><div style="font-size:10.5px;color:var(--text2);line-height:1.65">怕热、突眼、焦虑、心悸、食欲增加、体重减轻</div></div>
+      <div class="card card-red" style="flex:1;margin:0"><div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:5px">③ 桥本伴甲减</div><div style="font-size:10.5px;color:var(--text2);line-height:1.65">疲劳、怕冷、脱发、抑郁、体重增加、月经不调</div></div>
+      <div class="card card-red" style="flex:1;margin:0"><div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:5px">④ 伴其他自免病</div><div style="font-size:10.5px;color:var(--text2);line-height:1.65">类风湿、干燥综合征、红斑狼疮、自免性肝病</div></div>
+    </div>
+    <div class="callout callout-blue">
+      <div class="ct">🎯 干预目标</div>
+      <div class="cb">通过功能医学干预：<span class="hl-b">症状缓解 → 抗体下降 → 甲状腺组织再生 → 功能性治愈</span>。病因根除 + 生活方式改善 + 抗炎支持，三管齐下。</div>
+    </div>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">08</div></div>
+</div>
+
+<!-- SLIDE 6: 干预思路 -->
+<div class="slide s-content" data-idx="6">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">认知篇</div></div><div class="sh-num">10</div></div>
+  <div class="slide-body">
+    <div class="slide-title">调理桥本的正确顺序</div>
+    <div class="slide-sub">方向对了，身体会给你答案</div>
+    <div class="callout callout-gold" style="margin-bottom:13px">
+      <div class="ct">为什么优甲乐吃了还是不舒服？</div>
+      <div class="cb">优甲乐只补充激素，解决激素不足的症状。但<span class="hl-g">免疫为什么攻击甲状腺</span>的根本原因没解决，所以症状反复、停药反弹。</div>
+    </div>
+    <div class="step"><div class="step-n">1</div><div><div class="step-t">找到刺激源 — 精准检测</div><div class="step-d">食物不耐受检测 + 肠道菌群检测，找到持续刺激免疫系统的根源</div></div></div>
+    <div class="step"><div class="step-n">2</div><div><div class="step-t">精准忌口 — 切断刺激</div><div class="step-d">排除通用忌口六大类 + 个人不耐受食物，给免疫系统真正降温</div></div></div>
+    <div class="step"><div class="step-n">3</div><div><div class="step-t">修复肠道 — 重建防线</div><div class="step-d">70%的免疫细胞在肠道，修复肠漏是稳定免疫、降低抗体的关键</div></div></div>
+    <div class="step"><div class="step-n">4</div><div><div class="step-t">营养支持 — 协同增效</div><div class="step-d">针对性补充硒、维D3、镁、NAC等核心营养素，协同降低抗体</div></div></div>
+    <div class="step"><div class="step-n">5</div><div><div class="step-t">生活方式 — 长效稳定</div><div class="step-d">优化睡眠、运动、情绪、排毒，好的生活习惯可以坚持终身</div></div></div>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">10</div></div>
+</div>
+
+<!-- SLIDE 7: 重新认识桥本 -->
+<div class="slide s-content" data-idx="7">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">认知篇</div></div><div class="sh-num">11</div></div>
+  <div class="slide-body">
+    <div class="slide-title">重新认识桥本，开启智慧疗愈之旅</div>
+    <div class="slide-sub">打破"终身躺平"的误区</div>
+    <div class="g2">
+      <div>
+        <div class="badge-h"><div class="badge-h-t">01. 卸下焦虑</div></div>
+        <div class="card card-gray" style="margin-bottom:10px"><div class="card-body">刚拿到抗体异常的报告时，你可能感到迷茫，甚至被"终身服药"的标签压得喘不过气。请先放下这份沉重，桥本并非只能被动接受。</div></div>
+        <div class="callout callout-gold">
+          <div class="cb" style="font-style:italic;color:var(--gold)">"得了桥本，不是让你'躺平'，而是教你如何更'智慧'地生活。"</div>
+        </div>
+      </div>
+      <div>
+        <div class="badge-h"><div class="badge-h-t">02. 看见本质</div></div>
+        <div class="card card-gray" style="margin-bottom:10px"><div class="card-body">桥本的根源是免疫系统"迷失方向"攻击甲状腺，伴随慢性炎症。疗愈的核心不是"修补"器官，而是<span class="hl">重新恢复身体的免疫平衡</span>。</div></div>
+        <div class="callout">
+          <div class="ct">关键认知转变</div>
+          <div class="cb">从"甲状腺坏了"→"免疫系统迷路了"<br>从"终身服药"→"找到根源，系统调理"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">11</div></div>
+</div>
+
+<!-- SLIDE 8: 饮食章节 -->
+<div class="slide s-chapter" data-idx="8">
+  <div class="ch-line"></div>
+  <div class="ch-num">02</div>
+  <div class="ch-badge">CHAPTER 02</div>
+  <div class="ch-title">桥本饮食篇</div>
+  <div class="ch-en">Dietary Guidelines</div>
+  <div class="ch-desc">饮食是调理桥本最重要的基石<br>吃对了，抗体自然会降</div>
+</div>
+
+<!-- SLIDE 9: 两大原则 -->
+<div class="slide s-content" data-idx="9">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">饮食篇</div></div><div class="sh-num">13</div></div>
+  <div class="slide-body">
+    <div class="slide-title">桥本饮食的两大核心原则</div>
+    <div class="slide-sub">先排除伤害，再修复滋养</div>
+    <div class="g2" style="margin-bottom:11px">
+      <div class="card card-red" style="margin:0">
+        <div class="card-h"><div class="card-icon ci-red">🚫</div><div><div class="card-title">原则①：祛除伤害饮食（忌口）</div></div></div>
+        <div class="tags"><span class="tag tag-red">慢性食物不耐受（精准忌口）</span><span class="tag tag-red">通用忌口6大类</span></div>
+      </div>
+      <div class="card card-green" style="margin:0">
+        <div class="card-h"><div class="card-icon ci-g">✅</div><div><div class="card-title">原则②：修复桥本饮食（多吃）</div></div></div>
+        <div class="tags"><span class="tag tag-green">抗炎饮食</span><span class="tag tag-green">211饮食法</span><span class="tag tag-green">地中海饮食</span></div>
+      </div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-box"><div class="sn">88%</div><div class="sl">无麸质饮食后好转率</div></div>
+      <div class="stat-box"><div class="sn">33%</div><div class="sl">抗体平均下降幅度</div></div>
+      <div class="stat-box"><div class="sn">75%</div><div class="sl">桥本者鸡蛋不耐受</div></div>
+      <div class="stat-box"><div class="sn">70%</div><div class="sl">免疫细胞在肠道</div></div>
+    </div>
+    <div class="callout">
+      <div class="ct">正确顺序</div>
+      <div class="cb"><span class="hl">先精准忌口，再补充营养素。</span>不耐受食物还在吃 = 一边修墙一边拆墙，再多营养素也事倍功半。</div>
+    </div>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">13</div></div>
+</div>
+
+<!-- SLIDE 10: 精准忌口 -->
+<div class="slide s-content" data-idx="10">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">饮食篇</div></div><div class="sh-num">14</div></div>
+  <div class="slide-body">
+    <div class="slide-title">精准忌口——最重要的第一步</div>
+    <div class="slide-sub">推荐吃什么之前，先搞清楚不该吃什么</div>
+    <div class="callout" style="margin-bottom:11px">
+      <div class="ct">为什么需要食物不耐受检测？</div>
+      <div class="cb">不耐受食物产生的IgG抗体，结构与TPOAb、TGAb接近。<span class="hl">免疫攻击食物时会同时"误伤"甲状腺</span>——你以为最健康的食物，可能正是最大的刺激源。</div>
+    </div>
+    <div class="g2" style="margin-bottom:11px">
+      <div class="card card-green" style="margin:0">
+        <div class="card-h"><div class="card-icon ci-g">🔬</div><div><div class="card-title">食物不耐受检测</div></div></div>
+        <div class="card-body">• 结果高度个体化<br>• 直接给出"嫌疑食物"清单<br>• 立即开始针对性排除<br>• 提升调理依从性和效率</div>
+      </div>
+      <div class="card card-red" style="margin:0">
+        <div class="card-h"><div class="card-icon ci-red">⏱️</div><div><div class="card-title">自行排除饮食法</div><div class="card-sub">≈ 数周到数月</div></div></div>
+        <div class="card-body">• 耗时且需高度自律<br>• 复杂结果容易误判<br>• 可能忽视更严重问题<br><span class="hl-r">需专业人士指导</span></div>
+      </div>
+    </div>
+    <div class="callout callout-blue">
+      <div class="ct">真实案例：著名主持人朱丹</div>
+      <div class="cb">40多岁才得知对"鸡蛋"严重过敏，自述已导致连续心悸、甲状腺和肺部多处结节。</div>
+    </div>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">14</div></div>
+</div>
+
+<!-- SLIDE 11: 慢性炎症循环 -->
+<div class="slide s-content" data-idx="11">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">饮食篇</div></div><div class="sh-num">17</div></div>
+  <div class="slide-body">
+    <div class="slide-title">慢性食物不耐受的恶性循环</div>
+    <div class="slide-sub">持续摄入不耐受食物 = 持续给免疫系统加柴</div>
+    <div class="timeline" style="margin-bottom:13px">
+      <div class="tl-item"><div class="tl-t">频繁摄入不耐受食物</div><div class="tl-d">为免疫系统提供持续不断的刺激源，导致炎症反应周而复始</div></div>
+      <div class="tl-item"><div class="tl-t">慢性炎症加剧</div><div class="tl-d">改变肠道菌群组成，破坏肠道生态平衡</div></div>
+      <div class="tl-item"><div class="tl-t">肠道菌群失调 → 肠漏</div><div class="tl-d">产生促炎物质，损害肠道屏障，大分子进入血液</div></div>
+      <div class="tl-item"><div class="tl-t">免疫持续应激 → 抗体升高</div><div class="tl-d">TPOAb / TgAb 居高不下，甲状腺持续受损</div></div>
+    </div>
+    <div class="callout">
+      <div class="ct">🔬 检测优势</div>
+      <div class="cb">拿到食物不耐受报告后，<span class="hl">立即开始针对性剔除高反应食物</span>，直接指导个性化饮食方案制定，管理效率大幅提升。</div>
+    </div>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">17</div></div>
+</div>
+
+<!-- SLIDE 12: 精准忌口案例 -->
+<div class="slide s-content" data-idx="12">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">饮食篇</div></div><div class="sh-num">22</div></div>
+  <div class="slide-body">
+    <div class="slide-title">精准忌口后——真实改变</div>
+    <div class="slide-sub">均经本人授权同意</div>
+    <div class="g2" style="margin-bottom:11px">
+      <div class="card card-green" style="margin:0"><div class="card-body"><span class="hl">蜂蜜</span>居然是最大伤害——检测出严重不耐受，排除后抗体明显下降</div></div>
+      <div class="card card-green" style="margin:0"><div class="card-body">忌口后<span class="hl">脖子消肿了</span>——困扰多年的甲状腺肿大，仅通过饮食调整得到改善</div></div>
+      <div class="card card-green" style="margin:0"><div class="card-body"><span class="hl">精准忌口，考公上岸</span>——脑雾消失、精力恢复，备考效率大幅提升</div></div>
+      <div class="card card-green" style="margin:0"><div class="card-body"><span class="hl">坚持3个月</span>，TPOAb从800+降至正常范围</div></div>
+    </div>
+    <div class="callout">
+      <div class="ct">7种最常见高频不耐受食物</div>
+      <div class="cb">
+        <div class="tags">
+          <span class="tag tag-red">鸡蛋（约75%）</span><span class="tag tag-red">牛奶乳制品</span><span class="tag tag-red">含麸质面食</span>
+          <span class="tag tag-red">大豆黑豆（约44%）</span><span class="tag">虾（10-20%）</span><span class="tag">蟹（10-20%）</span><span class="tag">花生（10-20%）</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">22</div></div>
+</div>
+
+<!-- SLIDE 13: 无麸质清单 -->
+<div class="slide s-content" data-idx="13">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">饮食篇</div></div><div class="sh-num">25</div></div>
+  <div class="slide-body">
+    <div class="slide-title">桥本人全面的无麸质饮食清单</div>
+    <div class="slide-sub">可以吃的食物比你想象的多得多</div>
+    <div class="g3" style="gap:7px">
+      <div class="card card-green" style="margin:0;padding:10px 12px"><div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:4px">主食类 28种</div><div style="font-size:10px;color:var(--text2);line-height:1.65">大米、小米、糙米、藜麦、荞麦、无麸质燕麦、黑米、高粱<br>土豆、红薯、紫薯、山药、南瓜</div></div>
+      <div class="card card-green" style="margin:0;padding:10px 12px"><div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:4px">蛋白质 51种</div><div style="font-size:10px;color:var(--text2);line-height:1.65">猪牛羊肉、禽肉、各类海鱼河鱼<br>红豆绿豆鹰嘴豆豌豆<br>腰果核桃巴西坚果</div></div>
+      <div class="card card-green" style="margin:0;padding:10px 12px"><div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:4px">蔬菜类 48种</div><div style="font-size:10px;color:var(--text2);line-height:1.65">芹菜菠菜羽衣甘蓝西兰花白菜紫甘蓝四季豆<br>香菇木耳银耳</div></div>
+      <div class="card card-green" style="margin:0;padding:10px 12px"><div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:4px">水果类 24种</div><div style="font-size:10px;color:var(--text2);line-height:1.65"><b>优选：</b>蓝莓黑莓桑葚树莓牛油果猕猴桃<br><b>适量：</b>草莓梨香蕉葡萄柚子石榴</div></div>
+      <div class="card card-green" style="margin:0;padding:10px 12px"><div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:4px">调味料 39种</div><div style="font-size:10px;color:var(--text2);line-height:1.65">海盐、无麸质酱油、椰子醋苹果醋<br>葱姜蒜黑胡椒姜黄粉<br>椰子油橄榄油山茶油</div></div>
+      <div class="card card-green" style="margin:0;padding:10px 12px"><div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:4px">饮品零食 24种</div><div style="font-size:10px;color:var(--text2);line-height:1.65"><b>饮品：</b>花茶陈皮茶椰奶坚果奶<br><b>零食：</b>原味坚果无麸质米饼大米锅巴</div></div>
+    </div>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">25</div></div>
+</div>
+
+<!-- SLIDE 14: 主食蛋白详表 -->
+<div class="slide s-content" data-idx="14">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">饮食篇</div></div><div class="sh-num">26</div></div>
+  <div class="slide-body">
+    <div class="slide-title">主食 & 蛋白质详细分类</div>
+    <div class="slide-sub">无麸质饮食完整参考表</div>
+    <table class="food-table">
+      <thead><tr><th>类别</th><th>细分</th><th>推荐食物</th><th>注意事项</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="3" style="color:var(--green);font-weight:700">主食</td><td style="color:var(--muted)">谷物14种</td><td>大米、小米、糙米、藜麦、荞麦、无麸质燕麦、黑米、高粱、薏米、玉米</td><td style="color:var(--muted)">粗粮≤30%</td></tr>
+        <tr><td style="color:var(--muted)">粉面类8种</td><td>无麸质面条、红薯粉条、米粉、杂粮粉、木薯粉</td><td style="color:var(--muted)">警惕添加糖</td></tr>
+        <tr><td style="color:var(--muted)">根茎类6种</td><td>土豆、红薯、紫薯、山药、芋头、南瓜</td><td style="color:var(--muted)">土豆4天1次</td></tr>
+        <tr><td rowspan="2" style="color:var(--green);font-weight:700">蛋白质</td><td style="color:var(--muted)">动物性32种</td><td>猪牛羊肉、禽类、鸡鸭蛋（4天1次）、各类海鱼河鱼、虾贝类</td><td style="color:var(--muted)">海鲜每周3-4次</td></tr>
+        <tr><td style="color:var(--muted)">植物性29种</td><td>红豆绿豆鹰嘴豆豌豆；腰果核桃巴西坚果；豌豆蛋白粉</td><td style="color:var(--muted)">坚果每日≤1拳</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">26</div></div>
+</div>
+
+<!-- SLIDE 15: 蔬菜水果详表 -->
+<div class="slide s-content" data-idx="15">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">饮食篇</div></div><div class="sh-num">28</div></div>
+  <div class="slide-body">
+    <div class="slide-title">蔬菜 & 水果 & 油脂详表</div>
+    <table class="food-table">
+      <thead><tr><th>类别</th><th>细分</th><th>推荐食物</th><th>注意</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="5" style="color:var(--green);font-weight:700">蔬菜48种</td><td style="color:var(--muted)">茎叶菜27</td><td>芹菜韭菜菠菜羽衣甘蓝西兰花小白菜紫甘蓝四季豆荷兰豆</td><td style="color:var(--muted)">彩虹色搭配</td></tr>
+        <tr><td style="color:var(--muted)">根菜10</td><td>洋葱甜菜根魔芋白萝卜胡萝卜竹笋</td><td style="color:var(--muted)">胀气者适量</td></tr>
+        <tr><td style="color:var(--muted)">瓜果类8</td><td>黄瓜苦瓜木瓜佛手瓜冬瓜南瓜</td><td></td></tr>
+        <tr><td style="color:var(--muted)">菌菇类7</td><td>香菇蘑菇平菇金针菇猴头菇木耳银耳</td><td></td></tr>
+        <tr><td style="color:var(--muted)">茄科类6</td><td>茄子西红柿土豆青椒辣椒枸杞</td><td style="color:var(--red)">肠漏期忌口</td></tr>
+        <tr><td rowspan="3" style="color:var(--green);font-weight:700">水果24种</td><td style="color:var(--muted)">优选8</td><td>蓝莓黑莓桑葚蔓越莓树莓樱桃牛油果猕猴桃</td><td style="color:var(--muted)">每日1-2份</td></tr>
+        <tr><td style="color:var(--muted)">适量11</td><td>草莓梨杨梅菠萝香蕉西瓜葡萄柚子橘子</td><td style="color:var(--muted)">餐后2小时</td></tr>
+        <tr><td style="color:var(--muted)">限食5</td><td>榴莲荔枝芒果热带水果</td><td style="color:var(--red)">糖分>15%慎选</td></tr>
+        <tr><td style="color:var(--green);font-weight:700">健康油脂</td><td style="color:var(--muted)">9种</td><td>椰子油、橄榄油、山茶油、紫苏油、牛油果油、亚麻籽油、芝麻油</td><td style="color:var(--muted)">替换精炼植物油</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">28</div></div>
+</div>
+
+<!-- SLIDE 16: 六大类忌口 -->
+<div class="slide s-content" data-idx="16">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">饮食篇</div></div><div class="sh-num">35</div></div>
+  <div class="slide-body">
+    <div class="slide-title">通用忌口六大类</div>
+    <div class="slide-sub">无论个人情况，所有桥本人都应先排除</div>
+    <div class="g2" style="gap:7px">
+      <div class="card card-red" style="margin:0;padding:10px 12px"><div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:5px">① 含麸质面食</div><div style="font-size:10px;color:var(--text2);line-height:1.65"><b>为什么：</b>麸质蛋白与甲状腺过氧化酶相似，分子模拟攻击。<b style="color:var(--green)">替代：</b>大米、红薯、无麸质燕麦</div></div>
+      <div class="card card-red" style="margin:0;padding:10px 12px"><div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:5px">② 乳制品</div><div style="font-size:10px;color:var(--text2);line-height:1.65"><b>为什么：</b>A1β酪蛋白激活免疫，加重免疫负担。<b style="color:var(--green)">替代：</b>驼奶、椰奶、杏仁奶</div></div>
+      <div class="card card-red" style="margin:0;padding:10px 12px"><div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:5px">③ 大豆制品（种子态）</div><div style="font-size:10px;color:var(--text2);line-height:1.65">大豆黑豆毛豆含大量凝集素。豆腐豆浆少量可以，红豆绿豆豌豆正常吃。</div></div>
+      <div class="card card-red" style="margin:0;padding:10px 12px"><div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:5px">④ 含咖啡因饮品</div><div style="font-size:10px;color:var(--text2);line-height:1.65">咖啡、浓茶、奶茶给甲状腺额外压力。<b style="color:var(--green)">替代：</b>花茶、菊花茶</div></div>
+      <div class="card card-red" style="margin:0;padding:10px 12px"><div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:5px">⑤ 人工甜味剂</div><div style="font-size:10px;color:var(--text2);line-height:1.65">安赛蜜、阿斯巴甜、三氯蔗糖、果葡糖浆——隐藏于配料表，仔细识别。</div></div>
+      <div class="card card-red" style="margin:0;padding:10px 12px"><div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:5px">⑥ 所有酒精饮品</div><div style="font-size:10px;color:var(--text2);line-height:1.65">啤酒白酒红酒——损害肠道、免疫、肝脏，调理期间完全戒除。</div></div>
+    </div>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">35</div></div>
+</div>
+
+<!-- SLIDE 17: 抗炎饮食 -->
+<div class="slide s-content" data-idx="17">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">饮食篇</div></div><div class="sh-num">37</div></div>
+  <div class="slide-body">
+    <div class="slide-title">桥本推荐饮食：抗炎饮食</div>
+    <div class="slide-sub">吃对食物，让身体自然抗炎</div>
+    <div class="g3" style="margin-bottom:10px;gap:7px">
+      <div class="card card-green" style="margin:0;padding:11px 12px"><div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:5px">天然抗炎剂·Omega-3</div><div style="font-size:10px;color:var(--text2);line-height:1.65">抑制体内促炎因子，给甲状腺"灭火"。<br><b>推荐：</b>深海鱼、亚麻籽、奇亚籽、核桃</div></div>
+      <div class="card card-green" style="margin:0;padding:11px 12px"><div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:5px">免疫调节器·维生素D</div><div style="font-size:10px;color:var(--text2);line-height:1.65">缺乏增加甲减风险，调节免疫细胞活性。<br><b>补充：</b>多日晒、三文鱼、蘑菇</div></div>
+      <div class="card card-green" style="margin:0;padding:11px 12px"><div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:5px">肠道守护者·益生菌</div><div style="font-size:10px;color:var(--text2);line-height:1.65">70%免疫细胞在肠道，养好菌群是关键。<br><b>推荐：</b>燕麦、西兰花、苹果、泡菜</div></div>
+    </div>
+    <div class="g2" style="gap:8px">
+      <div class="card card-gold" style="margin:0;padding:11px 12px"><div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:5px">低碘优质蛋白·修复基石</div><div style="font-size:10px;color:var(--text2);line-height:1.65">推荐：三文鱼（含Omega-3）、鳕鱼、鲈鱼。低碘摄入避免刺激甲状腺。</div></div>
+      <div class="card card-gold" style="margin:0;padding:11px 12px"><div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:5px">甲状腺保护盾·富含硒</div><div style="font-size:10px;color:var(--text2);line-height:1.65">推荐：巴西坚果（每天1-2颗）、牡蛎、虾、动物肝脏。可显著降低TPOAb。</div></div>
+    </div>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">37</div></div>
+</div>
+
+<!-- SLIDE 18: 分期饮食 -->
+<div class="slide s-content" data-idx="18">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">饮食篇</div></div><div class="sh-num">41</div></div>
+  <div class="slide-body">
+    <div class="slide-title">分期而食：甲亢期 vs 甲减期</div>
+    <div class="slide-sub">不同阶段，饮食策略不同</div>
+    <div class="g2">
+      <div class="card card-red" style="margin:0">
+        <div style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:8px">⚡ 甲亢期·代谢旺盛</div>
+        <div style="font-size:10px;color:var(--muted);margin-bottom:8px">症状：心慌 / 手抖 / 易饿 / 体重减轻</div>
+        <div class="step" style="margin-bottom:7px"><div class="step-n">1</div><div><div class="step-t" style="font-size:11px">严格低碘</div><div class="step-d" style="font-size:10px">每日 &lt;100μg，忌海藻海带碘盐</div></div></div>
+        <div class="step" style="margin-bottom:7px"><div class="step-n">2</div><div><div class="step-t" style="font-size:11px">补足热量蛋白</div><div class="step-d" style="font-size:10px">弥补高代谢消耗，增重固肌</div></div></div>
+        <div class="step"><div class="step-n">3</div><div><div class="step-t" style="font-size:11px">多补钾元素</div><div class="step-d" style="font-size:10px">食用香蕉、菠菜，防低钾血症</div></div></div>
+      </div>
+      <div class="card card-blue" style="margin:0">
+        <div style="font-size:13px;font-weight:700;color:var(--teal);margin-bottom:8px">😴 甲减期·代谢缓慢</div>
+        <div style="font-size:10px;color:var(--muted);margin-bottom:8px">症状：乏力 / 怕冷 / 便秘 / 体重增加</div>
+        <div class="step" style="margin-bottom:7px"><div class="step-n">1</div><div><div class="step-t" style="font-size:11px">控制碘摄入</div><div class="step-d" style="font-size:10px">每日150-200μg，抗体高则低碘</div></div></div>
+        <div class="step" style="margin-bottom:7px"><div class="step-n">2</div><div><div class="step-t" style="font-size:11px">重点补充铁剂</div><div class="step-d" style="font-size:10px">多吃红肉、动物血，改善贫血</div></div></div>
+        <div class="step"><div class="step-n">3</div><div><div class="step-t" style="font-size:11px">补充维生素B12</div><div class="step-d" style="font-size:10px">摄入肉类（需排查不耐受），缓解神经疲劳</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">41</div></div>
+</div>
+
+<!-- SLIDE 19: 配料表技巧 -->
+<div class="slide s-content" data-idx="19">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">饮食篇</div></div><div class="sh-num">42</div></div>
+  <div class="slide-body">
+    <div class="slide-title">养成看"配料表"的习惯</div>
+    <div class="slide-sub">买任何食品，先翻到背面——比营养成分表更重要</div>
+    <div class="callout" style="margin-bottom:13px">
+      <div class="ct">核心习惯</div>
+      <div class="cb">食品正面标注往往具有误导性，隐藏成分藏在配料表里。看到以下成分立刻排除。</div>
+    </div>
+    <div class="g2" style="gap:8px">
+      <div class="card card-red" style="margin:0">
+        <div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:7px">隐形麸质</div>
+        <div class="tags"><span class="tag tag-red">小麦粉</span><span class="tag tag-red">麦芽</span><span class="tag tag-red">大麦成分</span><span class="tag tag-red">面筋</span></div>
+      </div>
+      <div class="card card-red" style="margin:0">
+        <div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:7px">隐形碘（调理期警惕）</div>
+        <div class="tags"><span class="tag tag-red">海藻</span><span class="tag tag-red">海带粉</span><span class="tag tag-red">碘化钾</span><span class="tag tag-red">虾青素</span></div>
+      </div>
+      <div class="card card-red" style="margin:0">
+        <div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:7px">人工甜味剂</div>
+        <div class="tags"><span class="tag tag-red">安赛蜜</span><span class="tag tag-red">阿斯巴甜</span><span class="tag tag-red">三氯蔗糖</span><span class="tag tag-red">果葡糖浆</span></div>
+      </div>
+      <div class="card card-red" style="margin:0">
+        <div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:7px">隐形乳制品</div>
+        <div class="tags"><span class="tag tag-red">奶粉</span><span class="tag tag-red">乳清蛋白</span><span class="tag tag-red">酪蛋白</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">42</div></div>
+</div>
+
+<!-- SLIDE 20: 211饮食法 -->
+<div class="slide s-content" data-idx="20">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">饮食篇</div></div><div class="sh-num">43</div></div>
+  <div class="slide-body">
+    <div class="slide-title">每日饮食结构：211 饮食法</div>
+    <div class="slide-sub">简单易执行的饮食框架</div>
+    <div class="stat-row" style="margin-bottom:14px">
+      <div class="stat-box"><div class="sn" style="color:var(--green)">2</div><div class="sl">份蔬菜（半盘）</div></div>
+      <div class="stat-box"><div class="sn">1</div><div class="sl">份优质蛋白</div></div>
+      <div class="stat-box"><div class="sn">1</div><div class="sl">份无麸质主食</div></div>
+    </div>
+    <div class="callout" style="margin-bottom:12px">
+      <div class="ct">进餐顺序很重要</div>
+      <div class="cb">先吃蔬菜 → 再吃蛋白质 → 最后吃主食。有效稳定血糖，减少餐后炎症反应。</div>
+    </div>
+    <div class="g3" style="gap:7px">
+      <div class="card card-green" style="margin:0;padding:11px 12px"><div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:5px">早餐</div><div style="font-size:10px;color:var(--text2);line-height:1.65">椰奶燕麦 + 蓝莓猕猴桃<br>或：蔬菜炒饭 + 豌豆蛋白粉</div></div>
+      <div class="card card-green" style="margin:0;padding:11px 12px"><div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:5px">午餐</div><div style="font-size:10px;color:var(--text2);line-height:1.65">三文鱼 + 彩虹蔬菜 + 糙米<br>或：鸡胸肉 + 西兰花 + 红薯</div></div>
+      <div class="card card-green" style="margin:0;padding:11px 12px"><div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:5px">晚餐</div><div style="font-size:10px;color:var(--text2);line-height:1.65">清蒸鲈鱼 + 菠菜蒜炒 + 小米粥<br>或：虫草花炖鸡 + 凉拌黄瓜</div></div>
+    </div>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">43</div></div>
+</div>
+
+<!-- SLIDE 21: 运动章节 -->
+<div class="slide s-chapter" data-idx="21">
+  <div class="ch-line"></div>
+  <div class="ch-num">03</div>
+  <div class="ch-badge">CHAPTER 03</div>
+  <div class="ch-title">智慧运动篇</div>
+  <div class="ch-en">Wise Movement</div>
+  <div class="ch-desc">运动目标是"充电"，不是"放电"<br>唤醒身体自愈力</div>
+</div>
+
+<!-- SLIDE 22: 推荐运动 -->
+<div class="slide s-content" data-idx="22">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">运动篇</div></div><div class="sh-num">45</div></div>
+  <div class="slide-body">
+    <div class="slide-title">推荐运动：温和、持续、不疲劳</div>
+    <div class="slide-sub">选择能让你运动后感到精力充沛的方式</div>
+    <div class="g3" style="margin-bottom:11px;gap:7px">
+      <div class="card card-green" style="margin:0"><div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:4px">低强度有氧</div><div style="font-size:10px;color:var(--muted);margin-bottom:6px">每周3-5次</div><div style="font-size:10.5px;color:var(--text2);line-height:1.7">• 户外快走/散步<br>• 游泳/水中运动<br>• 休闲骑行</div></div>
+      <div class="card card-green" style="margin:0"><div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:4px">身心调节运动</div><div style="font-size:10px;color:var(--muted);margin-bottom:6px">每周2-3次</div><div style="font-size:10.5px;color:var(--text2);line-height:1.7">• 阴瑜伽/修复瑜伽<br>• 太极/八段锦<br>• 普拉提</div></div>
+      <div class="card card-green" style="margin:0"><div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:4px">轻度力量训练</div><div style="font-size:10px;color:var(--muted);margin-bottom:6px">每周2次</div><div style="font-size:10.5px;color:var(--text2);line-height:1.7">• 小重量哑铃<br>• 弹力带抗阻<br>• 激活肌肉群</div></div>
+    </div>
+    <div class="g2" style="gap:8px">
+      <div class="callout" style="margin:0"><div class="ct">最佳运动时机</div><div class="cb">推荐<span class="hl">上午9-11点</span>或<span class="hl">傍晚5-7点</span>，避免清晨空腹运动。</div></div>
+      <div class="callout callout-red" style="margin:0"><div class="ct">⚠️ 过量预警信号</div><div class="cb">运动后疲劳感<span class="hl-r">超过24小时未缓解</span>，立即减量休息。</div></div>
+    </div>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">45</div></div>
+</div>
+
+<!-- SLIDE 23: 避免运动 -->
+<div class="slide s-content" data-idx="23">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">运动篇</div></div><div class="sh-num">46</div></div>
+  <div class="slide-body">
+    <div class="slide-title">需要避免的运动</div>
+    <div class="slide-sub">高强度运动会产生应激激素，加重炎症</div>
+    <div class="g3" style="margin-bottom:13px;gap:8px">
+      <div class="card card-red" style="margin:0;text-align:center;padding:16px 12px"><div style="font-size:26px;margin-bottom:7px">🏃</div><div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:5px">高强度间歇 HIIT</div><div style="font-size:10.5px;color:var(--text2);line-height:1.65">产生大量应激激素，加重炎症，不利疲劳恢复</div></div>
+      <div class="card card-red" style="margin:0;text-align:center;padding:16px 12px"><div style="font-size:26px;margin-bottom:7px">🏅</div><div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:5px">马拉松/长时间剧烈</div><div style="font-size:10.5px;color:var(--text2);line-height:1.65">过度消耗体能，让本已疲劳的身体雪上加霜</div></div>
+      <div class="card card-red" style="margin:0;text-align:center;padding:16px 12px"><div style="font-size:26px;margin-bottom:7px">😤</div><div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:5px">需要"硬撑"的运动</div><div style="font-size:10.5px;color:var(--text2);line-height:1.65">任何让你感到极度疲劳、需要意志力勉强坚持的</div></div>
+    </div>
+    <div class="callout">
+      <div class="ct">🎯 核心原则</div>
+      <div class="cb">运动的目标是<span class="hl">"充电"而不是"放电"</span>。选择运动后感到精力充沛的方式，倾听身体的声音永远是第一原则。</div>
+    </div>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">46</div></div>
+</div>
+
+<!-- SLIDE 24: 睡眠章节 -->
+<div class="slide s-chapter" data-idx="24">
+  <div class="ch-line"></div>
+  <div class="ch-num">04</div>
+  <div class="ch-badge">CHAPTER 04</div>
+  <div class="ch-title">优质睡眠篇</div>
+  <div class="ch-en">Sleep Optimization</div>
+  <div class="ch-desc">身体的天然修复剂<br>夜间是修复细胞、合成激素的主要窗口</div>
+</div>
+
+<!-- SLIDE 25: 睡眠指南 -->
+<div class="slide s-content" data-idx="25">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">睡眠篇</div></div><div class="sh-num">48</div></div>
+  <div class="slide-body">
+    <div class="slide-title">优质睡眠：身体的天然修复剂</div>
+    <div class="slide-sub">桥本患者对睡眠质量极度敏感</div>
+    <div class="g2" style="margin-bottom:11px">
+      <div class="card card-gold" style="margin:0">
+        <div style="font-size:12px;font-weight:700;color:var(--gold);margin-bottom:8px">为什么睡眠如此重要？</div>
+        <div class="step" style="margin-bottom:7px"><div class="step-n">🔧</div><div><div class="step-t" style="font-size:11px">修复与再生</div><div class="step-d" style="font-size:10px">夜间修复受损细胞、合成甲状腺激素的主要时间窗口</div></div></div>
+        <div class="step"><div class="step-n">🛡️</div><div><div class="step-t" style="font-size:11px">免疫与减压</div><div class="step-d" style="font-size:10px">调节免疫活性，抑制压力激素皮质醇，降低炎症</div></div></div>
+      </div>
+      <div class="card" style="margin:0">
+        <div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:8px">如何改善睡眠？</div>
+        <div class="step" style="margin-bottom:6px"><div class="step-n">1</div><div><div class="step-t" style="font-size:11px">固定作息规律</div><div class="step-d" style="font-size:10px">周末也保持固定入睡和起床时间</div></div></div>
+        <div class="step" style="margin-bottom:6px"><div class="step-n">2</div><div><div class="step-t" style="font-size:11px">卧室保持凉爽黑暗</div><div class="step-d" style="font-size:10px">18-22℃，遮光，安静</div></div></div>
+        <div class="step" style="margin-bottom:6px"><div class="step-n">3</div><div><div class="step-t" style="font-size:11px">睡前身心放松</div><div class="step-d" style="font-size:10px">远离电子设备，温水浴或阅读</div></div></div>
+        <div class="step"><div class="step-n">4</div><div><div class="step-t" style="font-size:11px">拒绝刺激物质</div><div class="step-d" style="font-size:10px">午后不摄入咖啡因，睡前避免饮酒</div></div></div>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="ct">🌙 目标</div>
+      <div class="cb"><span class="hl">23:00前入睡，保证7-8小时高质量睡眠</span>。镁可帮助改善入睡困难——睡前30分钟服用三合一镁300mg。</div>
+    </div>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">48</div></div>
+</div>
+
+<!-- SLIDE 26: 情绪章节 -->
+<div class="slide s-chapter" data-idx="26">
+  <div class="ch-line"></div>
+  <div class="ch-num">05</div>
+  <div class="ch-badge">CHAPTER 05</div>
+  <div class="ch-title">情绪管理篇</div>
+  <div class="ch-en">Emotional Management</div>
+  <div class="ch-desc">从内在觉察开始<br>重建身心平衡的疗愈之旅</div>
+</div>
+
+<!-- SLIDE 27: 压力循环 -->
+<div class="slide s-content" data-idx="27">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">情绪管理</div></div><div class="sh-num">50</div></div>
+  <div class="slide-body">
+    <div class="slide-title">压力与桥本的恶性循环</div>
+    <div class="slide-sub">打破循环，是稳定甲状腺功能的关键一步</div>
+    <div class="callout callout-red" style="margin-bottom:13px">
+      <div class="ct">恶性循环</div>
+      <div class="cb">压力 → 皮质醇升高 → 抑制甲状腺激素转化 → 加重甲减症状 → 焦虑加剧 → 炎症爆发 → <span class="hl-r">抗体升高</span></div>
+    </div>
+    <div class="badge-h" style="margin-bottom:11px"><div class="badge-h-t">每日减压实践</div></div>
+    <div class="g3" style="gap:7px">
+      <div class="card card-gold" style="margin:0;padding:12px 13px"><div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:5px">🌬️ 腹式呼吸法</div><div style="font-size:10.5px;color:var(--text2);line-height:1.65">每日早晚各5分钟。<br>鼻吸4秒→屏息2秒→嘴呼6秒，专注感受腹部起伏</div></div>
+      <div class="card card-gold" style="margin:0;padding:12px 13px"><div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:5px">🧘 正念冥想</div><div style="font-size:10.5px;color:var(--text2);line-height:1.65">每天10-15分钟。尝试"身体扫描"练习，将注意力依次转移到身体各部位</div></div>
+      <div class="card card-gold" style="margin:0;padding:12px 13px"><div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:5px">🌙 优质睡眠</div><div style="font-size:10.5px;color:var(--text2);line-height:1.65">身体最重要的修复期。保持规律作息，睡前远离电子屏幕</div></div>
+    </div>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">50</div></div>
+</div>
+
+<!-- SLIDE 28: 情绪释放 -->
+<div class="slide s-content" data-idx="28">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">情绪管理</div></div><div class="sh-num">51</div></div>
+  <div class="slide-body">
+    <div class="slide-title">情绪释放技巧</div>
+    <div class="slide-sub">让负面情绪有出口，才能给免疫系统真正降温</div>
+    <div class="g3" style="margin-bottom:12px;gap:8px">
+      <div class="card card-gold" style="margin:0;padding:14px"><div style="font-size:24px;margin-bottom:7px">📔</div><div style="font-size:12px;font-weight:700;color:var(--gold);margin-bottom:5px">写日记·情绪梳理</div><div style="font-size:10.5px;color:var(--text2);line-height:1.7">将焦虑、愤怒、担忧写下来，帮助看清内在情绪模式。记录的过程本身就是一次深度自我对话与疗愈。</div></div>
+      <div class="card card-gold" style="margin:0;padding:14px"><div style="font-size:24px;margin-bottom:7px">💬</div><div style="font-size:12px;font-weight:700;color:var(--gold);margin-bottom:5px">学会倾诉·分担压力</div><div style="font-size:10.5px;color:var(--text2);line-height:1.7">与信任的朋友、家人或咨询师分享感受。倾诉是连接的桥梁，也是将负面情绪"移出"身体的过程。</div></div>
+      <div class="card card-gold" style="margin:0;padding:14px"><div style="font-size:24px;margin-bottom:7px">🎨</div><div style="font-size:12px;font-weight:700;color:var(--gold);margin-bottom:5px">心流爱好·专注疗愈</div><div style="font-size:10.5px;color:var(--text2);line-height:1.7">绘画、音乐、园艺等能让你全神贯注的事。进入"心流"状态让大脑深度休息，缓解压力。</div></div>
+    </div>
+    <div class="callout">
+      <div class="ct">记住</div>
+      <div class="cb">情绪管理不是压制情绪，而是<span class="hl">为情绪找到健康的出口</span>。允许自己感受它，然后轻轻放下。</div>
+    </div>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">51</div></div>
+</div>
+
+<!-- SLIDE 29: 环境毒素 -->
+<div class="slide s-content" data-idx="29">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">生活排毒篇</div></div><div class="sh-num">53</div></div>
+  <div class="slide-body">
+    <div class="slide-title">环境毒素：隐藏的免疫干扰源</div>
+    <div class="slide-sub">减少接触，为免疫系统减负</div>
+    <div class="g2" style="margin-bottom:11px">
+      <div>
+        <div class="badge-h" style="margin-bottom:9px"><div class="badge-h-t">常见毒素来源</div></div>
+        <div class="card card-red" style="margin-bottom:7px;padding:10px 13px"><div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:3px">🥤 塑料制品</div><div style="font-size:10.5px;color:var(--text2)">双酚A（BPA）和邻苯二甲酸盐，干扰免疫系统</div></div>
+        <div class="card card-red" style="margin-bottom:7px;padding:10px 13px"><div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:3px">🧴 个人护理品</div><div style="font-size:10.5px;color:var(--text2)">防腐剂、人工香料和重金属</div></div>
+        <div class="card card-red" style="padding:10px 13px"><div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:3px">🧹 清洁用品</div><div style="font-size:10.5px;color:var(--text2)">洗衣液、消毒剂中的化学合成添加剂</div></div>
+      </div>
+      <div>
+        <div class="badge-h" style="margin-bottom:9px"><div class="badge-h-t">减少接触的方法</div></div>
+        <div class="step" style="margin-bottom:9px"><div class="step-n">1</div><div><div class="step-t">优选安全容器</div><div class="step-d">玻璃、陶瓷或不锈钢容器替代塑料</div></div></div>
+        <div class="step" style="margin-bottom:9px"><div class="step-n">2</div><div><div class="step-t">坚持天然无添加</div><div class="step-d">选购成分简单的个人护理产品</div></div></div>
+        <div class="step"><div class="step-n">3</div><div><div class="step-t">注重饮食安全</div><div class="step-d">优先有机食品，果蔬彻底清洗</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">53</div></div>
+</div>
+
+<!-- SLIDE 30: 三种医学对比 -->
+<div class="slide s-content" data-idx="30">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">医学对比</div></div><div class="sh-num">55</div></div>
+  <div class="slide-body">
+    <div class="slide-title">临床医学 · 中医 · 功能医学 对比</div>
+    <div class="slide-sub">了解三种体系，做出更明智的选择</div>
+    <table class="cmp-table">
+      <thead><tr><th class="th-a" style="width:16%">对比维度</th><th class="th-m" style="width:38%">✦ 功能医学</th><th class="th-a" style="width:23%">中医</th><th class="th-a" style="width:23%">西医</th></tr></thead>
+      <tbody>
+        <tr><td class="td-l">干预原则</td><td class="td-m">精确检测评估，明确病因，针对调理，调节免疫</td><td class="td-a">辨证论治，根据体质调理全身</td><td class="td-a">西药稳定甲功（赛治/优甲乐）</td></tr>
+        <tr><td class="td-l">病因认知</td><td class="td-m">基因+环境+肠漏<br>明确病因，精准干预</td><td class="td-a">脾肾亏虚<br>气阴两虚<br>痰凝血瘀</td><td class="td-a">自身免疫问题<br>病因不明</td></tr>
+        <tr><td class="td-l">常用手段</td><td class="td-m">精准忌口、营养补剂、运动睡眠情绪全方位</td><td class="td-a">夏枯草黄芪柴胡等中药</td><td class="td-a">赛治、优甲乐</td></tr>
+        <tr><td class="td-l">优势</td><td class="td-m" style="color:var(--green)">好的习惯可坚持终身<br>专业团队定制方案</td><td class="td-a">整体调理，副作用少</td><td class="td-a">起效快，激素稳定</td></tr>
+        <tr><td class="td-l">局限</td><td class="td-a" style="color:var(--muted)">需配合执行，见效较慢</td><td class="td-a" style="color:var(--red)">难长期坚持，停药反弹</td><td class="td-a" style="color:var(--red)">停药反弹，不治本</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">55</div></div>
+</div>
+
+<!-- SLIDE 31: 营养素章节 -->
+<div class="slide s-chapter" data-idx="31">
+  <div class="ch-line"></div>
+  <div class="ch-num">08</div>
+  <div class="ch-badge">CHAPTER 08</div>
+  <div class="ch-title">营养补充剂</div>
+  <div class="ch-en">Nutritional Supplements</div>
+  <div class="ch-desc">精准补充，协同降低抗体<br>给甲状腺最有力的支持</div>
+</div>
+
+<!-- SLIDE 32: 4大营养素 -->
+<div class="slide s-content" data-idx="32">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">营养补充剂</div></div><div class="sh-num">57</div></div>
+  <div class="slide-body">
+    <div class="slide-title">桥本必补的 4 种核心营养素</div>
+    <div class="slide-sub">单独有效 · 协同加倍</div>
+    <div class="ncrd"><div class="ncrd-name">⭐ 有机硒（甲硫氨酸硒）</div><span class="ncrd-dose">200mcg/天 · 餐后服用</span><div class="ncrd-desc">桥本调理最核心营养素。每日200μg有机硒，可使抗体降低约<b style="color:var(--green)">40%</b>。保护甲状腺细胞免受氧化损伤。<b>NAC+硒=最强抗炎组合。</b></div><div class="ncrd-warn">⚠️ 优先选有机硒，不超过400μg/天</div></div>
+    <div class="ncrd"><div class="ncrd-name">⭐ 维生素 D3 + K2</div><span class="ncrd-dose">5000IU/天 · 餐后1颗</span><div class="ncrd-desc"><b>80%的桥本患者缺乏维生素D。</b>理想值50-80ng/ml时，抗体下降速度明显加快。K2帮助D3精准发挥作用，两者必须同服。</div><div class="ncrd-warn">⚠️ 不超过10000IU/天，服用3个月复查</div></div>
+    <div class="ncrd"><div class="ncrd-name">⭐ 三合一镁</div><span class="ncrd-dose">300mg/天 · 失眠者睡前30分钟</span><div class="ncrd-desc">参与人体300多种酶反应。<b>没有镁，维生素D无法转化为活性形式。</b>适合有失眠、焦虑、心慌、便秘症状的患者。</div><div class="ncrd-warn">⚠️ 镁和钙不能同一时间服用</div></div>
+    <div class="ncrd"><div class="ncrd-name">⭐ NAC（N-乙酰半胱氨酸）</div><span class="ncrd-dose">1800mg/天 · 空腹服用</span><div class="ncrd-desc">谷胱甘肽（人体最强抗氧化剂）的前体。修复肠漏、支持肝脏解毒。与硒协同放大降抗体效果。</div><div class="ncrd-warn">⚠️ 孕妇儿童不建议自行补充</div></div>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">57</div></div>
+</div>
+
+<!-- SLIDE 33: 肠道修复补剂 -->
+<div class="slide s-content" data-idx="33">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">营养补充剂</div></div><div class="sh-num">58</div></div>
+  <div class="slide-body">
+    <div class="slide-title">肠道修复营养素 + 维生素B</div>
+    <div class="slide-sub">修好肠道，才能真正降低抗体</div>
+    <div class="g2" style="gap:8px">
+      <div class="ncrd" style="margin-bottom:0"><div class="ncrd-name">消化酶</div><span class="ncrd-dose">随第一口正餐 · 1粒</span><div class="ncrd-desc">桥本患者普遍胃酸不足，大分子蛋白无法分解，引发免疫应激。首选广谱复合消化酶。</div><div class="ncrd-warn">⚠️ 胃溃疡者避开甜菜碱</div></div>
+      <div class="ncrd" style="margin-bottom:0"><div class="ncrd-name">L-谷氨酰胺</div><span class="ncrd-dose">5-10g/天 · 早晨空腹</span><div class="ncrd-desc">肠道黏膜细胞最主要的能量来源，直接修复受损肠壁，降低肠道通透性（修复肠漏）。</div><div class="ncrd-warn">⚠️ 严重肝病/肾功能不全禁用</div></div>
+      <div class="ncrd" style="margin-bottom:0"><div class="ncrd-name">七联益生菌</div><span class="ncrd-dose">100-300亿CFU/天 · 晨起空腹</span><div class="ncrd-desc">平衡肠道菌群，修复肠漏，降低全身炎症负荷。与抗生素间隔2小时以上。</div></div>
+      <div class="ncrd" style="margin-bottom:0"><div class="ncrd-name">益生元 + 活性复合维生素B</div><span class="ncrd-dose">益生元3-5g晨起 · 维B每日1片餐后</span><div class="ncrd-desc">益生元是益生菌的"食物"。维生素B改善疲劳、稳定情绪、缓解焦虑失眠，特别适合疲劳情绪差的患者。</div></div>
+    </div>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">58</div></div>
+</div>
+
+<!-- SLIDE 34: 案例章节 -->
+<div class="slide s-chapter" data-idx="34">
+  <div class="ch-line"></div>
+  <div class="ch-num">09</div>
+  <div class="ch-badge">CHAPTER 09</div>
+  <div class="ch-title">真实康复案例</div>
+  <div class="ch-en">Real Recovery Stories</div>
+  <div class="ch-desc">功能医学桥本调理<br>3000+ 桥本家人的真实改变</div>
+</div>
+
+<!-- SLIDE 35: 案例一 -->
+<div class="slide s-content" data-idx="35">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">真实案例</div></div><div class="sh-num">61</div></div>
+  <div class="slide-body">
+    <div class="slide-title">调理案例一</div>
+    <div class="slide-sub">2个月抗体转阴，脖子消肿</div>
+    <div class="case-card">
+      <div class="case-tag">案例一 · 35岁女性</div>
+      <div class="case-body"><b>基本情况：</b>发现桥本6年，球蛋白抗体856，过氧化物酶抗体634<br><br><b>主要困扰：</b>腹胀、反酸多年，胃口欠佳，脖子肿明显，严重影响日常生活<br><br><b>干预方案：</b>食物不耐受检测 → 精准排除刺激食物 → 肠道修复 + 针对性营养素</div>
+      <div class="case-result">调理仅2个多月：<br>✅ 脖子消肿，不再胀大<br>✅ 过氧化物酶抗体<b>转阴</b><br>✅ 球蛋白抗体从856降至<b>136.36</b>，下降幅度84%</div>
+    </div>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">61</div></div>
+</div>
+
+<!-- SLIDE 36: 案例二 -->
+<div class="slide s-content" data-idx="36">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">真实案例</div></div><div class="sh-num">62</div></div>
+  <div class="slide-body">
+    <div class="slide-title">调理案例二</div>
+    <div class="slide-sub">备孕2年未果，调理后自然怀孕</div>
+    <div class="case-card">
+      <div class="case-tag">案例二 · 39岁女性</div>
+      <div class="case-body"><b>基本情况：</b>发现桥本5年，已备孕2年，一直未能自然怀孕，面临巨大心理压力<br><br><b>主要困扰：</b>桥本导致免疫失衡，影响着床环境，备孕之路异常艰辛，正考虑人工授精<br><br><b>干预方案：</b>功能医学系统调理，降低抗体、修复肠道、平衡免疫，改善着床环境</div>
+      <div class="case-result">调理后：<br>✅ 顺利<b>自然怀孕</b>，省去人工授精的巨大开支<br>✅ 避免了试管婴儿的身心折磨<br>✅ 宝宝和妈妈都健康</div>
+    </div>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">62</div></div>
+</div>
+
+<!-- SLIDE 37: 案例三 -->
+<div class="slide s-content" data-idx="37">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">真实案例</div></div><div class="sh-num">63</div></div>
+  <div class="slide-body">
+    <div class="slide-title">调理案例三</div>
+    <div class="slide-sub">桥本合并类风湿，半年全面好转</div>
+    <div class="case-card">
+      <div class="case-tag">案例三 · 59岁女性</div>
+      <div class="case-body"><b>基本情况：</b>发现桥本10年+，类风湿性关节炎3年，多重自免叠加<br><br><b>主要困扰：</b>关节疼痛、怕冷、脱发等症状困扰多年，走路都困难<br><br><b>干预方案：</b>半年全程陪伴调理——精准检测→忌口→肠道修复→营养素→生活方式全面调整</div>
+      <div class="case-result">半年调理后：<br>✅ 桥本抗体下降，<b>接近正常范围</b><br>✅ 类风湿因子指标<b>全部转阴</b><br>✅ 关节不再疼痛，身体状态"非常轻松"</div>
+    </div>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">63</div></div>
+</div>
+
+<!-- SLIDE 38: 总结号召 -->
+<div class="slide s-content" data-idx="38">
+  <div class="slide-header"><div class="sh-l"><div class="sh-dot"></div><div class="sh-label">总结与行动号召</div></div><div class="sh-num">59</div></div>
+  <div class="slide-body">
+    <div class="slide-title">总结与行动号召</div>
+    <div class="slide-sub">桥本疗愈是一场马拉松，不是短跑</div>
+    <div class="callout callout-gold" style="margin-bottom:11px">
+      <div class="cb" style="font-style:italic">桥本疗愈不是关于"戒断"一切，而是关于学习如何与自己的身体和谐共处。每一个小小的积极改变，都在为你的身体注入疗愈的力量。</div>
+    </div>
+    <div class="g3" style="margin-bottom:11px;gap:7px">
+      <div class="card card-green" style="margin:0;text-align:center;padding:13px"><div style="font-size:22px;margin-bottom:5px">🥗</div><div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:3px">饮食是基石</div><div style="font-size:10px;color:var(--text2);line-height:1.65">坚持抗炎、低碘、营养均衡的饮食，为身体提供充足修复原料</div></div>
+      <div class="card card-green" style="margin:0;text-align:center;padding:13px"><div style="font-size:22px;margin-bottom:5px">🧘</div><div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:3px">运动要智慧</div><div style="font-size:10px;color:var(--text2);line-height:1.65">选择温和持续的运动方式，避免过度劳累给身体额外负担</div></div>
+      <div class="card card-green" style="margin:0;text-align:center;padding:13px"><div style="font-size:22px;margin-bottom:5px">💙</div><div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:3px">情绪是关键</div><div style="font-size:10px;color:var(--text2);line-height:1.65">学会觉察并管理压力，为免疫系统"降温"，促进身心平衡</div></div>
+    </div>
+    <div class="callout">
+      <div class="ct">现在就开始</div>
+      <div class="cb"><span class="hl">就从今天的一顿饭、一次散步、一次深呼吸开始</span>，迈出你智慧疗愈的第一步！桥本路上，你不是一个人。</div>
+    </div>
+  </div>
+  <div class="slide-footer"><div class="sf-brand">汇泽甲功健康</div><div class="sf-pg">59</div></div>
+</div>
+
+<!-- SLIDE 39: 结束页 -->
+<div class="slide s-cta" data-idx="39">
+  <div class="cta-badge">汇泽甲功健康管理</div>
+  <div class="cta-title">祝各位桥本家人早日上岸</div>
+  <div class="cta-sub">始终陪伴着您的羽哥<br>已帮助 <b style="color:var(--green)">3000+</b> 桥本家人找到属于自己的调理方向</div>
+  <div class="cta-steps">
+    <div class="cta-step"><div class="cta-sn">01</div><div class="cta-st">先做通用忌口<br>六大类全排除</div></div>
+    <div class="cta-step"><div class="cta-sn">02</div><div class="cta-st">食物不耐受检测<br>精准定位刺激源</div></div>
+    <div class="cta-step"><div class="cta-sn">03</div><div class="cta-st">专业团队跟进<br>个性化调理方案</div></div>
+  </div>
+  <div class="cta-btn">扫码加微信 · 免费咨询</div>
+  <div class="cta-note">桥本路上，你不是一个人 🌱<br>THANKS</div>
+</div>
+
+      </div><!-- /slide-frame -->
+
+      <!-- NAV BAR -->
+      <div id="nav">
+        <div id="progress"></div>
+        <button onclick="prevSlide()" id="btn-prev" disabled>◀</button>
+        <span id="slide-counter">1 / 40</span>
+        <button onclick="nextSlide()" id="btn-next">▶</button>
+      </div>
+    </div><!-- /slide-wrap -->
+  </div><!-- /stage -->
+</div><!-- /layout -->
+
+<!-- EXPORT OVERLAY -->
+<div id="export-overlay">
+  <div class="export-box">
+    <div class="export-title">导出手册</div>
+    <div class="export-desc">选择你需要的导出格式</div>
+    <div class="export-opts">
+      <div class="export-opt" onclick="exportPDF()">
+        <div class="export-opt-icon">📄</div>
+        <div><div class="export-opt-title">导出为 PDF</div><div class="export-opt-desc">高清版电子手册，适合微信转发、钩子产品</div></div>
+      </div>
+      <div class="export-opt" onclick="exportHTML()">
+        <div class="export-opt-icon">🌐</div>
+        <div><div class="export-opt-title">保存 HTML 文件</div><div class="export-opt-desc">完整交互版，在浏览器中直接使用</div></div>
+      </div>
+    </div>
+    <button class="export-cancel" onclick="document.getElementById('export-overlay').classList.remove('show')">取消</button>
+  </div>
+</div>
+
+<script>
+const slides=document.querySelectorAll('.slide');
+const sideItems=document.querySelectorAll('.sidebar-item');
+let current=0,mode='full';
+const hookSlides=[0,1,2,9,12,16,17,20,39];
+
+function getTotalSlides(){return mode==='hook'?hookSlides.length:slides.length}
+function getRealIdx(i){return mode==='hook'?hookSlides[i]:i}
+
+function goTo(idx){
+  if(idx<0||idx>=slides.length)return;
+  slides[current].classList.remove('active');
+  slides[idx].classList.add('active');
+  current=idx;
+  sideItems.forEach(i=>i.classList.toggle('active',parseInt(i.dataset.idx)===current));
+  updateNav();
+}
+
+function updateNav(){
+  const total=getTotalSlides();
+  let li=mode==='hook'?hookSlides.indexOf(current):current;
+  if(li<0)li=0;
+  document.getElementById('slide-counter').textContent=`${li+1} / ${total}`;
+  document.getElementById('btn-prev').disabled=li===0;
+  document.getElementById('btn-next').disabled=li===total-1;
+  document.getElementById('progress').style.width=`${((li+1)/total)*100}%`;
+}
+
+function prevSlide(){
+  if(mode==='hook'){const i=hookSlides.indexOf(current);if(i>0)goTo(hookSlides[i-1]);}
+  else{if(current>0)goTo(current-1);}
+}
+function nextSlide(){
+  if(mode==='hook'){const i=hookSlides.indexOf(current);if(i<hookSlides.length-1)goTo(hookSlides[i+1]);}
+  else{if(current<slides.length-1)goTo(current+1);}
+}
+function setMode(m){
+  mode=m;
+  document.getElementById('btn-full').classList.toggle('active',m==='full');
+  document.getElementById('btn-hook').classList.toggle('active',m==='hook');
+  document.getElementById('sidebar').style.opacity=m==='hook'?'0.5':'1';
+  goTo(m==='hook'?hookSlides[0]:0);
+}
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT')return;
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')nextSlide();
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')prevSlide();
+});
+let touchX=0;
+const sw=document.getElementById('slide-wrap');
+sw.addEventListener('touchstart',e=>{touchX=e.touches[0].clientX});
+sw.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-touchX;if(Math.abs(dx)>40)dx<0?nextSlide():prevSlide()});
+
+function exportPDF(){
+  document.getElementById('export-overlay').classList.remove('show');
+  alert('PDF导出方法：\n\n1. 按 Ctrl+P（Mac: Cmd+P）\n2. 目标打印机选择"另存为PDF"\n3. 纸张：A4横向\n4. 取消页眉和页脚\n5. ✅ 开启背景图形\n6. 点击保存\n\n💡 推荐使用 Chrome 浏览器');
+}
+function exportHTML(){
+  document.getElementById('export-overlay').classList.remove('show');
+  const html=document.documentElement.outerHTML;
+  const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='桥本疗愈指南.html';
+  a.click();
+}
+updateNav();
+</script>
+</body>
+</html>

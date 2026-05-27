@@ -7,6 +7,7 @@ const links = [
   { label: "关于我们", href: "#about" },
   { label: "服务项目", href: "#services" },
   { label: "成功案例", href: "#cases" },
+  { label: "疗愈指南", href: "/guide" },
   { label: "联系我们", href: "#contact" },
 ];
 
