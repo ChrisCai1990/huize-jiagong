@@ -1,3 +1,5 @@
+"use client";
+
 const members = [
   {
     name: "菅晓勇",
