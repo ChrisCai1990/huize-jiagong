@@ -23,8 +23,13 @@ module.exports = {
 };
 EOF
 
-# 重启或启动
-pm2 reload huize-jiagong 2>/dev/null || pm2 start ecosystem.config.js
+# 先停掉 PM2 进程，再强制释放端口，最后重新启动
+# 防止 reload 时新旧进程同时争抢端口导致 EADDRINUSE
+pm2 stop huize-jiagong 2>/dev/null || true
+sleep 1
+fuser -k 3001/tcp 2>/dev/null || true
+sleep 1
+pm2 start ecosystem.config.js --update-env
 pm2 save
 
 # 写 Nginx 配置（首次）
