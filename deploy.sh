@@ -18,18 +18,19 @@ module.exports = {
     script: "node_modules/.bin/next",
     args: "start -p 3001",
     cwd: "/var/www/huize-jiagong",
+    max_restarts: 5,
+    min_uptime: "10s",
     env: { NODE_ENV: "production", PORT: "3001" }
   }]
 };
 EOF
 
-# 先停掉 PM2 进程，再强制释放端口，最后重新启动
-# 防止 reload 时新旧进程同时争抢端口导致 EADDRINUSE
-pm2 stop huize-jiagong 2>/dev/null || true
+# 删除旧进程（重置重启计数），强制释放端口，再全新启动
+pm2 delete huize-jiagong 2>/dev/null || true
 sleep 1
 fuser -k 3001/tcp 2>/dev/null || true
 sleep 1
-pm2 start ecosystem.config.js --update-env
+pm2 start ecosystem.config.js
 pm2 save
 
 # 写 Nginx 配置（首次）
