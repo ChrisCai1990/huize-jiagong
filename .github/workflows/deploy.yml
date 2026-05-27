@@ -44,14 +44,15 @@ jobs:
               apt-get install -y git
             fi
 
-            # 克隆或拉取代码
+            # 克隆或拉取代码（清理残留目录再 clone）
             if [ -d "/var/www/huize-jiagong/.git" ]; then
               cd /var/www/huize-jiagong
-              git pull origin main
+              git fetch origin main
+              git reset --hard origin/main
             else
+              rm -rf /var/www/huize-jiagong
               mkdir -p /var/www
               git clone https://github.com/${{ github.repository }}.git /var/www/huize-jiagong
-              cd /var/www/huize-jiagong
             fi
 
             cd /var/www/huize-jiagong
