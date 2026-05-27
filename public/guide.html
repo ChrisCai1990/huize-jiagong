@@ -232,6 +232,93 @@ html,body{height:100%;background:var(--bg);font-family:'PingFang SC','Microsoft 
 #slide-counter{font-size:11px;color:var(--muted);min-width:60px;text-align:center}
 #progress{position:absolute;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--green),var(--green2));transition:width .3s}
 
+/* ── FONT SCALE UP ── */
+.slide-title{font-size:22px}
+.slide-sub{font-size:12px}
+.card-title{font-size:13px}
+.card-sub{font-size:11px}
+.card-body{font-size:12px}
+.sh-label{font-size:11px}
+.cb{font-size:12px}
+.ct{font-size:12px}
+.step-t{font-size:13px}
+.step-d{font-size:12px}
+.ncrd-name{font-size:14px}
+.ncrd-desc{font-size:12px}
+.tl-t{font-size:13px}
+.tl-d{font-size:12px}
+.story-text{font-size:13px}
+.story-hl{font-size:13px;line-height:1.9}
+.sn{font-size:24px}
+.sl{font-size:11px}
+.tag{font-size:11px}
+.pill{font-size:11px}
+.sidebar-item{font-size:13px}
+
+/* ── MOBILE ── */
+@media(max-width:767px){
+  html,body{height:100%;overflow:hidden}
+  #layout{height:100vh}
+  #sidebar{display:none}
+  #stage>button{display:none}
+
+  #slide-frame{
+    width:100%!important;
+    height:calc(100% - 48px)!important;
+    position:absolute!important;
+    top:0!important;left:0!important;
+    transform:none!important;
+    overflow-y:auto;overflow-x:hidden;
+    -webkit-overflow-scrolling:touch
+  }
+  .slide{position:relative!important;height:auto!important;min-height:100%;display:none!important}
+  .slide.active{display:flex!important}
+
+  /* Cover */
+  .s-cover{padding:32px 20px 80px}
+  .cover-h1{font-size:32px}
+  .cover-en{letter-spacing:2px}
+  .cover-desc{max-width:100%;font-size:13px}
+  .cover-stats{flex-wrap:wrap;gap:8px}
+  .cstat{flex:1;min-width:70px}
+  .cover-bottom{position:relative;padding:12px 20px}
+
+  /* Chapter */
+  .s-chapter{padding:44px 20px}
+  .ch-title{font-size:28px}
+  .ch-desc{max-width:100%}
+  .ch-num{font-size:70px;right:20px}
+
+  /* Content slides */
+  .slide-header{padding:12px 16px 10px}
+  .slide-body{padding:14px 16px;overflow:visible;flex:none;height:auto}
+  .slide-footer{padding:10px 16px}
+  .slide-title{font-size:18px}
+  .slide-sub{margin-bottom:12px}
+
+  /* Grids */
+  .g2{grid-template-columns:1fr;gap:8px}
+  .g3{grid-template-columns:1fr 1fr;gap:7px}
+  .stat-row{flex-wrap:wrap;gap:7px}
+  .stat-box{min-width:70px;flex:1}
+
+  /* Story */
+  .s-story{flex-direction:column}
+  .story-bar{width:100%;height:4px;flex-shrink:0}
+  .story-body{padding:16px 16px 28px}
+
+  /* CTA */
+  .s-cta{padding:28px 20px}
+  .cta-steps{flex-direction:column;gap:8px}
+  .cta-sub{max-width:100%}
+
+  /* Tables */
+  .cmp-table{font-size:10px}
+  .food-table{font-size:9.5px}
+
+  /* Nav stays fixed at bottom */
+  #nav{position:fixed;bottom:0;left:0;right:0;z-index:50}
+}
 </style>
 </head>
 <body>
@@ -1107,13 +1194,14 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevSlide();
 });
 
-let touchX = 0;
+let touchX = 0, touchY = 0;
 const sw = document.getElementById('slide-wrap');
-sw.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; });
+sw.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; touchY = e.touches[0].clientY; }, { passive: true });
 sw.addEventListener('touchend', e => {
   const dx = e.changedTouches[0].clientX - touchX;
-  if (Math.abs(dx) > 40) dx < 0 ? nextSlide() : prevSlide();
-});
+  const dy = e.changedTouches[0].clientY - touchY;
+  if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) dx < 0 ? nextSlide() : prevSlide();
+}, { passive: true });
 
 function toggleSidebar() {
   const sb = document.getElementById('sidebar');
