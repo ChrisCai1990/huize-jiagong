@@ -51,7 +51,8 @@ html,body{height:100%;background:var(--bg);font-family:'PingFang SC','Microsoft 
 #layout{display:flex;height:100vh;padding-top:52px}
 
 /* ── SIDEBAR ── */
-#sidebar{width:210px;flex-shrink:0;background:var(--white);border-right:1px solid var(--border);overflow-y:auto;padding:8px 0}
+#sidebar{width:210px;flex-shrink:0;background:var(--white);border-right:1px solid var(--border);overflow-y:auto;padding:8px 0;transition:width .25s ease,padding .25s ease,border .25s ease;overflow-x:hidden}
+#sidebar.collapsed{width:0;padding:0;border-right:none}
 #sidebar::-webkit-scrollbar{width:3px}
 #sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 .sidebar-ch{padding:12px 16px 5px;font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase}
@@ -61,10 +62,10 @@ html,body{height:100%;background:var(--bg);font-family:'PingFang SC','Microsoft 
 .snum{font-size:10px;color:var(--muted);min-width:18px;flex-shrink:0}
 
 /* ── STAGE ── */
-#stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;background:var(--bg);position:relative}
+#stage{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg);position:relative}
 
 /* ── SLIDE WRAP ── */
-#slide-wrap{position:relative;width:900px;height:506px;background:var(--white);border-radius:12px;box-shadow:var(--shadow-md);border:1px solid var(--border);overflow:hidden}
+#slide-wrap{position:relative;width:100%;height:100%;background:var(--white);overflow:hidden}
 #slide-frame{width:100%;height:100%;position:relative}
 
 /* ── SLIDE BASE ── */
@@ -259,14 +260,10 @@ html,body{height:100%;background:var(--bg);font-family:'PingFang SC','Microsoft 
 
 <div id="topbar">
   <div class="brand"><div class="brand-dot"></div>桥本疗愈指南 · 汇泽甲功健康</div>
-  <div class="controls">
-    <div class="mode-group">
-      <button class="mode-btn active" onclick="setMode('full')" id="btn-full">完整版 40页</button>
-      <button class="mode-btn" onclick="setMode('hook')" id="btn-hook">钩子速查卡 9页</button>
-    </div>
-    <button class="ctrl-btn" onclick="document.getElementById('export-overlay').classList.add('show')">↓ 导出</button>
-    <button class="ctrl-btn primary" onclick="alert('请在短视频/直播引导用户\n点击主页→加微信→备注"疗愈指南"')">加微信咨询</button>
-  </div>
+  <button id="sidebar-toggle" onclick="toggleSidebar()" style="background:none;border:none;cursor:pointer;padding:8px;color:var(--text2);display:flex;align-items:center;gap:6px;font-size:12px;border-radius:6px;transition:all .15s" onmouseenter="this.style.background='var(--bg)'" onmouseleave="this.style.background='none'">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect y="2" width="16" height="1.5" rx=".75" fill="currentColor"/><rect y="7.25" width="16" height="1.5" rx=".75" fill="currentColor"/><rect y="12.5" width="16" height="1.5" rx=".75" fill="currentColor"/></svg>
+    目录
+  </button>
 </div>
 
 <div id="layout">
@@ -1199,6 +1196,31 @@ function exportHTML(){
   a.download='桥本疗愈指南.html';
   a.click();
 }
+
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('collapsed');
+}
+
+(function createWatermark(){
+  const c=document.createElement('canvas');
+  c.width=220;c.height=160;
+  const ctx=c.getContext('2d');
+  ctx.save();
+  ctx.translate(110,80);
+  ctx.rotate(-Math.PI/6);
+  ctx.font='bold 18px "PingFang SC","Microsoft YaHei",sans-serif';
+  ctx.fillStyle='rgba(26,46,74,0.07)';
+  ctx.textAlign='center';
+  ctx.textBaseline='middle';
+  ctx.fillText('汇泽健康',0,0);
+  ctx.restore();
+  const wm=document.createElement('div');
+  wm.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:5;';
+  wm.style.backgroundImage=`url(${c.toDataURL()})`;
+  wm.style.backgroundSize='220px 160px';
+  document.body.appendChild(wm);
+})();
+
 updateNav();
 </script>
 </body>
