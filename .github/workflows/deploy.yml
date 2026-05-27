@@ -25,30 +25,39 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Setup SSH key
+      - name: Install rsync and sshpass
+        run: sudo apt-get install -y rsync sshpass
+
+      - name: Upload build to ECS
+        env:
+          ECS_HOST: ${{ secrets.ECS_HOST }}
+          ECS_USER: ${{ secrets.ECS_USER }}
+          ECS_PASS: ${{ secrets.ECS_PASS }}
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.ECS_PASS }}" > /tmp/ecs_pass.txt
-          chmod 600 /tmp/ecs_pass.txt
+          ssh-keyscan -H "$ECS_HOST" >> ~/.ssh/known_hosts 2>/dev/null
 
-      - name: Upload files to ECS via scp
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.ECS_HOST }}
-          username: ${{ secrets.ECS_USER }}
-          password: ${{ secrets.ECS_PASS }}
-          source: ".next,public,package.json,package-lock.json,next.config.ts"
-          target: /var/www/huize-jiagong
-          strip_components: 0
-          overwrite: true
+          # 在 ECS 上创建目录
+          sshpass -p "$ECS_PASS" ssh "$ECS_USER@$ECS_HOST" "mkdir -p /var/www/huize-jiagong"
 
-      - name: Start app on ECS via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.ECS_HOST }}
-          username: ${{ secrets.ECS_USER }}
-          password: ${{ secrets.ECS_PASS }}
-          script: |
+          # 推送构建产物和配置文件（ECS 不需要访问 GitHub）
+          sshpass -p "$ECS_PASS" rsync -az --delete \
+            --exclude='.git' \
+            --exclude='node_modules' \
+            .next \
+            public \
+            package.json \
+            package-lock.json \
+            next.config.ts \
+            "$ECS_USER@$ECS_HOST:/var/www/huize-jiagong/"
+
+      - name: Start / restart app on ECS
+        env:
+          ECS_HOST: ${{ secrets.ECS_HOST }}
+          ECS_USER: ${{ secrets.ECS_USER }}
+          ECS_PASS: ${{ secrets.ECS_PASS }}
+        run: |
+          sshpass -p "$ECS_PASS" ssh "$ECS_USER@$ECS_HOST" bash << 'ENDSSH'
             set -e
             cd /var/www/huize-jiagong
 
@@ -58,49 +67,44 @@ jobs:
             fi
 
             # 安装生产依赖
-            npm install --omit=dev --legacy-peer-deps
+            npm install --omit=dev
 
-            # 写入 PM2 配置
+            # 写 PM2 配置
             cat > ecosystem.config.js << 'EOF'
 module.exports = {
   apps: [{
-    name: 'huize-jiagong',
-    script: 'node_modules/.bin/next',
-    args: 'start -p 3001',
-    cwd: '/var/www/huize-jiagong',
-    env: {
-      NODE_ENV: 'production',
-      PORT: '3001'
-    }
+    name: "huize-jiagong",
+    script: "node_modules/.bin/next",
+    args: "start -p 3001",
+    cwd: "/var/www/huize-jiagong",
+    env: { NODE_ENV: "production", PORT: "3001" }
   }]
 };
 EOF
 
-            # 重启或启动
             pm2 reload huize-jiagong 2>/dev/null || pm2 start ecosystem.config.js
             pm2 save
 
-            # 写入 Nginx 配置（首次部署）
+            # 写 Nginx 配置（首次）
             if [ ! -f /etc/nginx/conf.d/huize-jiagong.conf ]; then
-              cat > /etc/nginx/conf.d/huize-jiagong.conf << 'NGINXEOF'
+              cat > /etc/nginx/conf.d/huize-jiagong.conf << 'NGINX'
 server {
     listen 80;
     server_name _;
-
     location / {
         proxy_pass http://127.0.0.1:3001;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
+        proxy_set_header Connection "upgrade";
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_cache_bypass $http_upgrade;
     }
 }
-NGINXEOF
+NGINX
               nginx -t && nginx -s reload
             fi
 
             echo "Deploy done"
             pm2 list
+ENDSSH
