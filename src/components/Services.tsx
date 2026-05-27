@@ -29,31 +29,60 @@ export default function Services() {
   return (
     <section id="services" className="py-24 px-6 bg-white">
       <div className="max-w-6xl mx-auto">
+
+        {/* 标题区 */}
         <div className="text-center mb-16">
-          <span className="text-xs tracking-widest text-gray-400 uppercase">服务项目</span>
+          <span
+            className="text-xs tracking-widest uppercase"
+            style={{ color: "var(--green-700)" }}
+          >
+            服务项目
+          </span>
           <h2 className="mt-4 text-3xl md:text-4xl font-light text-gray-900">
-            全程陪伴，<span className="font-semibold">系统改善</span>
+            全程陪伴，
+            <span className="font-semibold" style={{ color: "var(--green-800)" }}>
+              系统改善
+            </span>
           </h2>
           <p className="mt-4 text-gray-500 max-w-xl mx-auto text-sm leading-relaxed">
             从初次评估到长期管理，我们为每位客户提供循序渐进、有据可依的健康干预路径。
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 gap-6">
+        {/* 服务卡片 */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((s) => (
             <div
               key={s.title}
-              className="group p-8 rounded-2xl border border-gray-100 hover:border-gray-300 hover:shadow-sm transition-all duration-200"
+              className="group p-7 rounded-2xl border transition-all duration-200 hover:shadow-md"
+              style={{ borderColor: "var(--green-100)" }}
+              onMouseEnter={e => (e.currentTarget.style.borderColor = "var(--green-300)")}
+              onMouseLeave={e => (e.currentTarget.style.borderColor = "var(--green-100)")}
             >
-              <span className="text-xs tracking-widest text-gray-400 uppercase border border-gray-200 rounded-full px-3 py-0.5">
+              <span
+                className="text-xs tracking-widest uppercase border rounded-full px-3 py-0.5"
+                style={{
+                  color: "var(--green-700)",
+                  borderColor: "var(--green-200)",
+                  background: "var(--green-50)",
+                }}
+              >
                 {s.tag}
               </span>
-              <h3 className="mt-4 text-xl font-medium text-gray-900">{s.title}</h3>
+              <h3
+                className="mt-4 text-lg font-medium"
+                style={{ color: "var(--green-900)" }}
+              >
+                {s.title}
+              </h3>
               <p className="mt-3 text-sm text-gray-500 leading-relaxed">{s.desc}</p>
               <ul className="mt-5 space-y-2">
                 {s.items.map((item) => (
                   <li key={item} className="flex items-center gap-2 text-sm text-gray-600">
-                    <span className="w-1 h-1 rounded-full bg-gray-400 flex-shrink-0" />
+                    <span
+                      className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                      style={{ background: "var(--green-500)" }}
+                    />
                     {item}
                   </li>
                 ))}

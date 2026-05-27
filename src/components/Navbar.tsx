@@ -27,35 +27,41 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-16">
+        {/* Logo */}
         <a href="#hero" className="flex items-center gap-2">
-          <span className="text-xl font-semibold tracking-tight text-gray-900">
-            汇泽甲功
-          </span>
-          <span className="text-xs text-gray-400 hidden sm:block border-l border-gray-200 pl-2">
-            自免·桥本·营养医学
+          <span className="w-2 h-5 rounded-sm" style={{ background: "var(--green-700)" }} />
+          <span className="text-lg font-semibold tracking-tight text-gray-900">
+            汇泽甲功健康
           </span>
         </a>
 
+        {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-8">
           {links.map((l) => (
             <a
               key={l.href}
               href={l.href}
-              className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+              className="text-sm text-gray-600 hover:text-green-800 transition-colors"
+              style={{ "--tw-text-opacity": "1" } as React.CSSProperties}
             >
               {l.label}
             </a>
           ))}
           <a
             href="#contact"
-            className="text-sm bg-gray-900 text-white px-4 py-2 rounded-full hover:bg-gray-700 transition-colors"
+            className="text-sm text-white px-5 py-2 rounded-full transition-colors"
+            style={{ background: "var(--green-700)" }}
+            onMouseEnter={e => (e.currentTarget.style.background = "var(--green-800)")}
+            onMouseLeave={e => (e.currentTarget.style.background = "var(--green-700)")}
           >
-            预约咨询
+            加微信咨询
           </a>
         </nav>
 
+        {/* Mobile menu button */}
         <button
-          className="md:hidden text-gray-700"
+          className="md:hidden"
+          style={{ color: "var(--green-800)" }}
           onClick={() => setOpen(!open)}
           aria-label="菜单"
         >
@@ -63,6 +69,7 @@ export default function Navbar() {
         </button>
       </div>
 
+      {/* Mobile menu */}
       {open && (
         <div className="md:hidden bg-white border-t border-gray-100 px-6 py-4 flex flex-col gap-4">
           {links.map((l) => (
@@ -77,10 +84,11 @@ export default function Navbar() {
           ))}
           <a
             href="#contact"
-            className="text-sm bg-gray-900 text-white text-center px-4 py-2 rounded-full"
+            className="text-sm text-white text-center px-4 py-2 rounded-full"
+            style={{ background: "var(--green-700)" }}
             onClick={() => setOpen(false)}
           >
-            预约咨询
+            加微信咨询
           </a>
         </div>
       )}

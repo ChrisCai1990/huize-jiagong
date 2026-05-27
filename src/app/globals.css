@@ -2,7 +2,17 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1a1a1a;
+
+  /* 品牌绿色系 */
+  --green-950: #0d2b1f;
+  --green-900: #1b4332;
+  --green-800: #2d6a4f;
+  --green-700: #40916c;
+  --green-500: #52b788;
+  --green-300: #95d5b2;
+  --green-100: #d8f3dc;
+  --green-50:  #f0faf4;
 }
 
 @theme inline {
@@ -10,6 +20,15 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-brand-950: var(--green-950);
+  --color-brand-900: var(--green-900);
+  --color-brand-800: var(--green-800);
+  --color-brand-700: var(--green-700);
+  --color-brand-500: var(--green-500);
+  --color-brand-300: var(--green-300);
+  --color-brand-100: var(--green-100);
+  --color-brand-50:  var(--green-50);
 }
 
 body {
