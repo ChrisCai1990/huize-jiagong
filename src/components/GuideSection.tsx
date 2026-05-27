@@ -19,7 +19,7 @@ const stats = [
 
 export default function GuideSection() {
   return (
-    <section className="py-24 px-6 bg-white">
+    <section id="guide" className="py-24 px-6 bg-white">
       <div className="max-w-6xl mx-auto">
 
         {/* 顶部标题 */}

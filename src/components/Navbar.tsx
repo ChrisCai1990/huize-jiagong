@@ -1,5 +1,6 @@
-﻿"use client";
+"use client";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 
 const links = [
@@ -8,13 +9,18 @@ const links = [
   { label: "服务项目", href: "#services" },
   { label: "成功案例", href: "#cases" },
   { label: "团队介绍", href: "#team" },
-  { label: "疗愈指南", href: "/guide" },
+  { label: "疗愈指南", href: "#guide" },
   { label: "联系我们", href: "#contact" },
 ];
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+
+  // On non-home pages, anchor links navigate to home first
+  const href = (h: string) => (h.startsWith("#") && !isHome ? "/" + h : h);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -30,7 +36,7 @@ export default function Navbar() {
     >
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-16">
         {/* Logo */}
-        <a href="#hero" className="flex items-center gap-2">
+        <a href={href("#hero")} className="flex items-center gap-2">
           <span className="w-2 h-5 rounded-sm" style={{ background: "var(--green-700)" }} />
           <span className="text-lg font-semibold tracking-tight text-gray-900">
             汇泽健康
@@ -41,8 +47,8 @@ export default function Navbar() {
         <nav className="hidden md:flex items-center gap-8">
           {links.map((l) => (
             <a
-              key={l.href}
-              href={l.href}
+              key={l.label}
+              href={href(l.href)}
               className="text-sm text-gray-600 hover:text-green-800 transition-colors"
               style={{ "--tw-text-opacity": "1" } as React.CSSProperties}
             >
@@ -50,7 +56,7 @@ export default function Navbar() {
             </a>
           ))}
           <a
-            href="#contact"
+            href={href("#contact")}
             className="text-sm text-white px-5 py-2 rounded-full transition-colors"
             style={{ background: "var(--green-700)" }}
             onMouseEnter={e => (e.currentTarget.style.background = "var(--green-800)")}
@@ -76,8 +82,8 @@ export default function Navbar() {
         <div className="md:hidden bg-white border-t border-gray-100 px-6 py-4 flex flex-col gap-4">
           {links.map((l) => (
             <a
-              key={l.href}
-              href={l.href}
+              key={l.label}
+              href={href(l.href)}
               className="text-sm text-gray-700"
               onClick={() => setOpen(false)}
             >
@@ -85,7 +91,7 @@ export default function Navbar() {
             </a>
           ))}
           <a
-            href="#contact"
+            href={href("#contact")}
             className="text-sm text-white text-center px-4 py-2 rounded-full"
             style={{ background: "var(--green-700)" }}
             onClick={() => setOpen(false)}
