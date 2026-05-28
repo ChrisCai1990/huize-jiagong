@@ -90,6 +90,7 @@ export default function YouzanPage() {
 
           {/* Hero Banner */}
           <div
+            id="section-hero"
             className="px-5 pt-7 pb-8 relative overflow-hidden"
             style={{ background: "var(--green-900)" }}
           >
@@ -139,7 +140,7 @@ export default function YouzanPage() {
           </div>
 
           {/* 分类导航 */}
-          <div className="bg-white mx-0 px-4 py-5 mt-2">
+          <div id="section-categories" className="bg-white mx-0 px-4 py-5 mt-2">
             <div className="grid grid-cols-4 gap-y-5">
               {categories.map(({ icon: Icon, label }, i) => (
                 <button key={i} className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform">
@@ -160,6 +161,7 @@ export default function YouzanPage() {
 
           {/* 健康管理3步 */}
           <div
+            id="section-steps"
             className="mx-3 mt-3 bg-white rounded-2xl p-4 border"
             style={{ borderColor: "var(--green-100)" }}
           >
@@ -217,6 +219,7 @@ export default function YouzanPage() {
 
           {/* 健康科普 */}
           <div
+            id="section-articles"
             className="mx-3 mt-3 bg-white rounded-2xl p-4 border"
             style={{ borderColor: "var(--green-100)" }}
           >
@@ -278,6 +281,7 @@ export default function YouzanPage() {
 
           {/* 客户案例 */}
           <div
+            id="section-cases"
             className="mx-3 mt-3 rounded-2xl p-4 border"
             style={{ background: "var(--green-50)", borderColor: "var(--green-100)" }}
           >
@@ -317,6 +321,7 @@ export default function YouzanPage() {
 
           {/* 关于我们 */}
           <div
+            id="section-about"
             className="mx-3 mt-3 rounded-2xl p-4 border-2 border-dashed"
             style={{ borderColor: "var(--green-200)" }}
           >

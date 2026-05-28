@@ -42,3 +42,6 @@ next-env.d.ts
 
 # local deploy config (contains secrets)
 .deploy_config
+
+# 导出图片（本地生成，不入库）
+exports/
