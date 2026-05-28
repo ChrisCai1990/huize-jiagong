@@ -64,10 +64,31 @@ export default function YouzanPage() {
         <main className="flex-1 pb-16 youzan-scroll overflow-y-auto">
 
           {/* ── Hero ── */}
-          <section id="section-hero" className="px-5 pt-8 pb-7 bg-white">
+          <section
+            id="section-hero"
+            className="relative overflow-hidden px-5 pt-8 pb-0"
+            style={{ background: "linear-gradient(145deg, var(--green-50) 0%, white 55%)" }}
+          >
+            {/* 背景装饰圆 */}
+            <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full opacity-20"
+              style={{ background: "var(--green-400)" }} />
+            <div className="absolute top-16 -right-4 w-20 h-20 rounded-full opacity-10"
+              style={{ background: "var(--green-600)" }} />
+            <div className="absolute -bottom-6 right-20 w-14 h-14 rounded-full opacity-15"
+              style={{ background: "var(--green-300)" }} />
+
+            {/* 右上角徽章 */}
+            <div
+              className="absolute top-6 right-5 flex flex-col items-center justify-center w-16 h-16 rounded-2xl text-white"
+              style={{ background: "var(--green-800)" }}
+            >
+              <span className="text-lg font-semibold leading-none">95%</span>
+              <span className="text-[9px] mt-0.5 opacity-80">改善率</span>
+            </div>
+
             <span
               className="inline-block text-[10px] tracking-widest uppercase border rounded-full px-3 py-1 mb-5"
-              style={{ color: "var(--green-700)", borderColor: "var(--green-300)", background: "var(--green-50)" }}
+              style={{ color: "var(--green-700)", borderColor: "var(--green-300)", background: "white" }}
             >
               专注健康 · 精准营养
             </span>
@@ -90,15 +111,28 @@ export default function YouzanPage() {
               </button>
               <button
                 className="text-sm px-6 py-2.5 rounded-full border"
-                style={{ color: "var(--green-800)", borderColor: "var(--green-300)" }}
+                style={{ color: "var(--green-800)", borderColor: "var(--green-300)", background: "white" }}
               >
                 预约咨询
               </button>
             </div>
 
+            {/* 小数据条 */}
+            <div className="flex gap-4 mb-6">
+              {[
+                { num: "3000+", label: "服务案例" },
+                { num: "8年+",  label: "专注领域" },
+              ].map((s) => (
+                <div key={s.label} className="flex items-center gap-1.5">
+                  <span className="text-sm font-semibold" style={{ color: "var(--green-800)" }}>{s.num}</span>
+                  <span className="text-[11px] text-gray-400">{s.label}</span>
+                </div>
+              ))}
+            </div>
+
             {/* 信任标签 */}
             <div
-              className="flex items-center justify-around -mx-5 px-4 py-2.5 mt-6"
+              className="flex items-center justify-around -mx-5 px-4 py-2.5"
               style={{ background: "var(--green-900)" }}
             >
               {["正品保障", "专业检测", "顺丰包邮", "专属客服"].map((t) => (
