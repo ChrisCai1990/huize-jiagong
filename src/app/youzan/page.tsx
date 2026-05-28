@@ -127,7 +127,7 @@ export default function YouzanPage() {
                       : { background: "var(--green-50)", borderColor: "var(--green-100)" }
                     }
                   >
-                    <Icon size={20} style={{ color: i < 4 ? "var(--green-400)" : "var(--green-700)" }} />
+                    <Icon size={20} style={{ color: i < 4 ? "white" : "var(--green-700)" }} />
                   </div>
                   <span className="text-[11px] text-gray-600">{label}</span>
                 </button>
