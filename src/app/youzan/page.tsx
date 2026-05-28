@@ -97,11 +97,12 @@ export default function YouzanPage() {
             </div>
 
             {/* 信任标签 */}
-            <div className="flex items-center justify-between pt-5" style={{ borderTop: "1px solid var(--green-100)" }}>
+            <div className="grid grid-cols-4 pt-5" style={{ borderTop: "1px solid var(--green-100)" }}>
               {["正品保障", "专业检测", "顺丰包邮", "专属客服"].map((t) => (
-                <span key={t} className="text-[10px] flex items-center gap-0.5 text-gray-400">
-                  <span style={{ color: "var(--green-500)" }}>✓</span> {t}
-                </span>
+                <div key={t} className="flex flex-col items-center gap-1">
+                  <span className="text-xs" style={{ color: "var(--green-500)" }}>✓</span>
+                  <span className="text-[10px] text-gray-400">{t}</span>
+                </div>
               ))}
             </div>
           </section>
