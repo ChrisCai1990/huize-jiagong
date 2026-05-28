@@ -16,7 +16,7 @@ module.exports = {
     cwd: "/var/www/huize-jiagong/.next",
     max_restarts: 5,
     min_uptime: "10s",
-    env: { NODE_ENV: "production", PORT: "3001", HOSTNAME: "0.0.0.0" }
+    env: { NODE_ENV: "production", PORT: "3002", HOSTNAME: "0.0.0.0" }
   }]
 };
 EOF
@@ -24,7 +24,7 @@ EOF
 # 删除旧进程（重置重启计数），强制释放端口，再全新启动
 pm2 delete huize-jiagong 2>/dev/null || true
 sleep 1
-fuser -k 3001/tcp 2>/dev/null || true
+fuser -k 3002/tcp 2>/dev/null || true
 sleep 1
 pm2 start ecosystem.config.js
 pm2 save
@@ -36,7 +36,7 @@ server {
     listen 80;
     server_name _;
     location / {
-        proxy_pass http://127.0.0.1:3001;
+        proxy_pass http://127.0.0.1:3002;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
