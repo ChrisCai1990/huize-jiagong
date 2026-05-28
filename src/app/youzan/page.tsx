@@ -64,25 +64,37 @@ export default function YouzanPage() {
         <main className="flex-1 pb-16 youzan-scroll overflow-y-auto">
 
           {/* ── Hero ── */}
-          <section id="section-hero" className="px-5 pt-7 pb-6" style={{ background: "var(--green-900)" }}>
-            <p className="text-[11px] mb-4" style={{ color: "var(--green-400)" }}>
+          <section id="section-hero" className="px-5 pt-8 pb-8" style={{ background: "var(--green-900)" }}>
+            <span
+              className="inline-block text-[10px] tracking-widest uppercase border rounded-full px-3 py-1 mb-5"
+              style={{ color: "var(--green-300)", borderColor: "var(--green-700)", background: "rgba(255,255,255,0.06)" }}
+            >
               专注健康 · 精准营养
-            </p>
+            </span>
 
-            <h1 className="text-[28px] font-semibold text-white leading-tight mb-3">
-              科学营养方案<br />从这里开始
+            <h1 className="text-[30px] font-light text-white leading-snug mb-3">
+              科学营养方案<br />
+              <span className="font-semibold" style={{ color: "var(--green-300)" }}>从这里开始</span>
             </h1>
 
-            <p className="text-sm mb-6" style={{ color: "var(--green-300)" }}>
+            <p className="text-sm leading-relaxed mb-7" style={{ color: "var(--green-300)", maxWidth: "260px" }}>
               营养素 · 健康检测 · 天然食品
             </p>
 
-            <button
-              className="text-sm px-5 py-2 rounded-full border mb-6"
-              style={{ color: "var(--green-200)", borderColor: "var(--green-600)" }}
-            >
-              立即选购 →
-            </button>
+            <div className="flex gap-3 mb-7">
+              <button
+                className="text-sm px-6 py-2.5 rounded-full font-medium"
+                style={{ background: "var(--green-400)", color: "var(--green-950)" }}
+              >
+                立即选购
+              </button>
+              <button
+                className="text-sm px-6 py-2.5 rounded-full border"
+                style={{ color: "var(--green-200)", borderColor: "var(--green-700)" }}
+              >
+                预约咨询
+              </button>
+            </div>
 
             {/* 信任标签 */}
             <div className="flex items-center justify-between pt-4" style={{ borderTop: "1px solid var(--green-800)" }}>
