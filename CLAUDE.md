@@ -31,7 +31,7 @@ python scripts/huize_deploy.py
 - SSH：root@39.106.218.225，密码：@Cbq19900208
 - 项目路径：/var/www/huize-jiagong
 - PM2 进程名：huize-jiagong（端口 3002，Nginx 代理 80→3002）
-- 注意：端口 3001 被 /opt/poster-server/index.js 占用，不要用 3001
+- 注意：端口 3001 已空闲，但 huize-jiagong 固定用 3002，不要改
 - 查看日志：pm2 logs huize-jiagong
 
 ## GitHub
