@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import {
-  Search, ShoppingCart, ChevronRight,
+  ChevronRight,
   Pill, Activity, Heart, BookOpen, PlayCircle, Lightbulb, Users, Grid3x3,
   ClipboardList, Zap, BarChart2,
 } from "lucide-react";
@@ -60,29 +60,6 @@ export default function YouzanPage() {
   return (
     <div className="min-h-screen" style={{ background: "#e8ede9" }}>
       <div className="max-w-[390px] mx-auto min-h-screen flex flex-col bg-white relative">
-
-        {/* ── Header ── */}
-        <header
-          className="flex items-center justify-between px-5 py-3 sticky top-0 z-20 transition-all duration-300"
-          style={{
-            background: scrolled ? "rgba(255,255,255,0.96)" : "white",
-            backdropFilter: scrolled ? "blur(12px)" : "none",
-            borderBottom: `1px solid var(--green-100)`,
-            boxShadow: scrolled ? "0 1px 8px rgba(0,0,0,0.06)" : "none",
-          }}
-        >
-          <div className="flex items-center gap-2">
-            <span className="w-1.5 h-5 rounded-sm" style={{ background: "var(--green-700)" }} />
-            <div className="flex flex-col leading-tight">
-              <span className="text-sm font-semibold tracking-tight text-gray-900">汇泽健康</span>
-              <span className="text-[9px] tracking-wide" style={{ color: "var(--green-500)" }}>营养 · 检测 · 健康</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <Search size={17} className="text-gray-400" />
-            <ShoppingCart size={17} className="text-gray-400" />
-          </div>
-        </header>
 
         <main className="flex-1 pb-16 youzan-scroll overflow-y-auto">
 
