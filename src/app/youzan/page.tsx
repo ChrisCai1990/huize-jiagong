@@ -290,7 +290,7 @@ export default function YouzanPage() {
           {/* ── 关于我们 ── */}
           <section id="section-about" className="bg-white" style={{ borderTop: "1px solid var(--green-100)" }}>
             {/* 深色方法卡 */}
-            <div className="px-5 py-6 text-white" style={{ background: "var(--green-900)" }}>
+            <div className="px-5 py-6 text-white" style={{ background: "var(--green-800)" }}>
               <span className="text-[10px] tracking-widest uppercase" style={{ color: "var(--green-300)" }}>关于我们</span>
               <p className="text-lg font-light text-white mt-2 mb-1">
                 专注<span className="font-semibold">营养医学</span>领域
