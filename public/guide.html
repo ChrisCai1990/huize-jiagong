@@ -230,6 +230,7 @@ html,body{height:100%;background:var(--bg);font-family:'PingFang SC','Microsoft 
 #nav button:hover{border-color:var(--green);color:var(--green)}
 #nav button:disabled{opacity:.3;cursor:default}
 #slide-counter{font-size:11px;color:var(--muted);min-width:60px;text-align:center}
+#mob-toc-btn{display:none;align-items:center;gap:5px;font-size:12px;color:var(--text2);padding:0 10px;width:auto;min-width:64px;font-weight:500}
 #progress{position:absolute;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--green),var(--green2));transition:width .3s}
 
 /* ── FONT SCALE UP ── */
@@ -256,11 +257,15 @@ html,body{height:100%;background:var(--bg);font-family:'PingFang SC','Microsoft 
 .sidebar-item{font-size:13px}
 
 /* ── MOBILE ── */
+#mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:99;backdrop-filter:blur(1px)}
+#mob-overlay.active{display:block}
 @media(max-width:767px){
   html,body{height:100%;overflow:hidden}
   #layout{height:100vh}
-  #sidebar{display:none}
+  #sidebar{position:fixed;top:0;left:0;bottom:0;z-index:100;width:82%;max-width:270px;overflow-y:auto;transform:translateX(-105%);transition:transform .25s cubic-bezier(.4,0,.2,1);box-shadow:4px 0 24px rgba(0,0,0,.18)}
+  #sidebar.mobile-open{transform:translateX(0)}
   #stage>button{display:none}
+  #mob-toc-btn{display:flex}
 
   #slide-frame{
     width:100%!important;
@@ -319,9 +324,83 @@ html,body{height:100%;background:var(--bg);font-family:'PingFang SC','Microsoft 
   /* Nav stays fixed at bottom */
   #nav{position:fixed;bottom:0;left:0;right:0;z-index:50}
 }
+
+/* ── PDF 悬浮按钮 ── */
+#btn-pdf{
+  position:fixed;top:14px;right:14px;z-index:200;
+  display:flex;align-items:center;gap:6px;
+  padding:8px 14px;
+  background:var(--green);color:#fff;
+  border:none;border-radius:20px;
+  font-size:12px;font-weight:600;font-family:inherit;
+  cursor:pointer;
+  box-shadow:0 2px 10px rgba(46,125,107,.35);
+  transition:all .15s;
+}
+#btn-pdf:hover{background:var(--green2);box-shadow:0 4px 14px rgba(46,125,107,.45);transform:translateY(-1px)}
+#btn-pdf:active{transform:translateY(0)}
+
+/* ── PRINT / PDF EXPORT ── */
+@media print {
+  @page { size: 238mm 134mm; margin: 0; }
+
+  html, body { width: 900px; height: auto; overflow: visible; }
+
+  /* Hide all UI chrome */
+  #sidebar, #nav, #mob-overlay, #wm-overlay, #btn-pdf { display: none !important; }
+  #stage > button { display: none !important; }
+
+  /* Flatten layout to block flow */
+  #layout { display: block !important; height: auto; width: 900px; }
+  #stage  { display: block !important; height: auto; width: 900px; overflow: visible; background: none; }
+  #slide-wrap { width: 900px; height: auto; overflow: visible; position: static; background: none; }
+
+  /* Frame becomes vertical stack */
+  #slide-frame {
+    position: static !important;
+    width: 900px !important;
+    height: auto !important;
+    transform: none !important;
+    overflow: visible !important;
+  }
+
+  /* Show every slide, one per page */
+  .slide {
+    display: flex !important;
+    position: relative !important;
+    width: 900px !important;
+    height: 506px !important;
+    overflow: hidden !important;
+    box-sizing: border-box;
+    page-break-after: always;
+    break-after: page;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .slide:last-of-type {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  /* Mobile overrides interfere — reset */
+  .slide.active { display: flex !important; }
+  #slide-frame > .slide { top: auto !important; left: auto !important; }
+}
 </style>
 </head>
 <body>
+
+<div id="mob-overlay" onclick="closeMobileToc()"></div>
+
+<!-- 导出PDF 悬浮按钮 -->
+<button id="btn-pdf" onclick="exportPdf()" title="导出为 PDF">
+  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+    <path d="M3 2h7l3 3v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+    <path d="M9 2v3h3" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+    <path d="M8 8v4M6 10l2 2 2-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  导出PDF
+</button>
 
 <div id="layout">
   <div id="sidebar">
@@ -1144,6 +1223,7 @@ html,body{height:100%;background:var(--bg);font-family:'PingFang SC','Microsoft 
       <!-- NAV BAR -->
       <div id="nav">
         <div id="progress"></div>
+        <button id="mob-toc-btn" onclick="toggleMobileToc()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect y="2" width="16" height="1.5" rx=".75" fill="currentColor"/><rect y="7.25" width="16" height="1.5" rx=".75" fill="currentColor"/><rect y="12.5" width="16" height="1.5" rx=".75" fill="currentColor"/></svg>目录</button>
         <button onclick="prevSlide()" id="btn-prev" disabled>◀</button>
         <span id="slide-counter">1 / 40</span>
         <button onclick="nextSlide()" id="btn-next">▶</button>
@@ -1209,6 +1289,24 @@ function toggleSidebar() {
   setTimeout(scaleFrame, 280);
 }
 
+function toggleMobileToc() {
+  const sb = document.getElementById('sidebar');
+  const ov = document.getElementById('mob-overlay');
+  const open = sb.classList.toggle('mobile-open');
+  ov.classList.toggle('active', open);
+}
+function closeMobileToc() {
+  document.getElementById('sidebar').classList.remove('mobile-open');
+  document.getElementById('mob-overlay').classList.remove('active');
+}
+
+// Close mobile TOC when a sidebar item is tapped
+document.getElementById('sidebar').addEventListener('click', function(e) {
+  if (window.innerWidth <= 767 && e.target.closest('.sidebar-item')) {
+    setTimeout(closeMobileToc, 150);
+  }
+});
+
 function scaleFrame() {
   const wrap = document.getElementById('slide-wrap');
   const frame = document.getElementById('slide-frame');
@@ -1249,10 +1347,24 @@ window.addEventListener('resize', scaleFrame);
   ctx.restore();
   const wm = document.createElement('div');
   wm.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:5;';
+  wm.id = 'wm-overlay';
   wm.style.backgroundImage = `url(${c.toDataURL()})`;
   wm.style.backgroundSize = '220px 160px';
   document.body.appendChild(wm);
 })();
+
+function exportPdf() {
+  const url = new URL(window.location.href);
+  url.searchParams.set('print', '1');
+  window.open(url.toString(), '_blank');
+}
+
+// Auto-print when opened with ?print=1
+if (new URLSearchParams(window.location.search).get('print') === '1') {
+  document.fonts.ready.then(function() {
+    setTimeout(function() { window.print(); }, 400);
+  });
+}
 
 updateNav();
 scaleFrame();
