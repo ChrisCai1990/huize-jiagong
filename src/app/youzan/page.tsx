@@ -87,87 +87,36 @@ export default function YouzanPage() {
         <main className="flex-1 pb-16 youzan-scroll overflow-y-auto">
 
           {/* ── Hero ── */}
-          <section id="section-hero" className="px-5 pt-8 pb-6 bg-white">
+          <section id="section-hero" className="px-5 pt-8 pb-8" style={{ background: "var(--green-900)" }}>
             <span
               className="inline-block text-[10px] tracking-widest uppercase border rounded-full px-3 py-1 mb-5"
-              style={{ color: "var(--green-700)", borderColor: "var(--green-300)", background: "var(--green-50)" }}
+              style={{ color: "var(--green-300)", borderColor: "var(--green-700)", background: "rgba(255,255,255,0.06)" }}
             >
               自身免疫 · 营养医学 · 健康检测
             </span>
 
-            <h1 className="text-[28px] font-light text-gray-900 leading-snug mb-3">
+            <h1 className="text-[30px] font-light text-white leading-snug mb-3">
               重新认识<br />
-              <span className="font-semibold" style={{ color: "var(--green-800)" }}>甲状腺健康</span>
+              <span className="font-semibold" style={{ color: "var(--green-300)" }}>甲状腺健康</span>
             </h1>
 
-            <p className="text-sm text-gray-500 leading-relaxed mb-6 max-w-[280px]">
+            <p className="text-sm leading-relaxed mb-7" style={{ color: "var(--green-300)", maxWidth: "260px" }}>
               以循证营养医学为核心，帮助桥本、甲减患者系统改善症状、恢复活力。
             </p>
 
-            <div className="flex gap-3 mb-7">
+            <div className="flex gap-3">
               <button
-                className="text-sm text-white px-6 py-2.5 rounded-full"
-                style={{ background: "var(--green-700)" }}
+                className="text-sm px-6 py-2.5 rounded-full font-medium"
+                style={{ background: "var(--green-400)", color: "var(--green-950)" }}
               >
                 了解服务
               </button>
               <button
                 className="text-sm px-6 py-2.5 rounded-full border"
-                style={{ color: "var(--green-800)", borderColor: "var(--green-300)" }}
+                style={{ color: "var(--green-200)", borderColor: "var(--green-700)" }}
               >
                 预约咨询
               </button>
-            </div>
-
-            {/* 数据统计 */}
-            <div className="grid grid-cols-3 gap-3 mb-4">
-              {[
-                { num: "3000+", label: "服务案例" },
-                { num: "8年+",  label: "专注自免领域" },
-                { num: "95%",   label: "症状改善率" },
-              ].map((s) => (
-                <div
-                  key={s.label}
-                  className="rounded-2xl p-3 text-center border"
-                  style={{ background: "var(--green-50)", borderColor: "var(--green-100)" }}
-                >
-                  <div className="text-lg font-semibold" style={{ color: "var(--green-800)" }}>{s.num}</div>
-                  <div className="text-[10px] text-gray-400 mt-0.5 leading-tight">{s.label}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* 方法卡 */}
-            <div className="rounded-2xl p-5 text-white" style={{ background: "var(--green-900)" }}>
-              <div className="text-[10px] tracking-widest uppercase mb-3" style={{ color: "var(--green-300)" }}>
-                我们的方法
-              </div>
-              <div className="space-y-2.5">
-                {[
-                  "不只看指标，寻找症状背后的根本原因",
-                  "个性化营养方案，靶向调节免疫与甲状腺",
-                  "全程陪伴，定期追踪指标变化",
-                ].map((item, i) => (
-                  <div key={i} className="flex items-start gap-2.5 text-xs" style={{ color: "var(--green-100)" }}>
-                    <span className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: "var(--green-500)" }} />
-                    {item}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* 提示条 */}
-            <div
-              className="mt-3 rounded-2xl px-4 py-3 border flex items-center gap-3"
-              style={{ background: "var(--green-50)", borderColor: "var(--green-100)" }}
-            >
-              <div
-                className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-[10px] text-white"
-                style={{ background: "var(--green-500)" }}
-              >
-                ✓
-              </div>
-              <p className="text-xs text-gray-500">首次咨询免费评估，1个工作日内回复</p>
             </div>
           </section>
 
