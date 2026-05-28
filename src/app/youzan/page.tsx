@@ -117,19 +117,6 @@ export default function YouzanPage() {
               </button>
             </div>
 
-            {/* 小数据条 */}
-            <div className="flex gap-4 mb-6">
-              {[
-                { num: "3000+", label: "服务案例" },
-                { num: "8年+",  label: "专注领域" },
-              ].map((s) => (
-                <div key={s.label} className="flex items-center gap-1.5">
-                  <span className="text-sm font-semibold" style={{ color: "var(--green-800)" }}>{s.num}</span>
-                  <span className="text-[11px] text-gray-400">{s.label}</span>
-                </div>
-              ))}
-            </div>
-
             {/* 信任标签 */}
             <div
               className="flex items-center justify-around -mx-5 px-4 py-2.5"
