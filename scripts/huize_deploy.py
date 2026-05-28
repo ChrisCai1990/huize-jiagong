@@ -92,8 +92,8 @@ def run_deploy():
     _, log = run(f'git -C {REPO_DIR} log --oneline -1', 10)
     print(f'    当前 commit: {log.strip()}')
 
-    # 安装依赖
-    run(f'cd {REPO_DIR} && npm ci', 180, '安装依赖（npm ci）')
+    # 安装依赖（跳过 puppeteer 下载 Chrome，服务器不需要）
+    run(f'cd {REPO_DIR} && PUPPETEER_SKIP_DOWNLOAD=1 npm ci', 180, '安装依赖（npm ci）')
 
     # 构建
     code, _ = run(f'cd {REPO_DIR} && npm run build 2>&1', 600, '构建 Next.js')
