@@ -31,11 +31,20 @@ async function main() {
   const page = await browser.newPage();
 
   // 模拟 750px 手机屏幕，deviceScaleFactor=2 输出 2x 高清图
+  // deviceScaleFactor=2 → 实际输出 1500px 宽（2x 高清），有赞可正常上传
   await page.setViewport({ width: VIEWPORT_WIDTH, height: 1334, deviceScaleFactor: 2 });
   await page.goto(URL, { waitUntil: "networkidle0", timeout: 30000 });
 
   // 等待字体和图标渲染完成
-  await new Promise(r => setTimeout(r, 800));
+  await new Promise(r => setTimeout(r, 1000));
+
+  // 隐藏 Next.js Dev Tools 悬浮按钮（不影响内容）
+  await page.addStyleTag({
+    content: `
+      nextjs-portal { display: none !important; }
+      [data-nextjs-dialog-overlay] { display: none !important; }
+    `,
+  });
 
   for (const { id, name } of SECTIONS) {
     const el = await page.$(`#${id}`);
