@@ -121,10 +121,13 @@ export default function YouzanPage() {
               {categories.map(({ icon: Icon, label }, i) => (
                 <button key={i} className="flex flex-col items-center gap-1.5">
                   <div
-                    className="w-12 h-12 rounded-2xl flex items-center justify-center"
-                    style={{ background: "var(--green-900)" }}
+                    className="w-12 h-12 rounded-2xl flex items-center justify-center border"
+                    style={i < 4
+                      ? { background: "var(--green-900)", borderColor: "transparent" }
+                      : { background: "var(--green-50)", borderColor: "var(--green-100)" }
+                    }
                   >
-                    <Icon size={20} style={{ color: "var(--green-400)" }} />
+                    <Icon size={20} style={{ color: i < 4 ? "var(--green-400)" : "var(--green-700)" }} />
                   </div>
                   <span className="text-[11px] text-gray-600">{label}</span>
                 </button>
