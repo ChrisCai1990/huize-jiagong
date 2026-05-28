@@ -103,7 +103,7 @@ export default function YouzanPage() {
             {/* 信任标签 */}
             <div
               className="flex items-center justify-around -mx-5 px-4 py-2.5"
-              style={{ background: "var(--green-900)" }}
+              style={{ background: "var(--green-800)" }}
             >
               {["正品保障", "专业检测", "顺丰包邮", "专属客服"].map((t) => (
                 <span key={t} className="text-[10px] flex items-center gap-1" style={{ color: "var(--green-300)" }}>
