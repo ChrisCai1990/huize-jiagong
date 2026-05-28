@@ -127,7 +127,7 @@ export default function YouzanPage() {
                   <div
                     className="w-12 h-12 rounded-2xl flex items-center justify-center border"
                     style={i < 4
-                      ? { background: "var(--green-900)", borderColor: "transparent" }
+                      ? { background: "var(--green-800)", borderColor: "transparent" }
                       : { background: "var(--green-50)", borderColor: "var(--green-100)" }
                     }
                   >
