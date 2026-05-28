@@ -68,8 +68,8 @@ const cases = [
 
 export default function YouzanPage() {
   return (
-    <div className="min-h-screen bg-white flex justify-center">
-      <div className="w-full max-w-sm min-h-screen flex flex-col" style={{ background: "var(--green-50)" }}>
+    <div className="min-h-screen" style={{ background: "var(--green-50)" }}>
+      <div className="w-full min-h-screen flex flex-col">
 
         {/* 顶部导航 */}
         <header
