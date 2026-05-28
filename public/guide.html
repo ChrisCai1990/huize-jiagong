@@ -1353,17 +1353,67 @@ window.addEventListener('resize', scaleFrame);
   document.body.appendChild(wm);
 })();
 
-function exportPdf() {
-  const url = new URL(window.location.href);
-  url.searchParams.set('print', '1');
-  window.open(url.toString(), '_blank');
-}
+async function exportPdf() {
+  const btn = document.getElementById('btn-pdf');
+  const origHTML = btn.innerHTML;
+  btn.disabled = true;
 
-// Auto-print when opened with ?print=1
-if (new URLSearchParams(window.location.search).get('print') === '1') {
-  document.fonts.ready.then(function() {
-    setTimeout(function() { window.print(); }, 400);
-  });
+  async function ensureLib(src, test) {
+    if (test()) return;
+    await new Promise((res, rej) => {
+      const el = document.createElement('script');
+      el.src = src; el.onload = res; el.onerror = rej;
+      document.head.appendChild(el);
+    });
+  }
+
+  try {
+    btn.textContent = '加载中…';
+    await ensureLib(
+      'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
+      () => !!window.html2canvas
+    );
+    await ensureLib(
+      'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
+      () => !!window.jspdf
+    );
+
+    const { jsPDF } = window.jspdf;
+    const slides = Array.from(document.querySelectorAll('#slide-frame .slide'));
+    const pdf = new jsPDF({ orientation: 'l', unit: 'mm', format: [238.125, 133.854] });
+
+    const captureDiv = document.createElement('div');
+    captureDiv.style.cssText = 'position:fixed;left:0;top:0;width:900px;height:506px;overflow:hidden;z-index:9999;pointer-events:none';
+    document.body.appendChild(captureDiv);
+
+    for (let i = 0; i < slides.length; i++) {
+      btn.textContent = `${i + 1}/${slides.length}`;
+
+      const clone = slides[i].cloneNode(true);
+      clone.style.cssText = 'position:relative!important;display:flex!important;width:900px!important;height:506px!important;transform:none!important;top:auto!important;left:auto!important;overflow:hidden!important';
+      captureDiv.innerHTML = '';
+      captureDiv.appendChild(clone);
+      await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+      const canvas = await html2canvas(captureDiv, {
+        width: 900, height: 506, scale: 2,
+        useCORS: true, allowTaint: true, logging: false
+      });
+
+      if (i > 0) pdf.addPage([238.125, 133.854], 'l');
+      pdf.addImage(canvas.toDataURL('image/jpeg', 0.93), 'JPEG', 0, 0, 238.125, 133.854);
+    }
+
+    document.body.removeChild(captureDiv);
+    pdf.save('桥本疗愈指南-汇泽健康.pdf');
+
+  } catch (err) {
+    console.error(err);
+    alert('PDF生成失败，请刷新页面后重试');
+  } finally {
+    btn.innerHTML = origHTML;
+    btn.disabled = false;
+  }
 }
 
 updateNav();
