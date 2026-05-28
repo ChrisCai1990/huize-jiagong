@@ -116,7 +116,7 @@ export default function YouzanPage() {
           {/* ── 分类 ── */}
           <section id="section-categories" className="px-5 py-5 bg-white" style={{ borderTop: "1px solid var(--green-100)" }}>
             <div className="flex items-center justify-between mb-4">
-              <span className="text-[10px] tracking-widest uppercase" style={{ color: "var(--green-700)" }}>商品分类</span>
+              <span className="text-[10px] tracking-widest uppercase" style={{ color: "var(--green-800)" }}>商品分类</span>
               <button className="text-xs flex items-center gap-0.5 text-gray-400">
                 全部 <ChevronRight size={11} />
               </button>
