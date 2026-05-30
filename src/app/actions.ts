@@ -31,6 +31,14 @@ export async function logout() {
 
 // ─── Topics ─────────────────────────────────────────────────────────────────
 
+export async function reseedTopicsAction() {
+  const { reseedTopics } = await import("@/lib/db");
+  const count = reseedTopics();
+  revalidatePath("/admin/topics");
+  revalidatePath("/admin/schedule/2026-06");
+  return count;
+}
+
 export async function createTopic(formData: FormData) {
   const db = getDb();
   db.prepare(

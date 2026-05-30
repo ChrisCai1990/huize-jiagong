@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useTransition } from "react";
 import { NewTopicButton, TopicCard } from "./TopicModal";
 import { PILLARS, STAGES, PILLAR_COLORS, STAGE_COLORS } from "@/lib/types";
 import type { Topic, Pillar, AudienceStage } from "@/lib/types";
-import { Search } from "lucide-react";
+import { Search, RefreshCw } from "lucide-react";
+import { reseedTopicsAction } from "@/app/actions";
 
 async function fetchTopics() {
   const res = await fetch("/api/admin/topics", { cache: "no-store" });
@@ -16,8 +17,18 @@ export default function TopicsPage() {
   const [search, setSearch] = useState("");
   const [pillar, setPillar] = useState<Pillar | "全部">("全部");
   const [stage, setStage] = useState<AudienceStage | "全部">("全部");
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => { fetchTopics().then(setTopics); }, []);
+
+  function handleReseed() {
+    if (!confirm("将清空当前所有选题和6月排期，重置为30条新选题。确定吗？")) return;
+    startTransition(async () => {
+      await reseedTopicsAction();
+      const fresh = await fetchTopics();
+      setTopics(fresh);
+    });
+  }
 
   const filtered = topics.filter((t) => {
     if (pillar !== "全部" && t.pillar !== pillar) return false;
@@ -33,7 +44,20 @@ export default function TopicsPage() {
           <h1 className="text-base font-semibold text-gray-800">选题库</h1>
           <p className="text-xs text-gray-400 mt-0.5">共 {topics.filter(t => t.status === "approved").length} 条已审批</p>
         </div>
-        <NewTopicButton />
+        <div className="flex gap-2">
+          <button
+            onClick={handleReseed}
+            disabled={isPending}
+            className="flex items-center gap-1.5 px-3 py-2 text-sm rounded-lg border transition-colors disabled:opacity-40"
+            style={{ borderColor: "var(--green-200)", color: "var(--green-800)" }}
+            onMouseEnter={e => (e.currentTarget.style.background = "var(--green-50)")}
+            onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+          >
+            <RefreshCw size={14} className={isPending ? "animate-spin" : ""} />
+            {isPending ? "重置中…" : "重置选题"}
+          </button>
+          <NewTopicButton />
+        </div>
       </div>
 
       {/* Filters */}
