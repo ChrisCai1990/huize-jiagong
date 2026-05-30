@@ -1223,8 +1223,7 @@ html,body{height:100%;background:var(--bg);font-family:'PingFang SC','Microsoft 
       <!-- NAV BAR -->
       <div id="nav">
         <div id="progress"></div>
-        <button id="mob-toc-btn" onclick="toggleMobileToc()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect y="2" width="16" height="1.5" rx=".75" fill="currentColor"/><rect y="7.25" width="16" height="1.5" rx=".75" fill="currentColor"/><rect y="12.5" width="16" height="1.5" rx=".75" fill="currentColor"/></svg>目录</button>
-        <button onclick="prevSlide()" id="btn-prev" disabled>◀</button>
+<button onclick="prevSlide()" id="btn-prev" disabled>◀</button>
         <span id="slide-counter">1 / 40</span>
         <button onclick="nextSlide()" id="btn-next">▶</button>
       </div>
@@ -1353,10 +1352,123 @@ window.addEventListener('resize', scaleFrame);
   document.body.appendChild(wm);
 })();
 
-async function exportPdf() {
+// ── 手机版 PDF 强制覆盖样式（对应 @media max-width:767px）──
+const _PDF_MOB_CSS = `
+  ._mob_{width:390px!important;height:auto!important;overflow:hidden!important}
+  ._mob_ .s-cover{padding:32px 20px 80px!important}
+  ._mob_ .cover-h1{font-size:32px!important}
+  ._mob_ .cover-en{letter-spacing:2px!important}
+  ._mob_ .cover-desc{max-width:100%!important;font-size:13px!important}
+  ._mob_ .cover-stats{flex-wrap:wrap!important;gap:8px!important}
+  ._mob_ .cstat{flex:1!important;min-width:70px!important}
+  ._mob_ .cover-bottom{position:relative!important;padding:12px 20px!important}
+  ._mob_ .s-chapter{padding:44px 20px!important}
+  ._mob_ .ch-title{font-size:28px!important}
+  ._mob_ .ch-desc{max-width:100%!important}
+  ._mob_ .ch-num{font-size:70px!important;right:20px!important}
+  ._mob_ .slide-header{padding:12px 16px 10px!important}
+  ._mob_ .slide-body{padding:14px 16px!important;overflow:visible!important;flex:none!important;height:auto!important}
+  ._mob_ .slide-footer{padding:10px 16px!important}
+  ._mob_ .slide-title{font-size:18px!important}
+  ._mob_ .slide-sub{margin-bottom:12px!important}
+  ._mob_ .g2{grid-template-columns:1fr!important;gap:8px!important}
+  ._mob_ .g3{grid-template-columns:1fr 1fr!important;gap:7px!important}
+  ._mob_ .stat-row{flex-wrap:wrap!important;gap:7px!important}
+  ._mob_ .stat-box{min-width:70px!important;flex:1!important}
+  ._mob_ .s-story{flex-direction:column!important}
+  ._mob_ .story-bar{width:100%!important;height:4px!important;flex-shrink:0!important}
+  ._mob_ .story-body{padding:16px 16px 28px!important}
+  ._mob_ .s-cta{padding:28px 20px!important}
+  ._mob_ .cta-steps{flex-direction:column!important;gap:8px!important}
+  ._mob_ .cta-sub{max-width:100%!important}
+  ._mob_ .cmp-table{font-size:10px!important}
+  ._mob_ .food-table{font-size:9.5px!important}
+`;
+
+// ── 点击"导出PDF"：弹出版本选择框 ──
+function exportPdf() {
+  const cardBase = [
+    'border:2px solid #E8ECF0;border-radius:12px;padding:20px 16px',
+    'cursor:pointer;background:#fff;flex:1;text-align:center',
+    'font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif',
+    'transition:border-color .15s'
+  ].join(';');
+
+  const dialog = document.createElement('div');
+  dialog.style.cssText = 'position:fixed;inset:0;z-index:10000;background:rgba(15,28,46,0.75);display:flex;align-items:center;justify-content:center';
+  dialog.innerHTML = `
+    <div style="background:#fff;border-radius:16px;padding:28px 24px;max-width:380px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.25);font-family:'PingFang SC','Microsoft YaHei',system-ui,sans-serif">
+      <div style="font-size:17px;font-weight:700;color:#1A2E4A;margin-bottom:6px">选择导出版本</div>
+      <div style="font-size:13px;color:#546E7A;margin-bottom:22px">请选择适合阅读设备的格式</div>
+      <div style="display:flex;gap:12px;margin-bottom:16px">
+        <button id="_pdfPC" style="${cardBase}">
+          <div style="font-size:26px">🖥</div>
+          <div style="font-size:14px;font-weight:600;color:#1A2E4A;margin-top:10px">电脑版</div>
+          <div style="font-size:11px;color:#90A4AE;margin-top:5px">横版 16:9<br>适合电脑查看</div>
+        </button>
+        <button id="_pdfMob" style="${cardBase}">
+          <div style="font-size:26px">📱</div>
+          <div style="font-size:14px;font-weight:600;color:#1A2E4A;margin-top:10px">手机版</div>
+          <div style="font-size:11px;color:#90A4AE;margin-top:5px">竖版排版<br>适合手机查看</div>
+        </button>
+      </div>
+      <button id="_pdfCancel" style="width:100%;padding:10px;border:none;background:none;color:#90A4AE;font-size:13px;cursor:pointer;font-family:inherit">取消</button>
+    </div>
+  `;
+  document.body.appendChild(dialog);
+
+  const pcBtn  = dialog.querySelector('#_pdfPC');
+  const mobBtn = dialog.querySelector('#_pdfMob');
+  const cancel = dialog.querySelector('#_pdfCancel');
+  [pcBtn, mobBtn].forEach(b => {
+    b.onmouseenter = () => { b.style.borderColor = '#2E7D6B'; };
+    b.onmouseleave = () => { b.style.borderColor = '#E8ECF0'; };
+  });
+  const close = () => { if (dialog.parentNode) dialog.parentNode.removeChild(dialog); };
+  pcBtn.onclick  = () => { close(); _doPdfExport('desktop'); };
+  mobBtn.onclick = () => { close(); _doPdfExport('mobile'); };
+  cancel.onclick = close;
+}
+
+// ── 实际导出逻辑 ──
+async function _doPdfExport(mode) {
   const btn = document.getElementById('btn-pdf');
   const origHTML = btn.innerHTML;
   btn.disabled = true;
+  const savedSlide = current;
+
+  // 全屏遮罩，隐藏翻页过程
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(15,28,46,0.88);z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif';
+  if (!document.getElementById('_pdfSpinKF')) {
+    const s = document.createElement('style');
+    s.id = '_pdfSpinKF';
+    s.textContent = '@keyframes _pdfSpin{to{transform:rotate(360deg)}}';
+    document.head.appendChild(s);
+  }
+  overlay.innerHTML = `
+    <div style="width:36px;height:36px;border:3px solid rgba(255,255,255,.2);border-top-color:#3DAA90;border-radius:50%;animation:_pdfSpin .8s linear infinite"></div>
+    <div id="_pdfProg" style="color:#fff;font-size:15px">正在加载工具库…</div>
+    <div id="_pdfSub" style="color:rgba(255,255,255,.45);font-size:12px">首次使用需下载约 500KB，请稍候</div>
+  `;
+  document.body.appendChild(overlay);
+  const progEl = overlay.querySelector('#_pdfProg');
+  const subEl  = overlay.querySelector('#_pdfSub');
+
+  // 手机版注入 CSS
+  let mobStyle = null;
+  if (mode === 'mobile') {
+    mobStyle = document.createElement('style');
+    mobStyle.textContent = _PDF_MOB_CSS;
+    document.head.appendChild(mobStyle);
+  }
+
+  // captureDiv 在遮罩下层（z-index:9999）
+  const captureDiv = document.createElement('div');
+  captureDiv.style.cssText = mode === 'desktop'
+    ? 'position:fixed;left:0;top:0;width:900px;height:506px;overflow:hidden;z-index:9999;pointer-events:none'
+    : 'position:fixed;left:0;top:0;width:390px;overflow:hidden;z-index:9999;pointer-events:none';
+  document.body.appendChild(captureDiv);
 
   async function ensureLib(src, test) {
     if (test()) return;
@@ -1368,7 +1480,6 @@ async function exportPdf() {
   }
 
   try {
-    btn.textContent = '加载中…';
     await ensureLib(
       'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
       () => !!window.html2canvas
@@ -1377,42 +1488,69 @@ async function exportPdf() {
       'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
       () => !!window.jspdf
     );
+    subEl.style.display = 'none';
 
     const { jsPDF } = window.jspdf;
     const slides = Array.from(document.querySelectorAll('#slide-frame .slide'));
-    const pdf = new jsPDF({ orientation: 'l', unit: 'mm', format: [238.125, 133.854] });
-
-    const captureDiv = document.createElement('div');
-    captureDiv.style.cssText = 'position:fixed;left:0;top:0;width:900px;height:506px;overflow:hidden;z-index:9999;pointer-events:none';
-    document.body.appendChild(captureDiv);
+    let pdf = null;
 
     for (let i = 0; i < slides.length; i++) {
-      btn.textContent = `${i + 1}/${slides.length}`;
-
+      progEl.textContent = `正在生成 ${mode === 'mobile' ? '手机版' : '电脑版'} PDF… ${i + 1} / ${slides.length}`;
       const clone = slides[i].cloneNode(true);
-      clone.style.cssText = 'position:relative!important;display:flex!important;width:900px!important;height:506px!important;transform:none!important;top:auto!important;left:auto!important;overflow:hidden!important';
-      captureDiv.innerHTML = '';
-      captureDiv.appendChild(clone);
-      await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
 
-      const canvas = await html2canvas(captureDiv, {
-        width: 900, height: 506, scale: 2,
-        useCORS: true, allowTaint: true, logging: false
-      });
+      if (mode === 'desktop') {
+        clone.style.cssText = 'position:relative!important;display:flex!important;width:900px!important;height:506px!important;transform:none!important;top:auto!important;left:auto!important;overflow:hidden!important';
+        captureDiv.innerHTML = '';
+        captureDiv.appendChild(clone);
+        await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
 
-      if (i > 0) pdf.addPage([238.125, 133.854], 'l');
-      pdf.addImage(canvas.toDataURL('image/jpeg', 0.93), 'JPEG', 0, 0, 238.125, 133.854);
+        const canvas = await html2canvas(captureDiv, {
+          width: 900, height: 506, scale: 2,
+          useCORS: true, allowTaint: true, logging: false
+        });
+        const W = 238.125, H = 133.854;
+        if (!pdf) pdf = new jsPDF({ orientation: 'l', unit: 'mm', format: [W, H] });
+        else pdf.addPage([W, H], 'l');
+        pdf.addImage(canvas.toDataURL('image/jpeg', 0.93), 'JPEG', 0, 0, W, H);
+
+      } else {
+        // 手机版：390px 宽，高度自适应
+        clone.classList.add('_mob_');
+        clone.style.cssText = 'position:relative!important;display:flex!important;flex-direction:column!important;width:390px!important;height:auto!important;transform:none!important;top:auto!important;left:auto!important;overflow:hidden!important';
+        captureDiv.style.height = 'auto';
+        captureDiv.innerHTML = '';
+        captureDiv.appendChild(clone);
+        await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+        const actualH = Math.min(Math.max(clone.scrollHeight, 400), 1400);
+        captureDiv.style.height = actualH + 'px';
+        clone.style.minHeight = actualH + 'px';
+        await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+        const canvas = await html2canvas(captureDiv, {
+          width: 390, height: actualH, scale: 2,
+          useCORS: true, allowTaint: true, logging: false
+        });
+        const W_mm = 390 / 96 * 25.4;
+        const H_mm = actualH / 96 * 25.4;
+        if (!pdf) pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: [W_mm, H_mm] });
+        else pdf.addPage([W_mm, H_mm], 'p');
+        pdf.addImage(canvas.toDataURL('image/jpeg', 0.93), 'JPEG', 0, 0, W_mm, H_mm);
+      }
     }
 
-    document.body.removeChild(captureDiv);
-    pdf.save('桥本疗愈指南-汇泽健康.pdf');
+    if (pdf) pdf.save(mode === 'desktop' ? '桥本疗愈指南-电脑版.pdf' : '桥本疗愈指南-手机版.pdf');
 
   } catch (err) {
     console.error(err);
     alert('PDF生成失败，请刷新页面后重试');
   } finally {
+    if (captureDiv.parentNode) captureDiv.parentNode.removeChild(captureDiv);
+    if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+    if (mobStyle && mobStyle.parentNode) mobStyle.parentNode.removeChild(mobStyle);
     btn.innerHTML = origHTML;
     btn.disabled = false;
+    goTo(savedSlide);
   }
 }
 
