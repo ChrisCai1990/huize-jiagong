@@ -31,10 +31,8 @@ export default async function LoginPage({ searchParams }: Props) {
                 required
                 autoFocus
                 placeholder="请输入密码"
-                className="w-full px-4 py-2.5 rounded-lg text-sm focus:outline-none focus:ring-2 transition-colors"
-                style={{ border: "1px solid var(--green-200)", "--tw-ring-color": "var(--green-400)" } as React.CSSProperties}
-                onFocus={e => (e.currentTarget.style.borderColor = "var(--green-400)")}
-                onBlur={e => (e.currentTarget.style.borderColor = "var(--green-200)")}
+                className="w-full px-4 py-2.5 rounded-lg text-sm outline-none transition-colors"
+                style={{ border: "1px solid var(--green-200)" }}
               />
             </div>
             {error && (
@@ -46,8 +44,6 @@ export default async function LoginPage({ searchParams }: Props) {
               type="submit"
               className="w-full text-white py-2.5 rounded-lg text-sm font-medium transition-colors"
               style={{ background: "var(--green-700)" }}
-              onMouseEnter={e => (e.currentTarget.style.background = "var(--green-800)")}
-              onMouseLeave={e => (e.currentTarget.style.background = "var(--green-700)")}
             >
               进入后台
             </button>
