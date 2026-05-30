@@ -6,10 +6,22 @@ import { useRouter } from "next/navigation";
 import { initMonth } from "@/app/actions";
 import AssignModal from "./AssignModal";
 import { STATUS_DOT, PILLAR_COLORS } from "@/lib/types";
+import { buildWeekScriptPrompt } from "@/lib/prompts";
 import type { DayStatus, Pillar, AudienceStage } from "@/lib/types";
-import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus, Copy, CheckCheck, Zap } from "lucide-react";
 
-interface DayWithTopic { id: number; month: string; day_number: number; topic_id: number | null; status: DayStatus; title?: string; pillar?: Pillar; audience_stage?: AudienceStage; }
+interface DayWithTopic {
+  id: number;
+  month: string;
+  day_number: number;
+  topic_id: number | null;
+  status: DayStatus;
+  title?: string;
+  pillar?: Pillar;
+  audience_stage?: AudienceStage;
+  hook?: string | null;
+  pain_point?: string | null;
+}
 
 const WEEKDAYS = ["一", "二", "三", "四", "五", "六", "日"];
 
@@ -35,10 +47,29 @@ function nextMonth(month: string) {
   return `${y}-${String(m + 1).padStart(2, "0")}`;
 }
 
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+  function copy() {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 3000);
+  }
+  return (
+    <button
+      onClick={copy}
+      className="flex items-center gap-2 px-4 py-2 bg-green-700 text-white text-sm rounded-lg hover:bg-green-800 transition-colors shrink-0"
+    >
+      {copied ? <CheckCheck size={14} /> : <Copy size={14} />}
+      {copied ? "已复制！去 Claude.ai 粘贴" : "复制提示词"}
+    </button>
+  );
+}
+
 export default function MonthCalendar({ params }: { params: Promise<{ month: string }> }) {
   const [month, setMonth] = useState("");
   const [days, setDays] = useState<DayWithTopic[]>([]);
   const [assignDay, setAssignDay] = useState<number | null>(null);
+  const [selectedWeek, setSelectedWeek] = useState<number | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -77,7 +108,39 @@ export default function MonthCalendar({ params }: { params: Promise<{ month: str
 
   while (cells.length % 7 !== 0) cells.push(null);
 
+  // Split into week rows
+  const weeks: (DayWithTopic | null)[][] = [];
+  for (let i = 0; i < cells.length; i += 7) {
+    weeks.push(cells.slice(i, i + 7));
+  }
+
   const assigningDay = days.find((d) => d.day_number === assignDay);
+
+  // Build prompt for selected week
+  const weekPrompt = (() => {
+    if (selectedWeek === null) return "";
+    const weekDays = (weeks[selectedWeek] ?? [])
+      .filter((d): d is DayWithTopic => !!d && !!d.topic_id && !!d.title)
+      .map((d) => ({
+        day_number: d.day_number,
+        title: d.title!,
+        pillar: d.pillar ?? "",
+        audience_stage: d.audience_stage ?? "",
+        pain_point: d.pain_point,
+        hook: d.hook,
+      }));
+    if (weekDays.length === 0) return "";
+    return buildWeekScriptPrompt(weekDays);
+  })();
+
+  // Week label: first and last real day of the week
+  function weekLabel(week: (DayWithTopic | null)[], weekIdx: number) {
+    const real = week.filter(Boolean) as DayWithTopic[];
+    if (real.length === 0) return `第${weekIdx + 1}周`;
+    const first = real[0].day_number;
+    const last = real[real.length - 1].day_number;
+    return `第${weekIdx + 1}周（${m}/${first}–${last}）`;
+  }
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-6">
@@ -116,59 +179,87 @@ export default function MonthCalendar({ params }: { params: Promise<{ month: str
           ))}
         </div>
 
-        {/* Day cells */}
-        <div className="grid grid-cols-7 divide-x divide-y divide-slate-100">
-          {cells.map((day, idx) => {
-            if (!day) return <div key={idx} className="bg-slate-50/50 min-h-[80px]" />;
-
-            const isToday = isCurrentMonth && day.day_number === todayDate;
-            const hasTopic = !!day.topic_id;
+        {/* Week rows */}
+        <div className="divide-y divide-slate-100">
+          {weeks.map((week, weekIdx) => {
+            const assignedInWeek = week.filter((d): d is DayWithTopic => !!d && !!d.topic_id);
+            const isSelected = selectedWeek === weekIdx;
 
             return (
               <div
-                key={idx}
-                className={`min-h-[80px] p-1.5 flex flex-col ${isToday ? "bg-green-50" : "hover:bg-slate-50"} transition-colors relative group`}
+                key={weekIdx}
+                className={`grid grid-cols-7 divide-x divide-slate-100 relative group/week ${isSelected ? "bg-green-50/40" : ""}`}
               >
-                {/* Day number */}
-                <div className={`text-xs font-medium mb-1 w-5 h-5 flex items-center justify-center rounded-full ${isToday ? "bg-green-700 text-white" : "text-slate-500"}`}>
-                  {day.day_number}
-                </div>
+                {week.map((day, dayIdx) => {
+                  if (!day) return <div key={dayIdx} className="bg-slate-50/50 min-h-[80px]" />;
 
-                {hasTopic ? (
-                  <Link
-                    href={`/admin/schedule/${month}/${String(day.day_number).padStart(2, "0")}`}
-                    className="flex-1 flex flex-col"
-                  >
-                    <div className="flex items-center gap-1 mb-1">
-                      <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${STATUS_DOT[day.status]}`} />
-                    </div>
-                    {day.pillar && (
-                      <span className={`text-xs px-1.5 py-0.5 rounded mb-1 border leading-tight inline-block max-w-full truncate ${PILLAR_COLORS[day.pillar as Pillar]}`}>
-                        {day.pillar}
-                      </span>
-                    )}
-                    <p className="text-xs text-slate-700 leading-tight line-clamp-2">
-                      {(day as { title?: string }).title}
-                    </p>
-                  </Link>
-                ) : (
-                  <button
-                    onClick={() => setAssignDay(day.day_number)}
-                    className="flex-1 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <div className="w-6 h-6 rounded-full border-2 border-dashed border-slate-300 flex items-center justify-center hover:border-green-500 hover:text-green-600 transition-colors">
-                      <Plus size={12} />
-                    </div>
-                  </button>
-                )}
+                  const isToday = isCurrentMonth && day.day_number === todayDate;
+                  const hasTopic = !!day.topic_id;
 
-                {/* Edit button on hover for assigned days */}
-                {hasTopic && (
+                  return (
+                    <div
+                      key={dayIdx}
+                      className={`min-h-[80px] p-1.5 flex flex-col ${isToday ? "bg-green-50" : ""} transition-colors relative group`}
+                    >
+                      {/* Day number */}
+                      <div className={`text-xs font-medium mb-1 w-5 h-5 flex items-center justify-center rounded-full ${isToday ? "bg-green-700 text-white" : "text-slate-500"}`}>
+                        {day.day_number}
+                      </div>
+
+                      {hasTopic ? (
+                        <Link
+                          href={`/admin/schedule/${month}/${String(day.day_number).padStart(2, "0")}`}
+                          className="flex-1 flex flex-col"
+                        >
+                          <div className="flex items-center gap-1 mb-1">
+                            <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${STATUS_DOT[day.status]}`} />
+                          </div>
+                          {day.pillar && (
+                            <span className={`text-xs px-1.5 py-0.5 rounded mb-1 border leading-tight inline-block max-w-full truncate ${PILLAR_COLORS[day.pillar as Pillar]}`}>
+                              {day.pillar}
+                            </span>
+                          )}
+                          <p className="text-xs text-slate-700 leading-tight line-clamp-2">
+                            {(day as { title?: string }).title}
+                          </p>
+                        </Link>
+                      ) : (
+                        <button
+                          onClick={() => setAssignDay(day.day_number)}
+                          className="flex-1 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <div className="w-6 h-6 rounded-full border-2 border-dashed border-slate-300 flex items-center justify-center hover:border-green-500 hover:text-green-600 transition-colors">
+                            <Plus size={12} />
+                          </div>
+                        </button>
+                      )}
+
+                      {/* Edit button on hover for assigned days */}
+                      {hasTopic && (
+                        <button
+                          onClick={() => setAssignDay(day.day_number)}
+                          className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity w-5 h-5 rounded bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-600"
+                        >
+                          <Plus size={10} />
+                        </button>
+                      )}
+                    </div>
+                  );
+                })}
+
+                {/* Week generate button - shown on hover */}
+                {assignedInWeek.length > 0 && (
                   <button
-                    onClick={() => setAssignDay(day.day_number)}
-                    className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity w-5 h-5 rounded bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-600"
+                    onClick={() => setSelectedWeek(isSelected ? null : weekIdx)}
+                    title={`生成第${weekIdx + 1}周文案提示词`}
+                    className={`absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium transition-all z-10
+                      ${isSelected
+                        ? "bg-green-700 text-white shadow-sm"
+                        : "bg-white border border-slate-200 text-slate-500 shadow-sm opacity-0 group-hover/week:opacity-100"
+                      }`}
                   >
-                    <Plus size={10} />
+                    <Zap size={11} />
+                    {assignedInWeek.length}条
                   </button>
                 )}
               </div>
@@ -191,6 +282,40 @@ export default function MonthCalendar({ params }: { params: Promise<{ month: str
           </div>
         ))}
       </div>
+
+      {/* Week prompt panel */}
+      {selectedWeek !== null && (
+        <div className="mt-4 bg-white border border-slate-200 rounded-2xl overflow-hidden">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 bg-slate-50">
+            <div>
+              <p className="text-sm font-semibold text-slate-800">
+                {weekLabel(weeks[selectedWeek] ?? [], selectedWeek)} · 批量脚本提示词
+              </p>
+              <p className="text-xs text-slate-500 mt-0.5">
+                {(weeks[selectedWeek] ?? []).filter((d): d is DayWithTopic => !!d && !!d.topic_id).length} 条内容 · 复制后粘贴到 Claude.ai
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              {weekPrompt ? (
+                <CopyButton text={weekPrompt} />
+              ) : (
+                <span className="text-xs text-slate-400">本周暂无已分配选题</span>
+              )}
+              <button
+                onClick={() => setSelectedWeek(null)}
+                className="w-7 h-7 flex items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors text-base leading-none"
+              >
+                ×
+              </button>
+            </div>
+          </div>
+          {weekPrompt && (
+            <pre className="p-4 text-xs text-slate-600 whitespace-pre-wrap leading-relaxed max-h-72 overflow-y-auto">
+              {weekPrompt}
+            </pre>
+          )}
+        </div>
+      )}
 
       {/* Assign Modal */}
       {assignDay !== null && (

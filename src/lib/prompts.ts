@@ -105,6 +105,73 @@ ${script.weixin_script || "（未填写）"}
 最佳发布时间：`;
 }
 
+export function buildWeekScriptPrompt(
+  days: Array<{
+    day_number: number;
+    title: string;
+    pillar: string;
+    audience_stage: string;
+    pain_point?: string | null;
+    hook?: string | null;
+  }>
+): string {
+  const DAY_NAMES = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
+
+  const entries = days
+    .map((d, i) =>
+      `=== Day ${d.day_number}（${DAY_NAMES[i % 7]}）===
+话题：${d.title}
+内容支柱：${d.pillar}
+目标人群：${d.audience_stage}
+核心痛点：${d.pain_point || ""}
+视频号开场钩子：${d.hook || ""}`
+    )
+    .join("\n\n");
+
+  return `${BRAND_CONTEXT}
+
+---
+
+本周共 ${days.length} 条内容，请依次为每条生成完整口播脚本。
+
+${entries}
+
+---
+
+请按以下格式依次输出，每条之间用「=====」分隔：
+
+【Day N · 话题标题】
+
+===== 视频号版（60-90秒，约180-270字）=====
+
+【开场钩子 - 5秒】
+
+【共情建立 - 10秒】
+
+【核心内容 - 50秒，3个要点】
+第一点：
+第二点：
+第三点：
+
+【互动结尾 - 10秒】
+
+视频号封面文字：（5-8字）
+视频号标题：（15-20字）
+
+===== 小红书图文版 =====
+
+小红书标题：（20-30字，含emoji）
+
+图文正文：（300-500字，分点，结尾引导收藏）
+
+标签：（15个，#开头）
+
+===== 拍摄提示 =====
+景别建议：
+道具/场景：
+情绪节奏：`;
+}
+
 export function buildMonthlyTopicsPrompt(month: string, count: number): string {
   return `${BRAND_CONTEXT}
 
