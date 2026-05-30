@@ -47,13 +47,29 @@ function nextMonth(month: string) {
   return `${y}-${String(m + 1).padStart(2, "0")}`;
 }
 
-function CopyButton({ text }: { text: string }) {
+function CopyButton({ text, label = "复制提示词", mono = false }: { text: string; label?: string; mono?: boolean }) {
   const [copied, setCopied] = useState(false);
   function copy() {
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 3000);
   }
+
+  if (mono) {
+    return (
+      <button
+        onClick={copy}
+        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-colors w-full text-left"
+        style={{ background: "var(--green-50)", border: "1px solid var(--green-200)", color: "var(--green-800)", fontFamily: "monospace" }}
+        onMouseEnter={e => (e.currentTarget.style.borderColor = "var(--green-400)")}
+        onMouseLeave={e => (e.currentTarget.style.borderColor = "var(--green-200)")}
+      >
+        {copied ? <CheckCheck size={12} className="shrink-0" /> : <Copy size={12} className="shrink-0" />}
+        <span className="truncate">{copied ? "已复制！" : label}</span>
+      </button>
+    );
+  }
+
   return (
     <button
       onClick={copy}
@@ -63,7 +79,7 @@ function CopyButton({ text }: { text: string }) {
       onMouseLeave={e => (e.currentTarget.style.background = "var(--green-700)")}
     >
       {copied ? <CheckCheck size={12} /> : <Copy size={12} />}
-      {copied ? "已复制！" : "复制提示词"}
+      {copied ? "已复制！" : label}
     </button>
   );
 }
@@ -315,26 +331,60 @@ export default function MonthCalendar({ params }: { params: Promise<{ month: str
           <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--green-100)]" style={{ background: "var(--green-50)" }}>
             <div>
               <p className="text-sm font-medium text-gray-800">
-                {weekLabel(weeks[selectedWeek] ?? [], selectedWeek)} · 批量脚本提示词
+                {weekLabel(weeks[selectedWeek] ?? [], selectedWeek)}
               </p>
-              <p className="text-xs text-gray-500 mt-0.5">
-                {(weeks[selectedWeek] ?? []).filter((d): d is DayWithTopic => !!d && !!d.topic_id).length} 条 · 复制后粘贴到 Claude.ai
+              <p className="text-xs text-gray-400 mt-0.5">
+                {(weeks[selectedWeek] ?? []).filter((d): d is DayWithTopic => !!d && !!d.topic_id).length} 条选题
               </p>
             </div>
-            <div className="flex items-center gap-2">
-              {weekPrompt ? <CopyButton text={weekPrompt} /> : <span className="text-xs text-gray-400">本周暂无已分配选题</span>}
-              <button
-                onClick={() => setSelectedWeek(null)}
-                className="w-6 h-6 flex items-center justify-center rounded text-gray-400 hover:text-gray-600 hover:bg-[var(--green-100)] transition-colors text-sm leading-none"
-              >
-                ×
-              </button>
+            <button
+              onClick={() => setSelectedWeek(null)}
+              className="w-6 h-6 flex items-center justify-center rounded text-gray-400 hover:text-gray-600 hover:bg-[var(--green-100)] transition-colors text-sm leading-none"
+            >
+              ×
+            </button>
+          </div>
+
+          {/* Claude Code 工作流指引 */}
+          <div className="px-4 py-3 border-b border-[var(--green-100)]">
+            <p className="text-xs font-medium text-gray-600 mb-2">在 Claude Code 中生成文案：</p>
+            <div className="space-y-1.5 text-xs text-gray-500">
+              <div className="flex gap-2">
+                <span className="text-gray-300 shrink-0">1</span>
+                <span>在 Claude Code 对话框输入：</span>
+              </div>
+              <div className="ml-4">
+                <CopyButton
+                  text={`帮我生成 ${month} 第${selectedWeek + 1}周的文案`}
+                  label={`帮我生成 ${month} 第${selectedWeek + 1}周的文案`}
+                  mono
+                />
+              </div>
+              <div className="flex gap-2">
+                <span className="text-gray-300 shrink-0">2</span>
+                <span>Claude Code 读取选题、生成内容、直接写入数据库</span>
+              </div>
+              <div className="flex gap-2">
+                <span className="text-gray-300 shrink-0">3</span>
+                <span>刷新页面即可看到每天的脚本</span>
+              </div>
             </div>
           </div>
+
+          {/* 仍保留提示词预览（可折叠参考） */}
           {weekPrompt && (
-            <pre className="p-4 text-xs text-gray-600 whitespace-pre-wrap leading-relaxed max-h-60 overflow-y-auto">
-              {weekPrompt}
-            </pre>
+            <details className="group">
+              <summary className="px-4 py-2 text-xs text-gray-400 cursor-pointer hover:text-gray-600 select-none list-none flex items-center gap-1">
+                <span className="group-open:rotate-90 transition-transform inline-block">▶</span>
+                查看完整提示词（手动复制备用）
+              </summary>
+              <div className="border-t border-[var(--green-100)] px-4 py-3 flex justify-end">
+                <CopyButton text={weekPrompt} label="复制完整提示词" />
+              </div>
+              <pre className="px-4 pb-4 text-xs text-gray-500 whitespace-pre-wrap leading-relaxed max-h-52 overflow-y-auto">
+                {weekPrompt}
+              </pre>
+            </details>
           )}
         </div>
       )}
