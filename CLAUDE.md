@@ -8,20 +8,24 @@
 
 ## 部署命令
 
-### 标准部署
+### 标准部署（commit + push + 构建 + 上传）
 ```bash
 python scripts/huize_deploy.py --push
 python scripts/huize_deploy.py --push -m "feat: 描述改动"
 ```
 
-### 只部署（代码已手动 push 过）
+### 只构建部署（代码已手动 push 过）
 ```bash
 python scripts/huize_deploy.py
 ```
 
-> `--push` 会自动执行 git add . → git commit → git push，再 SSH 部署。未指定 `-m` 时 commit message 默认为 `update 时间戳`。
-
-`scripts/huize_deploy.py` 通过 SSH 直连服务器：git pull → npm ci → npm run build → 复制静态资源到 standalone → PM2 重启。
+> **部署流程（本地构建版）：**
+> 1. `--push`：git add → commit → push GitHub
+> 2. 本地 `npm run build`（失败直接终止）
+> 3. SFTP 上传 `.next/standalone` + `static` + `public` 到服务器
+> 4. SSH: PM2 重启
+>
+> 服务器不需要访问 GitHub，也不在服务器构建，速度更快。
 
 ## 线上地址
 - http://101.132.139.196
