@@ -31,19 +31,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   return (
-    <div className="flex flex-col h-screen bg-slate-50 overflow-hidden">
+    <div className="flex flex-col h-screen bg-white overflow-hidden">
       {/* Top navigation */}
-      <header className="bg-white border-b border-slate-200 shrink-0">
-        <div className="flex items-center h-14 px-4 md:px-6 gap-4">
+      <header className="bg-white shrink-0" style={{ borderBottom: "1px solid var(--green-100)" }}>
+        <div className="flex items-center h-14 px-4 md:px-8 gap-4">
           {/* Logo */}
           <div className="flex items-center gap-2.5 shrink-0">
-            <div className="w-7 h-7 bg-green-700 rounded-lg flex items-center justify-center">
+            <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "var(--green-700)" }}>
               <span className="text-white text-xs font-bold">汇</span>
             </div>
-            <span className="text-sm font-semibold text-slate-800">内容工厂</span>
+            <span className="text-sm font-semibold" style={{ color: "var(--green-900)" }}>内容工厂</span>
           </div>
 
-          <div className="w-px h-5 bg-slate-200 shrink-0" />
+          <div className="w-px h-5 shrink-0" style={{ background: "var(--green-100)" }} />
 
           {/* Nav links */}
           <nav className="flex items-center gap-0.5 flex-1">
@@ -53,11 +53,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 href={href}
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
                   isActive(href, exact)
-                    ? "bg-green-50 text-green-700 font-medium"
-                    : "text-slate-600 hover:bg-slate-50 hover:text-slate-800"
+                    ? "font-medium"
+                    : "text-gray-600 hover:text-gray-900"
                 }`}
+                style={isActive(href, exact)
+                  ? { background: "var(--green-50)", color: "var(--green-800)" }
+                  : {}
+                }
               >
-                <Icon size={16} />
+                <Icon size={15} />
                 <span className="hidden sm:inline">{label}</span>
               </Link>
             ))}
@@ -67,9 +71,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <form action={logout}>
             <button
               type="submit"
-              className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-slate-500 hover:bg-slate-50 hover:text-slate-700 transition-colors shrink-0"
+              className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-gray-500 hover:text-gray-700 transition-colors shrink-0"
+              onMouseEnter={e => (e.currentTarget.style.background = "var(--green-50)")}
+              onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
             >
-              <LogOut size={16} />
+              <LogOut size={15} />
               <span className="hidden sm:inline">退出</span>
             </button>
           </form>

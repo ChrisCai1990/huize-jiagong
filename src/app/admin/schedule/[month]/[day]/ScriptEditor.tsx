@@ -29,9 +29,12 @@ function CopyButton({ text }: { text: string }) {
   return (
     <button
       onClick={copy}
-      className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-700 px-2.5 py-1.5 border border-slate-200 rounded-lg transition-colors"
+      className="flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg transition-colors"
+      style={{ border: "1px solid var(--green-200)", color: "var(--green-700)" }}
+      onMouseEnter={e => (e.currentTarget.style.background = "var(--green-50)")}
+      onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
     >
-      {copied ? <CheckCheck size={13} className="text-green-600" /> : <Copy size={13} />}
+      {copied ? <CheckCheck size={13} /> : <Copy size={13} />}
       {copied ? "已复制" : "复制"}
     </button>
   );
@@ -59,13 +62,16 @@ function EditableSection({
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between">
-        <label className="text-xs font-medium text-slate-500 uppercase tracking-wide">{label}</label>
+        <label className="text-xs font-medium text-gray-400 uppercase tracking-wide">{label}</label>
         <div className="flex items-center gap-2">
           {value && !editing && <CopyButton text={value} />}
           {!editing ? (
             <button
               onClick={() => setEditing(true)}
-              className="flex items-center gap-1 text-xs text-slate-500 hover:text-slate-700 px-2.5 py-1.5 border border-slate-200 rounded-lg transition-colors"
+              className="flex items-center gap-1 text-xs px-2.5 py-1.5 rounded-lg transition-colors text-gray-500 hover:text-gray-700"
+              style={{ border: "1px solid var(--green-200)" }}
+              onMouseEnter={e => (e.currentTarget.style.background = "var(--green-50)")}
+              onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
             >
               <Edit2 size={12} />
               编辑
@@ -74,7 +80,10 @@ function EditableSection({
             <button
               onClick={handleSave}
               disabled={isPending}
-              className="flex items-center gap-1 text-xs bg-green-700 text-white px-2.5 py-1.5 rounded-lg transition-colors disabled:opacity-50"
+              className="flex items-center gap-1 text-xs text-white px-2.5 py-1.5 rounded-lg transition-colors disabled:opacity-50"
+              style={{ background: "var(--green-700)" }}
+              onMouseEnter={e => (e.currentTarget.style.background = "var(--green-800)")}
+              onMouseLeave={e => (e.currentTarget.style.background = "var(--green-700)")}
             >
               <Check size={12} />
               {isPending ? "保存…" : "保存"}
@@ -89,16 +98,25 @@ function EditableSection({
           onChange={(e) => setText(e.target.value)}
           rows={rows}
           placeholder={placeholder}
-          className="w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-600 resize-y"
+          className="w-full px-3 py-2.5 rounded-lg text-sm focus:outline-none resize-y transition-colors"
+          style={{ border: "1px solid var(--green-200)" }}
+          onFocus={e => (e.currentTarget.style.borderColor = "var(--green-400)")}
+          onBlur={e => (e.currentTarget.style.borderColor = "var(--green-200)")}
         />
       ) : value ? (
-        <div className="bg-slate-50 rounded-lg px-3 py-2.5 text-sm text-slate-700 whitespace-pre-wrap leading-relaxed min-h-[60px]">
+        <div
+          className="rounded-lg px-3 py-2.5 text-sm text-gray-700 whitespace-pre-wrap leading-relaxed min-h-[60px]"
+          style={{ background: "var(--green-50)" }}
+        >
           {value}
         </div>
       ) : (
         <div
           onClick={() => setEditing(true)}
-          className="border-2 border-dashed border-slate-200 rounded-lg px-3 py-6 text-center text-sm text-slate-400 cursor-pointer hover:border-slate-300 transition-colors"
+          className="rounded-lg px-3 py-6 text-center text-sm text-gray-400 cursor-pointer transition-colors"
+          style={{ border: "2px dashed var(--green-200)" }}
+          onMouseEnter={e => (e.currentTarget.style.borderColor = "var(--green-400)")}
+          onMouseLeave={e => (e.currentTarget.style.borderColor = "var(--green-200)")}
         >
           点击添加内容，或使用 AI 生成后粘贴
         </div>
@@ -147,25 +165,35 @@ export default function ScriptEditor({
   return (
     <div className="space-y-5">
       {/* Status stepper */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4">
-        <p className="text-xs font-medium text-slate-500 mb-3">内容状态</p>
+      <div className="bg-white rounded-2xl p-5" style={{ border: "1px solid var(--green-100)" }}>
+        <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-3">内容状态</p>
         <div className="flex items-center gap-2">
           {STATUS_STEPS.map((s, i) => (
             <div key={s} className="flex items-center gap-2 flex-1">
               <button
                 onClick={() => setStatus(s)}
-                className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-medium transition-colors border ${
+                className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-medium transition-colors ${
                   status === s
-                    ? STATUS_COLORS[s] + " border-transparent"
+                    ? STATUS_COLORS[s] + " border-transparent border"
                     : STATUS_STEPS.indexOf(status) > i
-                    ? "bg-green-50 text-green-700 border-green-200"
-                    : "border-slate-200 text-slate-400 hover:border-slate-300"
+                    ? ""
+                    : "text-gray-400"
                 }`}
+                style={
+                  STATUS_STEPS.indexOf(status) > i && status !== s
+                    ? { background: "var(--green-50)", color: "var(--green-700)", border: "1px solid var(--green-200)" }
+                    : status !== s
+                    ? { border: "1px solid var(--green-100)" }
+                    : {}
+                }
               >
                 {STATUS_LABELS[s]}
               </button>
               {i < STATUS_STEPS.length - 1 && (
-                <div className={`w-4 h-px shrink-0 ${STATUS_STEPS.indexOf(status) > i ? "bg-green-400" : "bg-slate-200"}`} />
+                <div
+                  className="w-4 h-px shrink-0"
+                  style={{ background: STATUS_STEPS.indexOf(status) > i ? "var(--green-400)" : "var(--green-100)" }}
+                />
               )}
             </div>
           ))}
@@ -173,38 +201,44 @@ export default function ScriptEditor({
       </div>
 
       {/* AI Generate prompt */}
-      <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+      <div className="rounded-2xl p-5" style={{ background: "var(--green-50)", border: "1px solid var(--green-200)" }}>
         <div className="flex items-center justify-between">
-          <p className="text-sm font-medium text-amber-800">用 Claude 生成内容</p>
+          <p className="text-sm font-medium" style={{ color: "var(--green-900)" }}>用 Claude 生成内容</p>
           <div className="flex gap-2">
-            <button
-              onClick={() => setShowPrompt(showPrompt === "script" ? null : "script")}
-              className="text-xs px-3 py-1.5 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
-            >
-              生成脚本提示词
-            </button>
-            <button
-              onClick={() => setShowPrompt(showPrompt === "publish" ? null : "publish")}
-              className="text-xs px-3 py-1.5 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
-            >
-              生成发布文案提示词
-            </button>
+            {(["script", "publish"] as const).map((type) => (
+              <button
+                key={type}
+                onClick={() => setShowPrompt(showPrompt === type ? null : type)}
+                className="text-xs px-3 py-1.5 text-white rounded-lg transition-colors"
+                style={{ background: "var(--green-700)" }}
+                onMouseEnter={e => (e.currentTarget.style.background = "var(--green-800)")}
+                onMouseLeave={e => (e.currentTarget.style.background = "var(--green-700)")}
+              >
+                {type === "script" ? "生成脚本提示词" : "生成发布文案提示词"}
+              </button>
+            ))}
           </div>
         </div>
 
         {showPrompt && (
           <div className="mt-3">
             <div className="flex items-center justify-between mb-2">
-              <p className="text-xs text-amber-700">复制以下提示词，粘贴到 Claude.ai 生成内容后填入对应区域</p>
+              <p className="text-xs text-gray-600">复制以下提示词，粘贴到 Claude.ai 生成内容后填入对应区域</p>
               <button
                 onClick={() => copyPrompt(showPrompt === "script" ? scriptPrompt : publishPrompt)}
-                className="flex items-center gap-1.5 text-xs bg-amber-600 text-white px-3 py-1.5 rounded-lg hover:bg-amber-700 transition-colors"
+                className="flex items-center gap-1.5 text-xs text-white px-3 py-1.5 rounded-lg transition-colors shrink-0"
+                style={{ background: "var(--green-700)" }}
+                onMouseEnter={e => (e.currentTarget.style.background = "var(--green-800)")}
+                onMouseLeave={e => (e.currentTarget.style.background = "var(--green-700)")}
               >
                 {copiedPrompt ? <CheckCheck size={13} /> : <Copy size={13} />}
                 {copiedPrompt ? "已复制！" : "复制提示词"}
               </button>
             </div>
-            <pre className="text-xs text-amber-900 bg-amber-100 rounded-lg p-3 overflow-x-auto whitespace-pre-wrap max-h-48 overflow-y-auto">
+            <pre
+              className="text-xs rounded-xl p-3 overflow-x-auto whitespace-pre-wrap max-h-48 overflow-y-auto"
+              style={{ background: "white", color: "var(--green-900)", border: "1px solid var(--green-200)" }}
+            >
               {showPrompt === "script" ? scriptPrompt : publishPrompt}
             </pre>
           </div>
@@ -212,24 +246,25 @@ export default function ScriptEditor({
       </div>
 
       {/* Content tabs */}
-      <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
-        <div className="flex border-b border-slate-100">
+      <div className="bg-white rounded-2xl overflow-hidden" style={{ border: "1px solid var(--green-100)" }}>
+        <div className="flex" style={{ borderBottom: "1px solid var(--green-100)" }}>
           {tabs.map(({ id, label }) => (
             <button
               key={id}
               onClick={() => setActiveTab(id)}
-              className={`flex-1 py-3 text-xs font-medium transition-colors ${
+              className="flex-1 py-3 text-xs font-medium transition-colors"
+              style={
                 activeTab === id
-                  ? "text-green-700 border-b-2 border-green-700"
-                  : "text-slate-500 hover:text-slate-700"
-              }`}
+                  ? { color: "var(--green-700)", borderBottom: "2px solid var(--green-700)" }
+                  : { color: "#9ca3af" }
+              }
             >
               {label}
             </button>
           ))}
         </div>
 
-        <div className="p-4 space-y-4">
+        <div className="p-5 space-y-4">
           {activeTab === "weixin_script" && (
             <>
               <EditableSection label="开场钩子" value={script?.weixin_script?.split("\n")[0] || null} fieldName="weixin_hook" rows={2}

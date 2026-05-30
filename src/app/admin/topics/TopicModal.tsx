@@ -6,6 +6,9 @@ import { PILLARS, STAGES, PILLAR_COLORS, STAGE_COLORS } from "@/lib/types";
 import type { Topic } from "@/lib/types";
 import { X, Plus, Trash2 } from "lucide-react";
 
+const inputClass = "w-full px-3 py-2 rounded-lg text-sm focus:outline-none transition-colors";
+const inputStyle = { border: "1px solid var(--green-200)" };
+
 interface Props {
   topic?: Topic;
   onClose: () => void;
@@ -34,46 +37,55 @@ export function TopicModal({ topic, onClose }: Props) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl w-full max-w-lg shadow-xl max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-          <h2 className="font-semibold text-slate-800">{topic ? "编辑选题" : "新建选题"}</h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition-colors">
+    <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl w-full max-w-lg shadow-xl max-h-[90vh] overflow-y-auto" style={{ border: "1px solid var(--green-100)" }}>
+        <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: "1px solid var(--green-100)" }}>
+          <h2 className="font-semibold text-gray-800">{topic ? "编辑选题" : "新建选题"}</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
             <X size={18} />
           </button>
         </div>
 
         <form action={handleSubmit} className="p-6 space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">话题标题 *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">话题标题 *</label>
             <input
               name="title"
               defaultValue={topic?.title}
               required
               placeholder="15字内，口语化表达"
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+              className={inputClass}
+              style={inputStyle}
+              onFocus={e => (e.currentTarget.style.borderColor = "var(--green-400)")}
+              onBlur={e => (e.currentTarget.style.borderColor = "var(--green-200)")}
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">内容支柱 *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">内容支柱 *</label>
               <select
                 name="pillar"
                 defaultValue={topic?.pillar || "指标解读"}
                 required
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+                className={inputClass}
+                style={inputStyle}
+                onFocus={e => (e.currentTarget.style.borderColor = "var(--green-400)")}
+                onBlur={e => (e.currentTarget.style.borderColor = "var(--green-200)")}
               >
                 {PILLARS.map((p) => <option key={p} value={p}>{p}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">人群阶段 *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">人群阶段 *</label>
               <select
                 name="audience_stage"
                 defaultValue={topic?.audience_stage || "备孕期"}
                 required
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+                className={inputClass}
+                style={inputStyle}
+                onFocus={e => (e.currentTarget.style.borderColor = "var(--green-400)")}
+                onBlur={e => (e.currentTarget.style.borderColor = "var(--green-200)")}
               >
                 {STAGES.map((s) => <option key={s} value={s}>{s}</option>)}
               </select>
@@ -81,44 +93,56 @@ export function TopicModal({ topic, onClose }: Props) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">核心痛点</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">核心痛点</label>
             <textarea
               name="pain_point"
               defaultValue={topic?.pain_point || ""}
               rows={2}
               placeholder="一句话描述目标用户的具体困惑"
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-600 resize-none"
+              className={inputClass + " resize-none"}
+              style={inputStyle}
+              onFocus={e => (e.currentTarget.style.borderColor = "var(--green-400)")}
+              onBlur={e => (e.currentTarget.style.borderColor = "var(--green-200)")}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">视频号开场钩子</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">视频号开场钩子</label>
             <textarea
               name="hook"
               defaultValue={topic?.hook || ""}
               rows={2}
               placeholder="第一句话，让目标用户说「这说的就是我！」"
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-600 resize-none"
+              className={inputClass + " resize-none"}
+              style={inputStyle}
+              onFocus={e => (e.currentTarget.style.borderColor = "var(--green-400)")}
+              onBlur={e => (e.currentTarget.style.borderColor = "var(--green-200)")}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">备注</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">备注</label>
             <input
               name="notes"
               defaultValue={topic?.notes || ""}
               placeholder="内部备注，不影响生成"
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+              className={inputClass}
+              style={inputStyle}
+              onFocus={e => (e.currentTarget.style.borderColor = "var(--green-400)")}
+              onBlur={e => (e.currentTarget.style.borderColor = "var(--green-200)")}
             />
           </div>
 
           {topic && (
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">状态</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">状态</label>
               <select
                 name="status"
                 defaultValue={topic.status}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+                className={inputClass}
+                style={inputStyle}
+                onFocus={e => (e.currentTarget.style.borderColor = "var(--green-400)")}
+                onBlur={e => (e.currentTarget.style.borderColor = "var(--green-200)")}
               >
                 <option value="draft">草稿</option>
                 <option value="approved">已审批</option>
@@ -143,14 +167,20 @@ export function TopicModal({ topic, onClose }: Props) {
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 text-sm text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
+                className="px-4 py-2 text-sm text-gray-600 rounded-lg transition-colors"
+                style={{ border: "1px solid var(--green-200)" }}
+                onMouseEnter={e => (e.currentTarget.style.background = "var(--green-50)")}
+                onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
               >
                 取消
               </button>
               <button
                 type="submit"
                 disabled={isPending}
-                className="px-4 py-2 text-sm bg-green-700 text-white rounded-lg hover:bg-green-800 transition-colors disabled:opacity-50"
+                className="px-4 py-2 text-sm text-white rounded-lg transition-colors disabled:opacity-50"
+                style={{ background: "var(--green-700)" }}
+                onMouseEnter={e => (e.currentTarget.style.background = "var(--green-800)")}
+                onMouseLeave={e => (e.currentTarget.style.background = "var(--green-700)")}
               >
                 {isPending ? "保存中…" : "保存"}
               </button>
@@ -168,7 +198,10 @@ export function NewTopicButton() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-1.5 px-4 py-2 bg-green-700 text-white text-sm rounded-lg hover:bg-green-800 transition-colors"
+        className="flex items-center gap-1.5 px-4 py-2 text-white text-sm rounded-lg transition-colors"
+        style={{ background: "var(--green-700)" }}
+        onMouseEnter={e => (e.currentTarget.style.background = "var(--green-800)")}
+        onMouseLeave={e => (e.currentTarget.style.background = "var(--green-700)")}
       >
         <Plus size={16} />
         新建选题
@@ -184,9 +217,18 @@ export function TopicCard({ topic }: { topic: Topic }) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="text-left bg-white border border-slate-200 rounded-xl p-4 hover:border-slate-300 hover:shadow-sm transition-all w-full"
+        className="text-left bg-white rounded-2xl p-5 transition-all w-full"
+        style={{ border: "1px solid var(--green-100)" }}
+        onMouseEnter={e => {
+          e.currentTarget.style.borderColor = "var(--green-300)";
+          e.currentTarget.style.boxShadow = "0 2px 8px 0 rgba(64,145,108,0.08)";
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.borderColor = "var(--green-100)";
+          e.currentTarget.style.boxShadow = "none";
+        }}
       >
-        <div className="flex flex-wrap gap-1.5 mb-2">
+        <div className="flex flex-wrap gap-1.5 mb-2.5">
           <span className={`text-xs px-2 py-0.5 rounded-full border ${PILLAR_COLORS[topic.pillar]}`}>
             {topic.pillar}
           </span>
@@ -194,9 +236,9 @@ export function TopicCard({ topic }: { topic: Topic }) {
             {topic.audience_stage}
           </span>
         </div>
-        <p className="text-sm font-medium text-slate-800 leading-snug mb-2">{topic.title}</p>
+        <p className="text-sm font-medium text-gray-800 leading-snug mb-2">{topic.title}</p>
         {topic.hook && (
-          <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">{topic.hook}</p>
+          <p className="text-xs text-gray-400 line-clamp-2 leading-relaxed">{topic.hook}</p>
         )}
       </button>
       {open && <TopicModal topic={topic} onClose={() => setOpen(false)} />}

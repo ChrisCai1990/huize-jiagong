@@ -29,24 +29,28 @@ export default function TopicsPage() {
   });
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-6">
-      <div className="flex items-center justify-between mb-6">
+    <div className="max-w-5xl mx-auto px-4 py-8">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">选题库</h1>
-          <p className="text-slate-500 text-sm mt-1">共 {topics.filter(t => t.status === 'approved').length} 条已审批选题</p>
+          <p className="text-xs tracking-widest uppercase mb-1" style={{ color: "var(--green-700)" }}>内容管理</p>
+          <h1 className="text-2xl font-light text-gray-900">选题库</h1>
+          <p className="text-sm text-gray-500 mt-1">共 {topics.filter(t => t.status === "approved").length} 条已审批选题</p>
         </div>
         <NewTopicButton />
       </div>
 
       {/* Filters */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 mb-5 space-y-3">
+      <div className="bg-white rounded-2xl p-5 mb-5 space-y-3.5" style={{ border: "1px solid var(--green-100)" }}>
         <div className="relative">
-          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="搜索话题或痛点…"
-            className="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+            className="w-full pl-9 pr-4 py-2 rounded-lg text-sm focus:outline-none transition-colors"
+            style={{ border: "1px solid var(--green-200)" }}
+            onFocus={e => (e.currentTarget.style.borderColor = "var(--green-400)")}
+            onBlur={e => (e.currentTarget.style.borderColor = "var(--green-200)")}
           />
         </div>
 
@@ -57,11 +61,22 @@ export default function TopicsPage() {
               onClick={() => setPillar(p as Pillar | "全部")}
               className={`text-xs px-3 py-1 rounded-full border transition-colors ${
                 pillar === p
-                  ? "bg-slate-800 text-white border-slate-800"
+                  ? p === "全部"
+                    ? ""
+                    : `${PILLAR_COLORS[p as Pillar]}`
                   : p === "全部"
-                  ? "border-slate-200 text-slate-600 hover:bg-slate-50"
-                  : `${PILLAR_COLORS[p as Pillar]} hover:opacity-80`
+                  ? "text-gray-600"
+                  : `${PILLAR_COLORS[p as Pillar]} opacity-50 hover:opacity-100`
               }`}
+              style={
+                pillar === p && p === "全部"
+                  ? { background: "var(--green-900)", color: "white", borderColor: "var(--green-900)" }
+                  : pillar !== p && p === "全部"
+                  ? { borderColor: "var(--green-200)" }
+                  : pillar === p
+                  ? { opacity: 1 }
+                  : {}
+              }
             >
               {p}
             </button>
@@ -73,13 +88,22 @@ export default function TopicsPage() {
             <button
               key={s}
               onClick={() => setStage(s as AudienceStage | "全部")}
-              className={`text-xs px-3 py-1 rounded-full transition-colors ${
+              className={`text-xs px-3 py-1 rounded-full border transition-colors ${
                 stage === s
-                  ? "bg-slate-800 text-white"
+                  ? s === "全部"
+                    ? ""
+                    : `${STAGE_COLORS[s as AudienceStage]}`
                   : s === "全部"
-                  ? "border border-slate-200 text-slate-600 hover:bg-slate-50"
-                  : `${STAGE_COLORS[s as AudienceStage]} hover:opacity-80`
+                  ? "text-gray-600"
+                  : `${STAGE_COLORS[s as AudienceStage]} opacity-50 hover:opacity-100`
               }`}
+              style={
+                stage === s && s === "全部"
+                  ? { background: "var(--green-900)", color: "white", borderColor: "var(--green-900)" }
+                  : stage !== s && s === "全部"
+                  ? { borderColor: "var(--green-200)" }
+                  : {}
+              }
             >
               {s}
             </button>
@@ -89,7 +113,7 @@ export default function TopicsPage() {
 
       {/* Grid */}
       {filtered.length === 0 ? (
-        <div className="text-center py-16 text-slate-400 text-sm">没有匹配的选题</div>
+        <div className="text-center py-20 text-gray-400 text-sm">没有匹配的选题</div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {filtered.map((topic) => (

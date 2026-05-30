@@ -71,28 +71,32 @@ export default async function DayDetailPage({ params }: PageProps) {
   const publishPrompt = topic && script ? buildPublishPrompt(topic, script) : "";
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6">
+    <div className="max-w-3xl mx-auto px-4 py-8">
       {/* Breadcrumb & Nav */}
-      <div className="flex items-center justify-between mb-5">
-        <div className="flex items-center gap-2 text-sm text-slate-500">
-          <Link href="/admin/schedule" className="hover:text-slate-800 transition-colors">排期</Link>
-          <span>›</span>
-          <Link href={`/admin/schedule/${month}`} className="hover:text-slate-800 transition-colors">
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-2 text-sm text-gray-500">
+          <Link href="/admin/schedule" className="hover:text-gray-800 transition-colors">排期</Link>
+          <span className="text-gray-300">›</span>
+          <Link href={`/admin/schedule/${month}`} className="hover:text-gray-800 transition-colors">
             {y}年{m}月
           </Link>
-          <span>›</span>
-          <span className="text-slate-800 font-medium">Day {String(dayNumber).padStart(2, "0")}</span>
+          <span className="text-gray-300">›</span>
+          <span className="text-gray-800 font-medium">Day {String(dayNumber).padStart(2, "0")}</span>
         </div>
         <div className="flex items-center gap-1">
           {prevDay && (
-            <Link href={`/admin/schedule/${month}/${prevDay}`}
-              className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">
+            <Link
+              href={`/admin/schedule/${month}/${prevDay}`}
+              className="p-1.5 rounded-lg border border-[var(--green-200)] hover:bg-[var(--green-50)] transition-colors"
+            >
               <ChevronLeft size={15} />
             </Link>
           )}
           {nextDay && (
-            <Link href={`/admin/schedule/${month}/${nextDay}`}
-              className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">
+            <Link
+              href={`/admin/schedule/${month}/${nextDay}`}
+              className="p-1.5 rounded-lg border border-[var(--green-200)] hover:bg-[var(--green-50)] transition-colors"
+            >
               <ChevronRight size={15} />
             </Link>
           )}
@@ -101,7 +105,7 @@ export default async function DayDetailPage({ params }: PageProps) {
 
       {/* Topic card */}
       {topic ? (
-        <div className="bg-white border border-slate-200 rounded-xl p-5 mb-5">
+        <div className="bg-white rounded-2xl p-6 mb-5 border border-[var(--green-100)]">
           <div className="flex flex-wrap items-center gap-2 mb-3">
             <span className={`text-xs px-2.5 py-1 rounded-full border font-medium ${PILLAR_COLORS[topic.pillar]}`}>
               {topic.pillar}
@@ -113,26 +117,29 @@ export default async function DayDetailPage({ params }: PageProps) {
               {STATUS_LABELS[scheduleDay.status]}
             </span>
           </div>
-          <h1 className="text-lg font-bold text-slate-800 mb-3">{topic.title}</h1>
+          <h1 className="text-lg font-semibold text-gray-900 mb-3">{topic.title}</h1>
           {topic.pain_point && (
             <div className="mb-2">
-              <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">核心痛点</span>
-              <p className="text-sm text-slate-600 mt-0.5">{topic.pain_point}</p>
+              <span className="text-xs font-medium text-gray-400 uppercase tracking-wide">核心痛点</span>
+              <p className="text-sm text-gray-600 mt-0.5">{topic.pain_point}</p>
             </div>
           )}
           {topic.hook && (
             <div>
-              <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">视频号开场钩子</span>
-              <p className="text-sm text-slate-600 mt-0.5 italic">"{topic.hook}"</p>
+              <span className="text-xs font-medium text-gray-400 uppercase tracking-wide">视频号开场钩子</span>
+              <p className="text-sm text-gray-600 mt-0.5 italic">"{topic.hook}"</p>
             </div>
           )}
         </div>
       ) : (
-        <div className="bg-slate-50 border-2 border-dashed border-slate-200 rounded-xl p-8 text-center mb-5">
-          <p className="text-slate-500 text-sm mb-3">本天尚未分配选题</p>
+        <div
+          className="rounded-2xl p-10 text-center mb-5"
+          style={{ background: "var(--green-50)", border: "2px dashed var(--green-200)" }}
+        >
+          <p className="text-gray-500 text-sm mb-3">本天尚未分配选题</p>
           <Link
             href={`/admin/schedule/${month}`}
-            className="text-sm text-green-700 hover:text-green-800 font-medium"
+            className="text-sm font-medium text-[var(--green-700)] hover:text-[var(--green-900)] transition-colors"
           >
             去排期页面分配 →
           </Link>
