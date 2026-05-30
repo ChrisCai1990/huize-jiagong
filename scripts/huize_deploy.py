@@ -10,9 +10,9 @@
 import sys, time, subprocess, argparse, os
 from datetime import datetime
 
-HOST      = '39.106.218.225'
+HOST      = '101.132.139.196'
 USER      = 'root'
-PASSWORD  = '@Cbq19900208'
+PASSWORD  = 'Hzjiagong2@26'
 REPO_DIR  = '/var/www/huize-jiagong'
 LOCAL_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

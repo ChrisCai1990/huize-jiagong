@@ -24,11 +24,11 @@ python scripts/huize_deploy.py
 `scripts/huize_deploy.py` 通过 SSH 直连服务器：git pull → npm ci → npm run build → 复制静态资源到 standalone → PM2 重启。
 
 ## 线上地址
-- http://39.106.218.225
+- http://101.132.139.196
 
 ## 服务器信息
-- 阿里云 ECS，IP：39.106.218.225
-- SSH：root@39.106.218.225，密码：@Cbq19900208
+- 阿里云 ECS，IP：101.132.139.196
+- SSH：root@101.132.139.196，密码：Hzjiagong2@26
 - 项目路径：/var/www/huize-jiagong
 - PM2 进程名：huize-jiagong（端口 3002，Nginx 代理 80→3002）
 - 注意：端口 3001 已空闲，但 huize-jiagong 固定用 3002，不要改
