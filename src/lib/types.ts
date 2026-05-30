@@ -1,4 +1,19 @@
-export type Pillar = "指标解读" | "用药问题" | "饮食禁忌" | "检查规划" | "情绪心理" | "医患沟通";
+export type Pillar =
+  | "指标解读"
+  | "用药问题"
+  | "饮食禁忌"
+  | "营养补充"
+  | "情绪心理"
+  | "压力管理"
+  | "运动"
+  | "睡眠"
+  | "检查规划"
+  | "日常管理"
+  | "医患沟通"
+  | "中医调理"
+  | "家人沟通"
+  | "病友故事";
+
 export type AudienceStage = "备孕期" | "孕早期" | "孕中晚期" | "产后";
 export type TopicStatus = "draft" | "approved" | "archived";
 export type DayStatus = "planned" | "scripted" | "filmed" | "published";
@@ -49,16 +64,30 @@ export interface PublishCopy {
   created_at: string;
 }
 
-export const PILLARS: Pillar[] = ["指标解读", "用药问题", "饮食禁忌", "检查规划", "情绪心理", "医患沟通"];
+export const PILLARS: Pillar[] = [
+  "指标解读", "用药问题", "饮食禁忌", "营养补充",
+  "情绪心理", "压力管理", "运动", "睡眠",
+  "检查规划", "日常管理", "医患沟通", "中医调理",
+  "家人沟通", "病友故事",
+];
+
 export const STAGES: AudienceStage[] = ["备孕期", "孕早期", "孕中晚期", "产后"];
 
 export const PILLAR_COLORS: Record<Pillar, string> = {
   "指标解读": "bg-blue-50 text-blue-700 border-blue-200",
   "用药问题": "bg-violet-50 text-violet-700 border-violet-200",
   "饮食禁忌": "bg-emerald-50 text-emerald-700 border-emerald-200",
-  "检查规划": "bg-orange-50 text-orange-700 border-orange-200",
+  "营养补充": "bg-lime-50 text-lime-700 border-lime-200",
   "情绪心理": "bg-pink-50 text-pink-700 border-pink-200",
+  "压力管理": "bg-purple-50 text-purple-700 border-purple-200",
+  "运动": "bg-green-50 text-green-700 border-green-200",
+  "睡眠": "bg-indigo-50 text-indigo-700 border-indigo-200",
+  "检查规划": "bg-orange-50 text-orange-700 border-orange-200",
+  "日常管理": "bg-amber-50 text-amber-700 border-amber-200",
   "医患沟通": "bg-cyan-50 text-cyan-700 border-cyan-200",
+  "中医调理": "bg-red-50 text-red-700 border-red-200",
+  "家人沟通": "bg-rose-50 text-rose-700 border-rose-200",
+  "病友故事": "bg-teal-50 text-teal-700 border-teal-200",
 };
 
 export const STAGE_COLORS: Record<AudienceStage, string> = {
