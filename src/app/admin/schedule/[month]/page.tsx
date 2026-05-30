@@ -158,8 +158,24 @@ export default function MonthCalendar({ params }: { params: Promise<{ month: str
             <ChevronRight size={14} />
           </button>
         </div>
-        <div className="text-xs text-gray-400">
-          {days.filter((d) => d.topic_id).length}/{daysInMonth} 已分配
+        <div className="flex items-center gap-4">
+          {/* Legend */}
+          <div className="hidden sm:flex items-center gap-3 text-xs text-gray-400">
+            {[
+              { color: "bg-gray-300", label: "选题已定" },
+              { color: "bg-blue-400", label: "脚本完成" },
+              { color: "bg-amber-400", label: "拍摄完成" },
+              { color: "bg-green-500", label: "已发布" },
+            ].map(({ color, label }) => (
+              <div key={label} className="flex items-center gap-1">
+                <span className={`w-1.5 h-1.5 rounded-full ${color}`} />
+                {label}
+              </div>
+            ))}
+          </div>
+          <div className="text-xs text-gray-400">
+            {days.filter((d) => d.topic_id).length}/{daysInMonth} 已分配
+          </div>
         </div>
       </div>
 
@@ -286,20 +302,8 @@ export default function MonthCalendar({ params }: { params: Promise<{ month: str
         </div>
       </div>
 
-      {/* Legend */}
-      <div className="flex gap-3 mt-3 text-xs text-gray-400 items-center">
-        {[
-          { color: "bg-gray-300", label: "选题已定" },
-          { color: "bg-blue-400", label: "脚本完成" },
-          { color: "bg-amber-400", label: "拍摄完成" },
-          { color: "bg-green-500", label: "已发布" },
-        ].map(({ color, label }) => (
-          <div key={label} className="flex items-center gap-1">
-            <span className={`w-1.5 h-1.5 rounded-full ${color}`} />
-            {label}
-          </div>
-        ))}
-        <div className="ml-auto flex items-center gap-1 text-gray-300">
+      <div className="flex justify-end mt-2">
+        <div className="flex items-center gap-1 text-gray-300 text-xs">
           <Zap size={10} />
           <span>hover 周行生成提示词</span>
         </div>
