@@ -16,7 +16,7 @@ export async function login(formData: FormData) {
   const cookieStore = await cookies();
   cookieStore.set("admin_session", "authenticated", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: false, // HTTP 服务器，无 HTTPS，不能设 Secure flag
     maxAge: 60 * 60 * 24 * 7,
     path: "/",
   });
