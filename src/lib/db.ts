@@ -67,43 +67,76 @@ function initSchema(db: Database.Database) {
   `);
 }
 
-const SEED_TOPICS = [
-  { title: "备孕前TSH要查到多少才算达标？", pain_point: "TSH在2点多，医生说正常，网上说备孕要低于2.5，到底信谁", pillar: "指标解读", audience_stage: "备孕期", hook: "姐妹们，拿到备孕前的化验单，是不是也不知道TSH那个数字到底算不算合格？" },
-  { title: "确诊桥本那天，我以为这辈子不能当妈了", pain_point: "刚确诊，网上搜出来全是不好的信息，不知道未来怎么走", pillar: "情绪心理", audience_stage: "备孕期", hook: "确诊桥本那天，我在医院门口坐了很久，不知道要不要打电话告诉我妈" },
-  { title: "桥本备孕到底能不能吃碘盐？", pain_point: "有人说不能，有人说能，家里人还一直催着多补碘，左右为难", pillar: "饮食禁忌", audience_stage: "备孕期", hook: "我妈说怀孕就要多补碘，我查了桥本好像不能多吃——这两个到底谁说的对？" },
-  { title: "桥本备孕，什么情况下才需要吃优甲乐？", pain_point: "TPO抗体高但TSH显示正常，不知道要不要提前用药", pillar: "用药问题", audience_stage: "备孕期", hook: "桥本抗体很高，但甲功显示正常，医生说不用吃药——备孕的话，真的不需要吗？" },
-  { title: "桥本备孕前，这5项指标一定要查清楚", pain_point: "备孕体检做了，但不知道桥本还需要查哪些额外的项目", pillar: "检查规划", audience_stage: "备孕期", hook: "备孕体检都做完了，你有没有漏掉这5项桥本专属的检查？" },
-  { title: "桥本备孕，挂哪个科、问什么最有效？", pain_point: "去医院不知道挂什么科，见了医生又不知道问什么，每次都被两句话打发走", pillar: "医患沟通", audience_stage: "备孕期", hook: "为了桥本备孕的事跑了好几次医院，每次都感觉没问到想问的——后来我学会了这么做" },
-  { title: "刚怀孕，TSH突然升高了，要紧吗？", pain_point: "孕前TSH正常，怀孕后第一次查TSH升到了3点多，非常慌", pillar: "指标解读", audience_stage: "孕早期", hook: "怀孕了第一次查甲状腺，TSH比孕前高了好多——是我吃错了什么，还是本来就会这样？" },
-  { title: "怀孕了，但我比备孕时还焦虑", pain_point: "终于怀上了，但还是每天盯着指标，每次复查前都睡不着", pillar: "情绪心理", audience_stage: "孕早期", hook: "怀孕了，反而比备孕的时候更焦虑——这种感觉，你有吗？" },
-  { title: "孕早期桥本，这3类食物真的要少碰", pain_point: "孕吐严重，很多东西吃不下，不知道吃什么既安全又能补充营养", pillar: "饮食禁忌", audience_stage: "孕早期", hook: "孕早期吐得什么都不想吃，但桥本又有饮食限制——我当时是这么撑过来的" },
-  { title: "孕早期TSH偏高，优甲乐要马上加量吗？", pain_point: "孕早期TSH升高，医生说加量，但担心药对宝宝有影响不敢吃", pillar: "用药问题", audience_stage: "孕早期", hook: "孕期吃优甲乐，会影响宝宝吗？这是我当时最害怕的问题" },
-  { title: "孕期TSH标准和平时为什么不一样？", pain_point: "孕期参考范围搞不清楚，自己查到的和医生说的对不上", pillar: "指标解读", audience_stage: "孕中晚期", hook: "孕期TSH2.8，医生说正常；孕前同样2.8，医生说要用药——为什么标准不一样？" },
-  { title: "产检5分钟，桥本妈妈要主动问这些", pain_point: "每次产检时间短，出来就后悔没问到桥本相关的问题", pillar: "医患沟通", audience_stage: "孕中晚期", hook: "产检的时间太短了，关于桥本的问题根本问不完——我整理了一张问诊清单" },
-  { title: "整个孕期，我都在担心桥本会影响宝宝", pain_point: "孕期一直焦虑，担心宝宝甲状腺发育有问题，睡不踏实", pillar: "情绪心理", audience_stage: "孕中晚期", hook: "整个孕期，我不知道搜了多少次『桥本会影响胎儿发育吗』" },
-  { title: "孕期桥本，这3个复查时间点不能错过", pain_point: "不清楚孕期甲状腺要多久查一次，担心自己漏掉了关键节点", pillar: "检查规划", audience_stage: "孕中晚期", hook: "孕期甲状腺复查，桥本孕妈不能和普通孕妈按同一个频率来" },
-  { title: "孕中期TSH正常了，优甲乐能不能减量？", pain_point: "TSH复查回来正常了，还在吃药，想自己减量但又不敢", pillar: "用药问题", audience_stage: "孕中晚期", hook: "孕中期指标好了，我当时也想着是不是可以把药悄悄减掉——医生是这么说的" },
-  { title: "TPO抗体一直很高，会影响宝宝吗？", pain_point: "抗体数值几百上千，每次看到都心跳加速，不知道对宝宝意味着什么", pillar: "指标解读", audience_stage: "孕中晚期", hook: "TPO抗体超过1000，每次拿到化验单都不敢看——它到底会不会伤害宝宝？" },
-  { title: "医生说桥本不影响备孕，我该直接信吗？", pain_point: "医生几句话打发走，自己查的资料和医生说的感觉有出入", pillar: "医患沟通", audience_stage: "备孕期", hook: "医生说桥本不影响备孕——这话没错，但他可能漏说了关键的后半句" },
-  { title: "孕期桥本，硒要不要额外补充？", pain_point: "看到网上说补硒对桥本有帮助，但不知道孕期能不能吃、吃多少", pillar: "饮食禁忌", audience_stage: "孕中晚期", hook: "孕期能不能补硒？这个问题我被桥本姐妹问了很多次，今天统一说清楚" },
-  { title: "生完孩子，桥本复查什么时候最关键？", pain_point: "出月子就忙着带娃，不知道产后甲状腺要不要复查、什么时候查", pillar: "检查规划", audience_stage: "产后", hook: "生完孩子有个检查，很多桥本妈妈都忘了——但产后这个窗口期真的错过就是错过了" },
-  { title: "产后掉发疲惫情绪崩，是甲减还是正常？", pain_point: "产后掉发严重、老是累、动不动想哭，不知道是月子没坐好还是桥本加重了", pillar: "情绪心理", audience_stage: "产后", hook: "生完孩子第二个月，我每天掉一把头发，老公说这很正常，但我总觉得哪里不对" },
-  { title: "哺乳期还能继续吃优甲乐吗？", pain_point: "准备喂母乳，但担心优甲乐通过母乳影响宝宝，不知道能不能继续吃", pillar: "用药问题", audience_stage: "产后", hook: "生完孩子想喂母乳，但手里还有优甲乐——这药哺乳期到底能不能吃？" },
-  { title: "坐月子，婆婆的这几个做法桥本要注意", pain_point: "坐月子被要求喝浓汤、补碘、吃海带，和桥本的饮食要求有冲突不知道怎么办", pillar: "饮食禁忌", audience_stage: "产后", hook: "我婆婆坚持坐月子要多喝海带汤补碘——桥本妈妈真的可以这么吃吗？" },
-  { title: "产后TSH升高，是桥本加重了吗？", pain_point: "产后复查TSH比孕前高了，不知道是一过性的还是需要处理", pillar: "指标解读", audience_stage: "产后", hook: "生完孩子查了甲状腺，TSH比孕前高了一截——医生说再观察，但我整夜没睡" },
-  { title: "反复备孕失败，要不要查甲状腺抗体？", pain_point: "试了好几次都没成功，不知道是否和桥本有关系", pillar: "检查规划", audience_stage: "备孕期", hook: "备孕一年多，试了好几次都没成——你有没有想过，查一下甲状腺抗体？" },
-  { title: "产后补硒，能帮助桥本恢复吗？", pain_point: "听说硒对桥本有帮助，但不知道产后哺乳期能不能补、怎么补", pillar: "用药问题", audience_stage: "产后", hook: "产后想通过补硒帮助桥本恢复——哺乳期能不能补？怎么选？我来说说我的经历" },
-  { title: "产后总想哭，是产后抑郁还是甲减在作怪？", pain_point: "产后情绪很差，容易崩溃，不知道是心理问题还是甲状腺的问题", pillar: "情绪心理", audience_stage: "产后", hook: "产后一直情绪很差、容易哭——我以为是带娃太累，后来查了才知道是甲减" },
-  { title: "产后复查桥本，挂妇科还是内分泌科？", pain_point: "产后想复查甲状腺，不知道应该挂哪个科室，挂错了白跑一趟", pillar: "医患沟通", audience_stage: "产后", hook: "生完孩子想查一下甲状腺——妇科？内分泌科？很多人挂错了科室" },
-  { title: "桥本备孕，十字花科蔬菜到底能不能吃？", pain_point: "看到说西兰花、卷心菜对甲状腺不好，一直不敢吃，但很想吃", pillar: "饮食禁忌", audience_stage: "备孕期", hook: "为了桥本备孕，我有段时间连西兰花都不敢碰——后来才知道我把这件事搞错了" },
-  { title: "孕期想换内分泌科医生，时机合适吗？", pain_point: "觉得现在的医生不够重视，想换但又担心影响治疗连续性", pillar: "医患沟通", audience_stage: "孕中晚期", hook: "孕期想换医生——这个时机到底合不合适？我当时是怎么处理的" },
-  { title: "试纸阳性，桥本患者第一件事要做什么？", pain_point: "刚发现怀孕，不知道桥本患者需要比普通人多做哪些事", pillar: "检查规划", audience_stage: "孕早期", hook: "试纸两道杠，普通孕妈知道去建档——桥本孕妈在这之前，还有一件事要立刻做" },
+export const SEED_TOPICS = [
+  // Day 1 · 指标解读 · 备孕期
+  { title: "备孕前的TSH，到底要查几次才能相信", pain_point: "只查了一次TSH显示正常就放心备孕，但听说TSH本身有波动，不知道一次结果能不能算数", pillar: "指标解读", audience_stage: "备孕期", hook: "备孕前查了一次TSH，显示正常——你有没有想过，这个数字其实可能不算数？" },
+  // Day 2 · 情绪心理 · 产后
+  { title: "生完孩子情绪崩了，是产后抑郁还是甲减", pain_point: "产后总想哭、情绪不稳定、容易烦躁，不知道是心理问题还是桥本甲减在作怪", pillar: "情绪心理", audience_stage: "产后", hook: "产后一直情绪很差、容易崩溃——我以为是带娃太累，查了甲状腺才知道根因在这" },
+  // Day 3 · 营养补充 · 备孕期
+  { title: "备孕桥本，光补叶酸还不够，还缺这3种", pain_point: "只知道备孕要补叶酸，不知道桥本人群额外还需要补什么营养素", pillar: "营养补充", audience_stage: "备孕期", hook: "备孕补叶酸，对桥本姐妹来说可能只做对了四分之一" },
+  // Day 4 · 用药问题 · 孕早期
+  { title: "确认怀孕那天，优甲乐要不要马上加量", pain_point: "刚发现怀孕，不知道是否需要立刻增加优甲乐剂量，还是等下次复查再说", pillar: "用药问题", audience_stage: "孕早期", hook: "试纸两道杠的那天晚上，我盯着药盒想了很久——剂量到底要不要动" },
+  // Day 5 · 运动 · 备孕期
+  { title: "备孕桥本，哪些运动有帮助、哪些要避开", pain_point: "想通过运动帮助调理身体，但担心运动强度过大反而影响甲状腺，不知道怎么选", pillar: "运动", audience_stage: "备孕期", hook: "备孕期间我每天跑步5公里，后来才知道这对桥本可能是错的" },
+  // Day 6 · 检查规划 · 产后
+  { title: "产后这两个复查时机，很多桥本妈妈都漏掉了", pain_point: "出月子就忙着带娃，不知道产后甲状腺最关键的复查节点在什么时候", pillar: "检查规划", audience_stage: "产后", hook: "生完孩子有两次检查窗口，错过了就真的错过——桥本妈妈一定要记住" },
+  // Day 7 · 压力管理 · 备孕期
+  { title: "越想怀孕越怀不上，压力真的会让TSH升高吗", pain_point: "工作压力避不开，听说压力会影响甲状腺，不知道怎么在高压下保住指标", pillar: "压力管理", audience_stage: "备孕期", hook: "我当时越努力备孕，TSH反而越高——后来才明白是什么在拉高它" },
+  // Day 8 · 医患沟通 · 备孕期
+  { title: "每次复诊5分钟，桥本备孕该问什么才有效", pain_point: "门诊时间极短，每次都有问题没问到，出来就后悔，不知道怎么高效问诊", pillar: "医患沟通", audience_stage: "备孕期", hook: "为桥本备孕跑了好几次医院，每次都感觉没问到最想问的——后来我准备了这张清单" },
+  // Day 9 · 日常管理 · 孕早期
+  { title: "孕吐严重，优甲乐没法空腹吃，怎么办", pain_point: "孕早期孕吐厉害，空腹吃优甲乐更难受，和食物一起吃又怕影响吸收，进退两难", pillar: "日常管理", audience_stage: "孕早期", hook: "孕吐最严重那段时间，我根本没法空腹吃优甲乐——后来医生告诉了我一个折中的方法" },
+  // Day 10 · 情绪心理 · 备孕期
+  { title: "备孕那段时间，我是怎么跟焦虑和解的", pain_point: "每个月等待结果都是一次煎熬，失败一次就崩溃一次，不知道能不能坚持下去", pillar: "情绪心理", audience_stage: "备孕期", hook: "备孕第8个月，我在卫生间哭着给自己发了一条语音——那是我最崩溃的一天" },
+  // Day 11 · 睡眠 · 产后
+  { title: "带娃睡眠碎片化，桥本妈妈怎么保护甲状腺", pain_point: "频繁起夜喂奶，睡眠质量极差，担心长期睡不好会让桥本和甲状腺指标变差", pillar: "睡眠", audience_stage: "产后", hook: "产后3个月每晚起来4次，我发现我的TSH悄悄升高了——睡眠不够对桥本的影响比我想的大" },
+  // Day 12 · 家人沟通 · 备孕期
+  { title: "婆婆说桥本不是病，怎么跟不懂的家人沟通", pain_point: "婆婆不理解桥本，认为只是小问题，一直催着不要想太多，说了也不信，很崩溃", pillar: "家人沟通", audience_stage: "备孕期", hook: "婆婆说"体检指标又没多少偏差，你就是想太多了"——这句话让我难受了很久" },
+  // Day 13 · 检查规划 · 孕早期
+  { title: "孕8周、12周、16周，桥本孕妈哪次复查最关键", pain_point: "孕早期不知道甲状腺最该在什么时间点检查，担心选错了时机错过关键窗口", pillar: "检查规划", audience_stage: "孕早期", hook: "孕早期甲状腺复查，桥本孕妈的时机和普通孕妈不一样——你知道哪次最关键吗" },
+  // Day 14 · 饮食禁忌 · 产后
+  { title: "月子里婆婆天天煮海带汤，桥本妈妈能喝吗", pain_point: "坐月子被要求喝海带汤补碘，但桥本饮食有碘的限制，夹在中间不知道怎么办", pillar: "饮食禁忌", audience_stage: "产后", hook: "婆婆每天煮海带汤说补碘——桥本妈妈喝这个，到底对不对" },
+  // Day 15 · 指标解读 · 孕中晚期
+  { title: "孕中晚期FT3偏低但TSH正常，需要处理吗", pain_point: "孕中期化验单FT3在正常范围下限，医生说没问题，但自己看到这个数字就很担心", pillar: "指标解读", audience_stage: "孕中晚期", hook: "拿到化验单，TSH正常，但FT3在最低线——这个组合到底意味着什么" },
+  // Day 16 · 压力管理 · 孕早期
+  { title: "等复查结果的那几天，我用这个方法熬过来的", pain_point: "抽完血到出结果的2-3天，焦虑程度几乎没法正常工作和生活，不知道怎么撑过去", pillar: "压力管理", audience_stage: "孕早期", hook: "孕期等甲状腺复查结果的那两天，是我整个孕程里最难熬的时刻" },
+  // Day 17 · 用药问题 · 孕中晚期
+  { title: "孕中期TSH正常了，我能不能悄悄把药减掉", pain_point: "指标复查回来好了，还在继续吃药，很想自己减量，但又不敢，担心影响宝宝", pillar: "用药问题", audience_stage: "孕中晚期", hook: "孕中期指标终于好了，我当时也动过悄悄停药的念头——还好没有" },
+  // Day 18 · 情绪心理 · 孕早期
+  { title: "终于怀上了，但我比备孕时还要焦虑", pain_point: "历经备孕终于怀上，却发现自己比备孕时更紧张，每天盯着症状、睡不好", pillar: "情绪心理", audience_stage: "孕早期", hook: "怀孕了，反而比备孕时更焦虑——这种感觉你有过吗" },
+  // Day 19 · 营养补充 · 孕早期
+  { title: "孕吐导致什么都吃不下，桥本营养素怎么补", pain_point: "孕吐严重影响饮食，担心营养跟不上，但吃什么都吐，不知道怎么维持桥本所需的营养", pillar: "营养补充", audience_stage: "孕早期", hook: "孕吐那段时间我几乎只能喝白粥——桥本需要的营养素，我是这样撑过来的" },
+  // Day 20 · 运动 · 孕中晚期
+  { title: "孕中晚期桥本，瑜伽和散步哪个更适合", pain_point: "孕期想保持运动帮助调理，但不知道哪种运动对桥本孕妈更友好，哪些动作要避开", pillar: "运动", audience_stage: "孕中晚期", hook: "孕期我坚持每天运动，但有一段时间选错了方式，TSH反而飘了" },
+  // Day 21 · 医患沟通 · 孕中晚期
+  { title: "产检时间太短，桥本孕妈要主动问这几个问题", pain_point: "每次产检只有5分钟，关于桥本的问题总没时间问完，出来就后悔", pillar: "医患沟通", audience_stage: "孕中晚期", hook: "产检排队1小时，见医生5分钟——桥本孕妈这几个问题一定要提前准备好" },
+  // Day 22 · 睡眠 · 孕中晚期
+  { title: "孕晚期睡不好，是桥本在拖后腿吗", pain_point: "孕晚期翻来覆去睡不着，不知道是正常的孕期现象，还是甲状腺功能影响了睡眠", pillar: "睡眠", audience_stage: "孕中晚期", hook: "孕晚期我每天凌晨2点还睡不着——后来查甲状腺才发现问题出在哪" },
+  // Day 23 · 日常管理 · 产后
+  { title: "带娃全乱了节奏，怎么保证每天按时吃优甲乐", pain_point: "有了孩子之后生活节奏完全被打乱，经常忘记吃优甲乐，或者和奶粉、饮食同时吃", pillar: "日常管理", audience_stage: "产后", hook: "产后半年我漏服了不知道多少次优甲乐——指标飘了才意识到这件事有多重要" },
+  // Day 24 · 家人沟通 · 孕早期
+  { title: "老公说别担心了，但他根本不懂桥本孕妈的焦虑", pain_point: "想让老公理解自己的担心和压力，但他总觉得是自己想多了，感觉很孤独", pillar: "家人沟通", audience_stage: "孕早期", hook: "我跟老公说我很担心桥本影响宝宝，他说"没事的别想了"——那一刻我觉得很孤独" },
+  // Day 25 · 检查规划 · 备孕期
+  { title: "反复备孕失败，有没有想过查一下甲状腺抗体", pain_point: "试了好几次都没成功，不知道是否和桥本抗体有关，以为只查TSH就够了", pillar: "检查规划", audience_stage: "备孕期", hook: "备孕失败好几次，一直以为是运气问题——后来查了TPO抗体才找到根因" },
+  // Day 26 · 用药问题 · 产后
+  { title: "断奶后，优甲乐剂量要跟着重新评估吗", pain_point: "哺乳结束了，不知道优甲乐的用量是否需要调整，还是继续照旧吃", pillar: "用药问题", audience_stage: "产后", hook: "断奶那个月我的TSH突然变了——原来哺乳期和非哺乳期，身体对优甲乐的需求不一样" },
+  // Day 27 · 情绪心理 · 孕中晚期
+  { title: "整个孕期我都在搜"桥本会影响宝宝吗"", pain_point: "孕期一直担心桥本抗体影响胎儿甲状腺发育，每次看到报告上的抗体数值就心跳加速", pillar: "情绪心理", audience_stage: "孕中晚期", hook: "孕期我不知道搜了多少次"桥本会影响宝宝吗"——每次答案都让我更焦虑" },
+  // Day 28 · 饮食禁忌 · 备孕期
+  { title: "备孕桥本，西兰花和卷心菜到底能不能吃", pain_point: "看到说十字花科蔬菜影响甲状腺，一直不敢吃，但这些菜营养很好，一直在忍", pillar: "饮食禁忌", audience_stage: "备孕期", hook: "为了桥本备孕，我有段时间连西兰花都戒掉了——后来才知道我把这件事搞错了" },
+  // Day 29 · 指标解读 · 产后
+  { title: "产后TSH升高了，是桥本加重了还是正常波动", pain_point: "产后复查TSH比孕前高，不知道是产后一过性波动还是桥本真的加重了，需不需要马上处理", pillar: "指标解读", audience_stage: "产后", hook: "生完孩子第一次查甲状腺，TSH比孕前高了一大截——我当晚一直没睡着" },
+  // Day 30 · 医患沟通 · 产后
+  { title: "产后复查桥本，挂妇科还是内分泌科", pain_point: "产后想复查甲状腺，不知道挂哪个科室，怕挂错了跑冤枉路", pillar: "医患沟通", audience_stage: "产后", hook: "生完孩子想查甲状腺——妇科？内分泌科？很多桥本妈妈挂错了科室" },
 ];
 
 function seedIfEmpty(db: Database.Database) {
   const count = (db.prepare("SELECT COUNT(*) as c FROM topics").get() as { c: number }).c;
   if (count > 0) return;
+  _insertSeedTopics(db);
+}
 
+function _insertSeedTopics(db: Database.Database) {
   const insertTopic = db.prepare(
     "INSERT INTO topics (title, pain_point, pillar, audience_stage, hook, status) VALUES (?, ?, ?, ?, ?, 'approved')"
   );
@@ -111,13 +144,23 @@ function seedIfEmpty(db: Database.Database) {
     "INSERT OR IGNORE INTO schedule_days (month, day_number, topic_id, status) VALUES (?, ?, ?, 'planned')"
   );
 
-  const insertMany = db.transaction(() => {
-    for (const t of SEED_TOPICS) {
+  db.transaction(() => {
+    for (let i = 0; i < SEED_TOPICS.length; i++) {
+      const t = SEED_TOPICS[i];
       const result = insertTopic.run(t.title, t.pain_point, t.pillar, t.audience_stage, t.hook);
-      insertDay.run("2026-06", SEED_TOPICS.indexOf(t) + 1, result.lastInsertRowid);
+      insertDay.run("2026-06", i + 1, result.lastInsertRowid);
     }
-  });
-  insertMany();
+  })();
+}
+
+export function reseedTopics(): number {
+  const db = getDb();
+  db.prepare("DELETE FROM schedule_days WHERE month = '2026-06'").run();
+  db.prepare("DELETE FROM topics").run();
+  try { db.prepare("DELETE FROM sqlite_sequence WHERE name = 'topics'").run(); } catch {}
+  try { db.prepare("DELETE FROM sqlite_sequence WHERE name = 'schedule_days'").run(); } catch {}
+  _insertSeedTopics(db);
+  return SEED_TOPICS.length;
 }
 
 export default getDb;
