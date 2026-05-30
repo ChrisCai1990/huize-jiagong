@@ -57,13 +57,13 @@ function CopyButton({ text }: { text: string }) {
   return (
     <button
       onClick={copy}
-      className="flex items-center gap-2 px-4 py-2 text-white text-sm rounded-lg transition-colors shrink-0"
+      className="flex items-center gap-1.5 px-3 py-1.5 text-white text-xs rounded-lg transition-colors shrink-0"
       style={{ background: "var(--green-700)" }}
       onMouseEnter={e => (e.currentTarget.style.background = "var(--green-800)")}
       onMouseLeave={e => (e.currentTarget.style.background = "var(--green-700)")}
     >
-      {copied ? <CheckCheck size={14} /> : <Copy size={14} />}
-      {copied ? "已复制！去 Claude.ai 粘贴" : "复制提示词"}
+      {copied ? <CheckCheck size={12} /> : <Copy size={12} />}
+      {copied ? "已复制！" : "复制提示词"}
     </button>
   );
 }
@@ -108,13 +108,10 @@ export default function MonthCalendar({ params }: { params: Promise<{ month: str
       return days.find((d) => d.day_number === dayNum) || { day_number: dayNum, month, status: "planned" } as DayWithTopic;
     }),
   ];
-
   while (cells.length % 7 !== 0) cells.push(null);
 
   const weeks: (DayWithTopic | null)[][] = [];
-  for (let i = 0; i < cells.length; i += 7) {
-    weeks.push(cells.slice(i, i + 7));
-  }
+  for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7));
 
   const assigningDay = days.find((d) => d.day_number === assignDay);
 
@@ -137,54 +134,41 @@ export default function MonthCalendar({ params }: { params: Promise<{ month: str
   function weekLabel(week: (DayWithTopic | null)[], weekIdx: number) {
     const real = week.filter(Boolean) as DayWithTopic[];
     if (real.length === 0) return `第${weekIdx + 1}周`;
-    const first = real[0].day_number;
-    const last = real[real.length - 1].day_number;
-    return `第${weekIdx + 1}周（${m}/${first}–${last}）`;
+    return `第${weekIdx + 1}周（${m}/${real[0].day_number}–${real[real.length - 1].day_number}）`;
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
+    <div className="max-w-5xl mx-auto px-4 py-5">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-3">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
           <button
             onClick={() => router.push(`/admin/schedule/${prevMonth(month)}`)}
-            className="p-2 rounded-lg transition-colors"
-            style={{ border: "1px solid var(--green-200)" }}
-            onMouseEnter={e => (e.currentTarget.style.background = "var(--green-50)")}
-            onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+            className="p-1.5 rounded-lg transition-colors border border-[var(--green-200)] hover:bg-[var(--green-50)]"
           >
-            <ChevronLeft size={16} />
+            <ChevronLeft size={14} />
           </button>
-          <div>
-            <p className="text-xs tracking-widest uppercase" style={{ color: "var(--green-700)" }}>内容排期</p>
-            <h1 className="text-2xl font-light text-gray-900">
-              {year}年<span className="font-semibold" style={{ color: "var(--green-800)" }}>{m}月</span>
-            </h1>
-          </div>
+          <h1 className="text-base font-semibold text-gray-800">
+            {year}年{m}月
+          </h1>
           <button
             onClick={() => router.push(`/admin/schedule/${nextMonth(month)}`)}
-            className="p-2 rounded-lg transition-colors"
-            style={{ border: "1px solid var(--green-200)" }}
-            onMouseEnter={e => (e.currentTarget.style.background = "var(--green-50)")}
-            onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+            className="p-1.5 rounded-lg transition-colors border border-[var(--green-200)] hover:bg-[var(--green-50)]"
           >
-            <ChevronRight size={16} />
+            <ChevronRight size={14} />
           </button>
         </div>
-        <div className="text-sm text-gray-500">
+        <div className="text-xs text-gray-400">
           {days.filter((d) => d.topic_id).length}/{daysInMonth} 已分配
         </div>
       </div>
 
       {/* Calendar */}
-      <div className="bg-white rounded-2xl overflow-hidden" style={{ border: "1px solid var(--green-100)" }}>
+      <div className="bg-white rounded-xl overflow-hidden border border-[var(--green-100)]">
         {/* Weekday headers */}
-        <div className="grid grid-cols-7" style={{ borderBottom: "1px solid var(--green-100)" }}>
+        <div className="grid grid-cols-7 border-b border-[var(--green-100)]">
           {WEEKDAYS.map((d) => (
-            <div key={d} className="py-2.5 text-center text-xs font-medium text-gray-400">
-              {d}
-            </div>
+            <div key={d} className="py-2 text-center text-xs font-medium text-gray-400">{d}</div>
           ))}
         </div>
 
@@ -207,7 +191,7 @@ export default function MonthCalendar({ params }: { params: Promise<{ month: str
                   if (!day) return (
                     <div
                       key={dayIdx}
-                      className="min-h-[88px]"
+                      className="min-h-[68px]"
                       style={{
                         background: "var(--green-50)",
                         borderRight: dayIdx < 6 ? "1px solid var(--green-100)" : "none",
@@ -221,7 +205,7 @@ export default function MonthCalendar({ params }: { params: Promise<{ month: str
                   return (
                     <div
                       key={dayIdx}
-                      className="min-h-[88px] p-1.5 flex flex-col relative group transition-colors"
+                      className="min-h-[68px] p-1.5 flex flex-col relative group transition-colors"
                       style={{
                         borderRight: dayIdx < 6 ? "1px solid var(--green-100)" : "none",
                         background: isToday ? "var(--green-50)" : "transparent",
@@ -234,26 +218,23 @@ export default function MonthCalendar({ params }: { params: Promise<{ month: str
                         className="text-xs font-medium mb-1 w-5 h-5 flex items-center justify-center rounded-full"
                         style={isToday
                           ? { background: "var(--green-700)", color: "white" }
-                          : { color: "#6b7280" }
+                          : { color: "#9ca3af" }
                         }
                       >
                         {day.day_number}
                       </div>
 
                       {hasTopic ? (
-                        <Link
-                          href={`/admin/schedule/${month}/${String(day.day_number).padStart(2, "0")}`}
-                          className="flex-1 flex flex-col"
-                        >
+                        <Link href={`/admin/schedule/${month}/${String(day.day_number).padStart(2, "0")}`} className="flex-1 flex flex-col">
                           <div className="flex items-center gap-1 mb-1">
                             <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${STATUS_DOT[day.status]}`} />
                           </div>
                           {day.pillar && (
-                            <span className={`text-xs px-1.5 py-0.5 rounded mb-1 border leading-tight inline-block max-w-full truncate ${PILLAR_COLORS[day.pillar as Pillar]}`}>
+                            <span className={`text-xs px-1 py-0.5 rounded mb-1 border leading-tight inline-block max-w-full truncate ${PILLAR_COLORS[day.pillar as Pillar]}`} style={{ fontSize: "10px" }}>
                               {day.pillar}
                             </span>
                           )}
-                          <p className="text-xs text-gray-700 leading-tight line-clamp-2">
+                          <p className="text-gray-700 leading-tight line-clamp-2" style={{ fontSize: "11px" }}>
                             {(day as { title?: string }).title}
                           </p>
                         </Link>
@@ -263,10 +244,10 @@ export default function MonthCalendar({ params }: { params: Promise<{ month: str
                           className="flex-1 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                         >
                           <div
-                            className="w-6 h-6 rounded-full border-2 border-dashed flex items-center justify-center transition-colors"
+                            className="w-5 h-5 rounded-full border-2 border-dashed flex items-center justify-center transition-colors"
                             style={{ borderColor: "var(--green-300)", color: "var(--green-500)" }}
                           >
-                            <Plus size={12} />
+                            <Plus size={10} />
                           </div>
                         </button>
                       )}
@@ -274,10 +255,10 @@ export default function MonthCalendar({ params }: { params: Promise<{ month: str
                       {hasTopic && (
                         <button
                           onClick={() => setAssignDay(day.day_number)}
-                          className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity w-5 h-5 rounded bg-white flex items-center justify-center text-gray-400 hover:text-gray-600"
+                          className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity w-4 h-4 rounded bg-white flex items-center justify-center text-gray-400 hover:text-gray-600"
                           style={{ border: "1px solid var(--green-200)" }}
                         >
-                          <Plus size={10} />
+                          <Plus size={8} />
                         </button>
                       )}
                     </div>
@@ -289,15 +270,14 @@ export default function MonthCalendar({ params }: { params: Promise<{ month: str
                   <button
                     onClick={() => setSelectedWeek(isSelected ? null : weekIdx)}
                     title={`生成第${weekIdx + 1}周文案提示词`}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium transition-all z-10"
+                    className="absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-medium transition-all z-10 opacity-0 group-hover/week:opacity-100"
                     style={isSelected
-                      ? { background: "var(--green-700)", color: "white", boxShadow: "0 1px 4px rgba(64,145,108,0.3)" }
-                      : { background: "white", color: "var(--green-700)", border: "1px solid var(--green-200)", boxShadow: "0 1px 4px rgba(0,0,0,0.06)", opacity: 0 }
+                      ? { background: "var(--green-700)", color: "white", opacity: 1 }
+                      : { background: "white", color: "var(--green-700)", border: "1px solid var(--green-200)" }
                     }
-                    onMouseEnter={e => { if (!isSelected) e.currentTarget.style.opacity = "1"; }}
                   >
-                    <Zap size={11} />
-                    {assignedInWeek.length}条
+                    <Zap size={10} />
+                    {assignedInWeek.length}
                   </button>
                 )}
               </div>
@@ -306,60 +286,49 @@ export default function MonthCalendar({ params }: { params: Promise<{ month: str
         </div>
       </div>
 
-      {/* Hover hint for week button */}
-      <style>{`
-        .group\\/week:hover [data-week-btn] { opacity: 1 !important; }
-      `}</style>
-
       {/* Legend */}
-      <div className="flex gap-4 mt-4 text-xs text-gray-500">
+      <div className="flex gap-3 mt-3 text-xs text-gray-400 items-center">
         {[
           { color: "bg-gray-300", label: "选题已定" },
           { color: "bg-blue-400", label: "脚本完成" },
           { color: "bg-amber-400", label: "拍摄完成" },
           { color: "bg-green-500", label: "已发布" },
         ].map(({ color, label }) => (
-          <div key={label} className="flex items-center gap-1.5">
-            <span className={`w-2 h-2 rounded-full ${color}`} />
+          <div key={label} className="flex items-center gap-1">
+            <span className={`w-1.5 h-1.5 rounded-full ${color}`} />
             {label}
           </div>
         ))}
-        <div className="ml-auto flex items-center gap-1 text-gray-400">
-          <Zap size={11} />
-          <span>hover 周行可生成周提示词</span>
+        <div className="ml-auto flex items-center gap-1 text-gray-300">
+          <Zap size={10} />
+          <span>hover 周行生成提示词</span>
         </div>
       </div>
 
       {/* Week prompt panel */}
       {selectedWeek !== null && (
-        <div className="mt-5 bg-white rounded-2xl overflow-hidden" style={{ border: "1px solid var(--green-200)" }}>
-          <div className="flex items-center justify-between px-5 py-3.5" style={{ borderBottom: "1px solid var(--green-100)", background: "var(--green-50)" }}>
+        <div className="mt-4 bg-white rounded-xl overflow-hidden border border-[var(--green-200)]">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--green-100)]" style={{ background: "var(--green-50)" }}>
             <div>
-              <p className="text-sm font-semibold text-gray-800">
+              <p className="text-sm font-medium text-gray-800">
                 {weekLabel(weeks[selectedWeek] ?? [], selectedWeek)} · 批量脚本提示词
               </p>
               <p className="text-xs text-gray-500 mt-0.5">
-                {(weeks[selectedWeek] ?? []).filter((d): d is DayWithTopic => !!d && !!d.topic_id).length} 条内容 · 复制后粘贴到 Claude.ai
+                {(weeks[selectedWeek] ?? []).filter((d): d is DayWithTopic => !!d && !!d.topic_id).length} 条 · 复制后粘贴到 Claude.ai
               </p>
             </div>
             <div className="flex items-center gap-2">
-              {weekPrompt ? (
-                <CopyButton text={weekPrompt} />
-              ) : (
-                <span className="text-xs text-gray-400">本周暂无已分配选题</span>
-              )}
+              {weekPrompt ? <CopyButton text={weekPrompt} /> : <span className="text-xs text-gray-400">本周暂无已分配选题</span>}
               <button
                 onClick={() => setSelectedWeek(null)}
-                className="w-7 h-7 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 transition-colors text-base leading-none"
-                onMouseEnter={e => (e.currentTarget.style.background = "var(--green-100)")}
-                onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+                className="w-6 h-6 flex items-center justify-center rounded text-gray-400 hover:text-gray-600 hover:bg-[var(--green-100)] transition-colors text-sm leading-none"
               >
                 ×
               </button>
             </div>
           </div>
           {weekPrompt && (
-            <pre className="p-4 text-xs text-gray-600 whitespace-pre-wrap leading-relaxed max-h-72 overflow-y-auto">
+            <pre className="p-4 text-xs text-gray-600 whitespace-pre-wrap leading-relaxed max-h-60 overflow-y-auto">
               {weekPrompt}
             </pre>
           )}
@@ -372,10 +341,7 @@ export default function MonthCalendar({ params }: { params: Promise<{ month: str
           month={month}
           dayNumber={assignDay}
           currentTopicId={assigningDay?.topic_id || undefined}
-          onClose={() => {
-            setAssignDay(null);
-            loadDays(month);
-          }}
+          onClose={() => { setAssignDay(null); loadDays(month); }}
         />
       )}
     </div>

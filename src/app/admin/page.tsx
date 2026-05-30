@@ -53,25 +53,20 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="mb-8">
-        <p className="text-xs tracking-widest uppercase mb-2 text-[var(--green-700)]">内容总览</p>
-        <h1 className="text-2xl font-light text-gray-900">
-          {y}年<span className="font-semibold text-[var(--green-800)]">{m}月</span>
+    <div className="max-w-4xl mx-auto px-4 py-5">
+      <div className="mb-5">
+        <h1 className="text-base font-semibold text-gray-800">
+          {y}年{m}月 <span className="font-normal text-gray-400 text-sm">· 共{total}天</span>
         </h1>
-        <p className="text-sm text-gray-500 mt-1">共 {total} 天内容计划</p>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
         {stats.map(({ label, value, colorClass }) => (
-          <div
-            key={label}
-            className="bg-white rounded-2xl p-5 border border-[var(--green-100)]"
-          >
-            <div className={`text-2xl font-semibold ${colorClass}`}>{value}</div>
+          <div key={label} className="bg-white rounded-xl p-4 border border-[var(--green-100)]">
+            <div className={`text-xl font-semibold ${colorClass}`}>{value}</div>
             <div className="text-xs text-gray-500 mt-0.5">{label}</div>
-            <div className="mt-3 h-1 rounded-full overflow-hidden bg-[var(--green-100)]">
+            <div className="mt-2.5 h-1 rounded-full overflow-hidden bg-[var(--green-100)]">
               <div
                 className="h-full rounded-full bg-[var(--green-500)] transition-all"
                 style={{ width: total > 0 ? `${(value / total) * 100}%` : "0%" }}
@@ -82,9 +77,9 @@ export default function AdminDashboard() {
       </div>
 
       {/* This week */}
-      <div className="bg-white rounded-2xl mb-4 overflow-hidden border border-[var(--green-100)]">
-        <div className="flex items-center justify-between px-5 py-3.5 border-b border-[var(--green-100)]">
-          <h2 className="text-sm font-semibold text-gray-700">本周内容</h2>
+      <div className="bg-white rounded-xl mb-3 overflow-hidden border border-[var(--green-100)]">
+        <div className="flex items-center justify-between px-4 py-2.5 border-b border-[var(--green-100)]">
+          <h2 className="text-sm font-medium text-gray-700">本周内容</h2>
           <Link
             href={`/admin/schedule/${month}`}
             className="text-xs text-[var(--green-700)] hover:text-[var(--green-900)] transition-colors"
@@ -94,18 +89,18 @@ export default function AdminDashboard() {
         </div>
         <div className="grid grid-cols-7 divide-x divide-[var(--green-100)]">
           {["一", "二", "三", "四", "五", "六", "日"].map((d) => (
-            <div key={d} className="text-center py-2 text-xs text-gray-400">{d}</div>
+            <div key={d} className="text-center py-1.5 text-xs text-gray-400">{d}</div>
           ))}
           {weekDays.map((day) => {
             if (!day) return (
-              <div key={Math.random()} className="p-2 bg-[var(--green-50)]" />
+              <div key={Math.random()} className="p-1.5 bg-[var(--green-50)]" />
             );
             const isToday = day.day_number === today;
             return (
               <Link
                 key={day.day_number}
                 href={`/admin/schedule/${month}/${String(day.day_number).padStart(2, "0")}`}
-                className={`p-2 text-center transition-colors hover:bg-[var(--green-50)] ${isToday ? "bg-[var(--green-50)]" : ""}`}
+                className={`p-1.5 text-center transition-colors hover:bg-[var(--green-50)] ${isToday ? "bg-[var(--green-50)]" : ""}`}
               >
                 <div className={`text-xs font-medium mb-1 ${isToday ? "text-[var(--green-700)]" : "text-gray-700"}`}>
                   {day.day_number}
@@ -113,7 +108,7 @@ export default function AdminDashboard() {
                 {day.topic_id ? (
                   <>
                     <div className="flex justify-center mb-1">
-                      <span className={`w-2 h-2 rounded-full ${STATUS_DOT[day.status]}`} />
+                      <span className={`w-1.5 h-1.5 rounded-full ${STATUS_DOT[day.status]}`} />
                     </div>
                     <div className="text-xs text-gray-500 leading-tight line-clamp-2 hidden md:block">
                       {(day as { title?: string }).title}
@@ -156,9 +151,9 @@ export default function AdminDashboard() {
           <Link
             key={href}
             href={href}
-            className="bg-white rounded-2xl p-5 border border-[var(--green-100)] hover:border-[var(--green-300)] hover:shadow-sm transition-all"
+            className="bg-white rounded-xl p-4 border border-[var(--green-100)] hover:border-[var(--green-300)] hover:shadow-sm transition-all"
           >
-            <Icon size={20} className={`${iconColor} mb-2.5`} />
+            <Icon size={18} className={`${iconColor} mb-2`} />
             <div className="text-sm font-medium text-gray-800">{label}</div>
             <div className="text-xs text-gray-500 mt-0.5">{desc}</div>
           </Link>

@@ -38,7 +38,7 @@ export function TopicModal({ topic, onClose }: Props) {
 
   return (
     <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl w-full max-w-lg shadow-xl max-h-[90vh] overflow-y-auto" style={{ border: "1px solid var(--green-100)" }}>
+      <div className="bg-white rounded-xl w-full max-w-lg shadow-lg max-h-[90vh] overflow-y-auto" style={{ border: "1px solid var(--green-100)" }}>
         <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: "1px solid var(--green-100)" }}>
           <h2 className="font-semibold text-gray-800">{topic ? "编辑选题" : "新建选题"}</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
@@ -46,7 +46,7 @@ export function TopicModal({ topic, onClose }: Props) {
           </button>
         </div>
 
-        <form action={handleSubmit} className="p-6 space-y-4">
+        <form action={handleSubmit} className="p-5 space-y-3.5">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">话题标题 *</label>
             <input
@@ -217,7 +217,7 @@ export function TopicCard({ topic }: { topic: Topic }) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="text-left bg-white rounded-2xl p-5 transition-all w-full"
+        className="text-left bg-white rounded-xl p-4 transition-all w-full"
         style={{ border: "1px solid var(--green-100)" }}
         onMouseEnter={e => {
           e.currentTarget.style.borderColor = "var(--green-300)";

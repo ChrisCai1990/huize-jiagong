@@ -21,7 +21,7 @@ export default async function LoginPage({ searchParams }: Props) {
           <p className="text-sm text-gray-500 mt-1">内容管理后台</p>
         </div>
 
-        <div className="bg-white rounded-2xl p-8" style={{ border: "1px solid var(--green-100)", boxShadow: "0 1px 8px 0 rgba(64,145,108,0.06)" }}>
+        <div className="bg-white rounded-xl p-6" style={{ border: "1px solid var(--green-100)", boxShadow: "0 1px 8px 0 rgba(64,145,108,0.06)" }}>
           <form action={login} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">管理密码</label>

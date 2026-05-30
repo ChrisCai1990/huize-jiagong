@@ -34,7 +34,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <div className="flex flex-col h-screen bg-white overflow-hidden">
       {/* Top navigation */}
       <header className="bg-white shrink-0" style={{ borderBottom: "1px solid var(--green-100)" }}>
-        <div className="flex items-center h-14 px-4 md:px-8 gap-4">
+        <div className="flex items-center h-12 px-4 md:px-6 gap-3">
           {/* Logo */}
           <div className="flex items-center gap-2.5 shrink-0">
             <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "var(--green-700)" }}>
