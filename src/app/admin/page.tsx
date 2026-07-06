@@ -91,9 +91,9 @@ export default function AdminDashboard() {
           {["一", "二", "三", "四", "五", "六", "日"].map((d) => (
             <div key={d} className="text-center py-1.5 text-xs text-gray-400">{d}</div>
           ))}
-          {weekDays.map((day) => {
+          {weekDays.map((day, index) => {
             if (!day) return (
-              <div key={Math.random()} className="p-1.5 bg-[var(--green-50)]" />
+              <div key={`empty-${index}`} className="p-1.5 bg-[var(--green-50)]" />
             );
             const isToday = day.day_number === today;
             return (

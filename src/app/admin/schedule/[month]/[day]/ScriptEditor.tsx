@@ -41,7 +41,7 @@ function CopyButton({ text }: { text: string }) {
 }
 
 function EditableSection({
-  label, value, fieldName, placeholder, rows = 6, onSave,
+  label, value, placeholder, rows = 6, onSave,
 }: {
   label: string; value: string | null; fieldName: string;
   placeholder?: string; rows?: number;
@@ -123,7 +123,7 @@ export default function ScriptEditor({
   scheduleDayId, month, dayNumber, status, script, publishCopy, scriptPrompt, publishPrompt
 }: Props) {
   const [activeTab, setActiveTab] = useState<Tab>("weixin_script");
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const [showPrompt, setShowPrompt] = useState<"script" | "publish" | null>(null);
   const [copiedPrompt, setCopiedPrompt] = useState(false);
 

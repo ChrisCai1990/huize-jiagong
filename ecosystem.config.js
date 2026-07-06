@@ -10,7 +10,8 @@ module.exports = {
       PORT: "3002",
       HOSTNAME: "0.0.0.0",
       DATABASE_PATH: "/var/www/huize-jiagong/content.db",
-      ADMIN_PASSWORD: "huize2026admin",
+      ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
+      ADMIN_SESSION_TOKEN: process.env.ADMIN_SESSION_TOKEN,
     }
   }]
 };

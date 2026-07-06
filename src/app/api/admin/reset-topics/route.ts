@@ -3,7 +3,8 @@ import { reseedTopics } from "@/lib/db";
 
 export async function POST(req: NextRequest) {
   const pwd = req.headers.get("x-admin-password");
-  if (pwd !== (process.env.ADMIN_PASSWORD || "huize2026")) {
+  const expected = process.env.ADMIN_PASSWORD;
+  if (!expected || pwd !== expected) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
   try {

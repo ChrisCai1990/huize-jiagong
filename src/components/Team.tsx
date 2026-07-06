@@ -54,6 +54,7 @@ const members = [
 function Avatar({ name, photo }: { name: string; photo: string }) {
   return (
     <div className="w-16 h-16 rounded-2xl overflow-hidden flex-shrink-0" style={{ border: "2px solid var(--green-200)" }}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={photo}
         alt={name}

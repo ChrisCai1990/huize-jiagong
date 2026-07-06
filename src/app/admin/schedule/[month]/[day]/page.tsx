@@ -112,7 +112,7 @@ export default async function DayDetailPage({ params }: PageProps) {
           {topic.hook && (
             <div>
               <span className="text-xs text-gray-400 uppercase tracking-wide">开场钩子</span>
-              <p className="text-sm text-gray-500 mt-0.5 italic">"{topic.hook}"</p>
+              <p className="text-sm text-gray-500 mt-0.5 italic">“{topic.hook}”</p>
             </div>
           )}
         </div>

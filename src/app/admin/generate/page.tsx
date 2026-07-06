@@ -37,18 +37,14 @@ export default function GeneratePage() {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
   });
-  const [daysInMonth, setDaysInMonth] = useState(30);
+  const [year, monthNumber] = month.split("-").map(Number);
+  const daysInMonth = new Date(year, monthNumber, 0).getDate();
 
   useEffect(() => {
     fetch("/api/admin/topics")
       .then(r => r.json())
       .then((data: Topic[]) => setTopics(data.filter(t => t.status === "approved")));
   }, []);
-
-  useEffect(() => {
-    const [y, m] = month.split("-").map(Number);
-    setDaysInMonth(new Date(y, m, 0).getDate());
-  }, [month]);
 
   const prompt =
     type === "monthly"

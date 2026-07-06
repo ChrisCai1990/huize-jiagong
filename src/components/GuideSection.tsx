@@ -67,7 +67,7 @@ export default function GuideSection() {
                 桥本<em className="not-italic" style={{ color: "var(--green-700)" }}>疗愈</em>指南
               </h3>
               <p className="text-xs tracking-widest text-gray-400 mb-4 uppercase">
-                Hashimoto's Healing Guide
+                Hashimoto’s Healing Guide
               </p>
               <p className="text-sm leading-relaxed mb-6 border-l-2 pl-3" style={{ color: "#546E7A", borderColor: "var(--green-300)" }}>
                 从饮食、运动、睡眠、情绪管理到营养补充剂<br />

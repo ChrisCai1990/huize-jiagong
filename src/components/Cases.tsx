@@ -60,7 +60,7 @@ export default function Cases() {
               {/* 引用线 */}
               <div className="mt-5 pl-4 border-l-2" style={{ borderColor: "var(--green-300)" }}>
                 <blockquote className="text-sm text-gray-600 leading-relaxed italic">
-                  "{c.quote}"
+                  “{c.quote}”
                 </blockquote>
               </div>
 

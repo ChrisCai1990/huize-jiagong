@@ -5,6 +5,7 @@
  *
  * 输出：exports/youzan/01-hero.png ... （750px 宽，有赞标准宽度）
  */
+/* eslint-disable @typescript-eslint/no-require-imports */
 
 const puppeteer = require("puppeteer");
 const fs = require("fs");

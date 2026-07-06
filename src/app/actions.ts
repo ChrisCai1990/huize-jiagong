@@ -9,14 +9,16 @@ import getDb from "@/lib/db";
 
 export async function login(formData: FormData) {
   const password = formData.get("password") as string;
-  const expected = process.env.ADMIN_PASSWORD || "huize2026";
-  if (password !== expected) {
+  const expected = process.env.ADMIN_PASSWORD;
+  const sessionToken = process.env.ADMIN_SESSION_TOKEN;
+  if (!expected || !sessionToken || password !== expected) {
     redirect("/admin/login?error=1");
   }
   const cookieStore = await cookies();
-  cookieStore.set("admin_session", "authenticated", {
+  cookieStore.set("admin_session", sessionToken, {
     httpOnly: true,
-    secure: false, // HTTP 服务器，无 HTTPS，不能设 Secure flag
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
     maxAge: 60 * 60 * 24 * 7,
     path: "/",
   });

@@ -8,7 +8,8 @@ export function proxy(request: NextRequest) {
   if (pathname === "/admin/login") return NextResponse.next();
 
   const session = request.cookies.get("admin_session");
-  if (!session || session.value !== "authenticated") {
+  const sessionToken = process.env.ADMIN_SESSION_TOKEN;
+  if (!sessionToken || !session || session.value !== sessionToken) {
     return NextResponse.redirect(new URL("/admin/login", request.url));
   }
   return NextResponse.next();

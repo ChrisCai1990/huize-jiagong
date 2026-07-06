@@ -3,6 +3,7 @@
  * 用法：node scripts/export-guide-pdf.js
  * 前提：public/ 目录已在 http://localhost:8888 运行（python -m http.server 8888）
  */
+/* eslint-disable @typescript-eslint/no-require-imports */
 
 const puppeteer = require('puppeteer');
 const path = require('path');

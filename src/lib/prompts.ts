@@ -1,4 +1,4 @@
-import type { Topic, ScheduleDay, Script } from "./types";
+import type { Topic, Script } from "./types";
 
 // ─── 新姐人设 ────────────────────────────────────────────────────────────────
 const ANCHOR_PERSONA = `

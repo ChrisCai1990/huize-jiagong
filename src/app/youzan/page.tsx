@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import {
   ChevronRight,
   Pill, Activity, Heart, BookOpen, PlayCircle, Lightbulb, Users, Grid3x3,
@@ -47,16 +46,6 @@ const cases = [
 
 /* ─── 页面 ─── */
 export default function YouzanPage() {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const el = document.querySelector(".youzan-scroll");
-    if (!el) return;
-    const onScroll = () => setScrolled(el.scrollTop > 20);
-    el.addEventListener("scroll", onScroll);
-    return () => el.removeEventListener("scroll", onScroll);
-  }, []);
-
   return (
     <div className="min-h-screen" style={{ background: "#e8ede9" }}>
       <div className="max-w-[390px] mx-auto min-h-screen flex flex-col bg-white relative">
@@ -265,7 +254,7 @@ export default function YouzanPage() {
                   </span>
 
                   <div className="mt-3 pl-4 border-l-2" style={{ borderColor: "var(--green-300)" }}>
-                    <p className="text-xs text-gray-600 leading-relaxed italic">"{c.quote}"</p>
+                    <p className="text-xs text-gray-600 leading-relaxed italic">“{c.quote}”</p>
                   </div>
 
                   <div className="mt-4 pt-3 border-t flex items-center justify-between" style={{ borderColor: "var(--green-100)" }}>
